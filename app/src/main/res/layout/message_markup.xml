@@ -26,9 +26,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginStart="119dp"
         android:layout_marginLeft="119dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginRight="0dp"
-        android:text="How are you doing? This is a long message that should probably wrap."
+        android:text="How are you doing?"
         android:textIsSelectable="true"
         android:textSize="18sp" />
 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:paddingVertical="10dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="10dp">
+
+    <TextView
+        android:id="@+id/chatName"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_alignLeft="@id/message"
+        android:layout_alignTop="@id/userAvatar"
+        android:fontFamily="sans-serif-black"
+        android:text="Chat name"
+        android:textSize="12sp" />
+
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_below="@id/userName"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@id/userAvatar"
+        android:layout_toRightOf="@id/userAvatar"
+        android:text="How are you doing? Let's go. I wish you good luck. Happy New Year"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="20:00"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/userAvatar"
+        android:layout_width="57dp"
+        android:layout_height="53dp"
+        tools:srcCompat="@drawable/hacker" />
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chatName"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="2dp"
+        android:layout_toRightOf="@id/userAvatar"
+        android:fontFamily="sans-serif-black"
+        android:text="Kate"
+        android:textSize="10sp" />
+</RelativeLayout>
