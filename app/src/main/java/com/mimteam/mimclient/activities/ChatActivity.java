@@ -132,7 +132,8 @@ public class ChatActivity extends CustomActivity {
 
     private boolean handleMessage() {
         if (inputEdit.getText().toString().length() > 0) {
-            messages.add(new MessageModel("User name", inputEdit.getText().toString()));
+            messages.add(new MessageModel(getString(R.string.user_name),
+                    inputEdit.getText().toString()));
             messageAdapter.notifyDataSetChanged();
             inputEdit.getText().clear();
             return true;

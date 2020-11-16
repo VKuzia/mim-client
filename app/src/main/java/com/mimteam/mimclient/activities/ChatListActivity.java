@@ -79,7 +79,7 @@ public class ChatListActivity extends CustomActivity {
 
                 return convertView;
             }
-        };;
+        };
         listChats.setAdapter(chatAdapter);
     }
 
@@ -109,9 +109,9 @@ public class ChatListActivity extends CustomActivity {
     }
 
     private void handleChat() {
-        chats.add(new ChatModel(new MessageModel("Name",
-                "Hello! How are you? I wish you good luck"),
-                "Chat " + chats.size(),
+        chats.add(new ChatModel(new MessageModel(getString(R.string.user_name),
+                getString(R.string.test_message)),
+                String.format(getString(R.string.chat_name), chats.size()),
                 "@drawable/hacker"));
         chatAdapter.notifyDataSetChanged();
     }

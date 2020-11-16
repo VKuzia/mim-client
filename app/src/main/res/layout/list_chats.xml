@@ -16,20 +16,13 @@
 
     <ListView
         android:id="@+id/listOfChats"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolBarChats"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="55dp"
-        android:layout_marginBottom="11dp"
         android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:transcriptMode="normal">
-    </ListView>
+        android:transcriptMode="normal" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -41,6 +34,7 @@
         android:layout_marginRight="30dp"
         android:layout_marginBottom="30dp"
         android:clickable="true"
+        android:focusable="true"
         android:src="@android:drawable/ic_input_add"
         app:backgroundTint="@color/blue_fab"
         tools:srcCompat="@android:drawable/ic_input_add" />

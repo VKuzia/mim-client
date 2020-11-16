@@ -14,7 +14,7 @@
         android:layout_alignLeft="@id/message"
         android:layout_marginLeft="-3dp"
         android:fontFamily="sans-serif-black"
-        android:text="User Name"
+        android:text="@string/user_name"
         android:textSize="14sp" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginStart="119dp"
         android:layout_marginLeft="119dp"
-        android:text="How are you doing?"
+        android:text="@string/test_message"
         android:textIsSelectable="true"
         android:textSize="18sp" />
 
@@ -37,6 +37,6 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="-5dp"
         android:layout_toRightOf="@id/message"
-        android:text="20:00"
+        android:text="@string/time"
         android:textSize="12sp" />
 </RelativeLayout>

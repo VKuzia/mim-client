@@ -1,9 +1,8 @@
 package com.mimteam.mimclient.models;
 
-import android.annotation.SuppressLint;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class MessageModel {
     private String userName;
@@ -31,12 +30,12 @@ public class MessageModel {
     }
 
     public String getTimeString() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("HH mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("HH mm", Locale.ENGLISH);
         return formatter.format(dateTime);
     }
 
     public String getDateString() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd", Locale.ENGLISH);
         return formatter.format(dateTime);
     }
 }
