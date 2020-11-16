@@ -19,9 +19,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mimteam.mimclient.ChatList"
+            android:name="com.mimteam.mimclient.activities.ChatListActivity"
             android:launchMode="singleTask" />
-        <activity android:name="com.mimteam.mimclient.Chat" />
+        <activity android:name="com.mimteam.mimclient.activities.ChatActivity" />
     </application>
 
 </manifest>

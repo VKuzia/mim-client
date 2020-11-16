@@ -14,7 +14,6 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:navigationIcon="@drawable/abc_vector_test" />
 
-    <!--    RecycleView-->
     <Button
         android:id="@+id/sendButton"
         android:layout_width="62dp"
