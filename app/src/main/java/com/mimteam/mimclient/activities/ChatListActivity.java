@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class ChatListActivity extends CustomActivity {
 
-    private ListView listChats;
+    private ListView chatsList;
     private Toolbar chatListToolbar;
     private FloatingActionButton addChat;
 
@@ -44,7 +44,7 @@ public class ChatListActivity extends CustomActivity {
 
     @Override
     protected void initializeUIComponents() {
-        listChats = findViewById(R.id.listOfChats);
+        chatsList = findViewById(R.id.listOfChats);
         chatListToolbar = findViewById(R.id.toolBarChat);
         addChat = findViewById(R.id.fab);
     }
@@ -52,7 +52,7 @@ public class ChatListActivity extends CustomActivity {
     @Override
     protected void attachListenersToComponents() {
         addChat.setOnClickListener(view -> handleAddChatButtonClicked());
-        listChats.setOnItemClickListener((parent, view, position, id) -> handleListViewItemClicked());
+        chatsList.setOnItemClickListener((parent, view, position, id) -> handleListViewItemClicked());
     }
 
     private void setupChatList() {
@@ -67,7 +67,7 @@ public class ChatListActivity extends CustomActivity {
                 return convertView;
             }
         };
-        listChats.setAdapter(chatAdapter);
+        chatsList.setAdapter(chatAdapter);
     }
 
     private void setupChatModel(View convertView, ChatModel chatModel) {

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class ChatActivity extends CustomActivity {
 
     private EditText inputEdit;
-    private ListView listMessages;
+    private ListView messagesList;
     private Button sendButton;
     private Toolbar chatToolbar;
 
@@ -55,7 +55,7 @@ public class ChatActivity extends CustomActivity {
     @Override
     protected void initializeUIComponents() {
         inputEdit = findViewById(R.id.inputEdit);
-        listMessages = findViewById(R.id.listOfMessages);
+        messagesList = findViewById(R.id.listOfMessages);
         sendButton = findViewById(R.id.sendButton);
         chatToolbar = findViewById(R.id.toolBarChat);
     }
@@ -86,7 +86,7 @@ public class ChatActivity extends CustomActivity {
                 return convertView;
             }
         };
-        listMessages.setAdapter(messageAdapter);
+        messagesList.setAdapter(messageAdapter);
     }
 
     private void setupMessageModel(@NotNull View convertView, @NotNull MessageModel messageModel) {
