@@ -2,11 +2,9 @@ package com.mimteam.mimclient.activities;
 
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,47 +20,39 @@ import java.util.ArrayList;
 public class ChatListActivity extends CustomActivity {
 
     private ListView listChats;
-    private Toolbar toolbar;
+    private Toolbar chatListToolbar;
     private FloatingActionButton addChat;
 
     private ArrayList<ChatModel> chats;
     private ArrayAdapter<ChatModel> chatAdapter;
 
-    private Intent intent;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_chats);
-        intent = new Intent();
-
-        initializeUIComponents();
-        setSupportActionBar(toolbar);
         setupChatList();
-        attachListenersToComponents();
+    }
+
+    @Override
+    protected void setToolBar() {
+        setSupportActionBar(chatListToolbar);
+    }
+
+    @Override
+    protected void setView() {
+        setContentView(R.layout.list_chats);
     }
 
     @Override
     protected void initializeUIComponents() {
         listChats = findViewById(R.id.listOfChats);
-        toolbar = findViewById(R.id.toolBarChat);
+        chatListToolbar = findViewById(R.id.toolBarChat);
         addChat = findViewById(R.id.fab);
     }
 
     @Override
     protected void attachListenersToComponents() {
-        addChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleAddChatButtonClicked();
-            }
-        });
-        listChats.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                handleListViewItemClicked();
-            }
-        });
+        addChat.setOnClickListener(view -> handleAddChatButtonClicked());
+        listChats.setOnItemClickListener((parent, view, position, id) -> handleListViewItemClicked());
     }
 
     private void setupChatList() {
@@ -71,12 +61,9 @@ public class ChatListActivity extends CustomActivity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getLayoutInflater()
-                            .inflate(R.layout.chat_markup, parent, false);
+                    convertView = getLayoutInflater().inflate(R.layout.chat_markup, parent, false);
                 }
-                ChatModel chatModel = chats.get(position);
-                setupChatModel(convertView, chatModel);
-
+                setupChatModel(convertView, chats.get(position));
                 return convertView;
             }
         };
@@ -94,8 +81,7 @@ public class ChatListActivity extends CustomActivity {
         userName.setText(chatModel.getUserName());
         message.setText(chatModel.getMessage());
         time.setText(chatModel.getTimeString());
-        int resourceID = getResources().getIdentifier(chatModel.getImage(),
-                "drawable", getPackageName());
+        int resourceID = getResources().getIdentifier(chatModel.getImage(), "drawable", getPackageName());
         avatar.setImageResource(resourceID);
     }
 
@@ -109,10 +95,10 @@ public class ChatListActivity extends CustomActivity {
     }
 
     private void handleChat() {
-        chats.add(new ChatModel(new MessageModel(getString(R.string.user_name),
-                getString(R.string.test_message)),
-                String.format(getString(R.string.chat_name), chats.size()),
-                "@drawable/hacker"));
+        MessageModel messageModel = new MessageModel(getString(R.string.user_name), getString(R.string.test_message));
+
+        String chatName = String.format(getString(R.string.chat_name), chats.size());
+        chats.add(new ChatModel(messageModel, chatName, "@drawable/hacker"));
         chatAdapter.notifyDataSetChanged();
     }
 }

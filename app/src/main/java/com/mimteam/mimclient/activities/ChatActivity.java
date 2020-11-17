@@ -2,7 +2,6 @@ package com.mimteam.mimclient.activities;
 
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -31,18 +30,20 @@ public class ChatActivity extends CustomActivity {
     private ArrayList<MessageModel> messages;
     private ArrayAdapter<MessageModel> messageAdapter;
 
-    private Intent intent;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chat);
-        intent = new Intent();
-
-        initializeUIComponents();
         setupMessageList();
+    }
+
+    @Override
+    protected void setToolBar() {
         setSupportActionBar(chatToolbar);
-        attachListenersToComponents();
+    }
+
+    @Override
+    protected void setView() {
+        setContentView(R.layout.chat);
     }
 
     @Override
@@ -61,28 +62,15 @@ public class ChatActivity extends CustomActivity {
 
     @Override
     protected void attachListenersToComponents() {
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleOnSendButtonClicked();
-            }
-        });
-        chatToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleOnNavigationButtonClicked();
-            }
-        });
-        inputEdit.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                        return handleOnKeyPressed();
-                    }
+        sendButton.setOnClickListener(v -> handleOnSendButtonClicked());
+        chatToolbar.setNavigationOnClickListener(v -> handleOnNavigationButtonClicked());
+        inputEdit.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    return handleOnKeyPressed();
                 }
-                return false;
             }
+            return false;
         });
     }
 
@@ -90,24 +78,18 @@ public class ChatActivity extends CustomActivity {
         messages = new ArrayList<>();
         messageAdapter = new ArrayAdapter<MessageModel>(this, R.layout.message_markup, messages) {
             @Override
-            public View getView(int position,
-                                View convertView,
-                                ViewGroup parent) {
+            public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
-                    convertView = getLayoutInflater()
-                            .inflate(R.layout.message_markup, parent, false);
+                    convertView = getLayoutInflater().inflate(R.layout.message_markup, parent, false);
                 }
-                MessageModel messageModel = messages.get(position);
-                setupMessageModel(convertView, messageModel);
-
+                setupMessageModel(convertView, messages.get(position));
                 return convertView;
             }
         };
         listMessages.setAdapter(messageAdapter);
     }
 
-    private void setupMessageModel(@org.jetbrains.annotations.NotNull View convertView,
-                                   @NotNull MessageModel messageModel) {
+    private void setupMessageModel(@NotNull View convertView, @NotNull MessageModel messageModel) {
         TextView userName = convertView.findViewById(R.id.userName);
         TextView message = convertView.findViewById(R.id.message);
         TextView time = convertView.findViewById(R.id.time);
@@ -131,13 +113,12 @@ public class ChatActivity extends CustomActivity {
     }
 
     private boolean handleMessage() {
-        if (inputEdit.getText().toString().length() > 0) {
-            messages.add(new MessageModel(getString(R.string.user_name),
-                    inputEdit.getText().toString()));
-            messageAdapter.notifyDataSetChanged();
-            inputEdit.getText().clear();
-            return true;
+        if (inputEdit.getText().toString().length() <= 0) {
+            return false;
         }
-        return false;
+        messages.add(new MessageModel(getString(R.string.user_name), inputEdit.getText().toString()));
+        messageAdapter.notifyDataSetChanged();
+        inputEdit.getText().clear();
+        return true;
     }
 }

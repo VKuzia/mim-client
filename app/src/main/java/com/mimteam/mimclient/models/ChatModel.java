@@ -1,15 +1,9 @@
 package com.mimteam.mimclient.models;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
-
 public class ChatModel {
     private MessageModel messageModel;
     private String chatName;
     private String image;
-
 
     public ChatModel(MessageModel messageModel, String chatName, String image) {
         this.messageModel = messageModel;
@@ -25,12 +19,10 @@ public class ChatModel {
         return messageModel.getUserName();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public String getTimeString() {
         return messageModel.getTimeString();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public String getDateString() {
         return messageModel.getDateString();
     }

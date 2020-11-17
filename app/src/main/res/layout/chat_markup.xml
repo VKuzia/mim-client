@@ -5,13 +5,16 @@
     android:layout_height="wrap_content"
     android:clipToPadding="false"
     android:paddingVertical="10dp"
+    android:paddingStart="15dp"
     android:paddingLeft="15dp"
+    android:paddingEnd="10dp"
     android:paddingRight="10dp">
 
     <TextView
         android:id="@+id/chatName"
         android:layout_width="wrap_content"
         android:layout_height="15dp"
+        android:layout_alignStart="@id/message"
         android:layout_alignLeft="@id/message"
         android:layout_alignTop="@id/userAvatar"
         android:fontFamily="sans-serif-black"
@@ -35,6 +38,7 @@
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:text="@string/time"
         android:textSize="12sp" />
@@ -50,8 +54,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/chatName"
+        android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="2dp"
+        android:layout_toEndOf="@id/userAvatar"
         android:layout_toRightOf="@id/userAvatar"
         android:fontFamily="sans-serif-black"
         android:text="@string/user_name"

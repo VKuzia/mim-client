@@ -9,10 +9,11 @@ public class MessageModel {
     private String message;
     private Date dateTime;
 
+    private final SimpleDateFormat timeFormatter = new SimpleDateFormat("HH mm", Locale.ENGLISH);
+    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy MM dd", Locale.ENGLISH);
+
     public MessageModel(String userName, String message) {
-        this.userName = userName;
-        this.message = message;
-        this.dateTime = new Date();
+        this(userName, message, new Date());
     }
 
     public MessageModel(String userName, String message, Date dateTime) {
@@ -30,12 +31,10 @@ public class MessageModel {
     }
 
     public String getTimeString() {
-        SimpleDateFormat formatter = new SimpleDateFormat("HH mm", Locale.ENGLISH);
-        return formatter.format(dateTime);
+        return timeFormatter.format(dateTime);
     }
 
     public String getDateString() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd", Locale.ENGLISH);
-        return formatter.format(dateTime);
+        return dateFormatter.format(dateTime);
     }
 }
