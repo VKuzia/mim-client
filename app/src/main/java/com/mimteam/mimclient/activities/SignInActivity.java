@@ -37,22 +37,15 @@ public class SignInActivity extends AppCompatActivity {
 
     protected void attachListenersToComponents() {
         // так как тут просто переход к другой активити, то решил бахнуть анонимуса
-//        signUpButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(SignInActivity.this, SignUpActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-        signUpButton.setOnClickListener(button -> reg());
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(SignInActivity.this, SignUpActivity.class);
+                startActivity(intent);
+            }
+        });
         signInButton.setOnClickListener(button -> authorization());
-    }
-
-    private void reg() {
-        Intent intent = new Intent();
-        intent.setClass(SignInActivity.this, SignUpActivity.class);
-        startActivity(intent);
     }
 
     private void authorization() {
