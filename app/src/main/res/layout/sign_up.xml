@@ -103,7 +103,7 @@
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/createAccount"
+        android:id="@+id/signUpCreateAccount"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_below="@id/signUpPasswordEdit"

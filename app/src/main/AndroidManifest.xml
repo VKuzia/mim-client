@@ -22,6 +22,9 @@
             android:name="com.mimteam.mimclient.activities.ChatListActivity"
             android:launchMode="singleTask" />
         <activity android:name="com.mimteam.mimclient.activities.ChatActivity" />
+<!--        Стоит ли эти активити делать SingleTone ? -->
+        <activity android:name="com.mimteam.mimclient.activities.SignUpActivity" />
+        <activity android:name="com.mimteam.mimclient.activities.SignInActivity" />
     </application>
 
 </manifest>
