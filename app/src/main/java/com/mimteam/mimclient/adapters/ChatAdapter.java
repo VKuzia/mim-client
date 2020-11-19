@@ -13,27 +13,21 @@ import androidx.annotation.NonNull;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.models.ChatModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChatAdapter extends ArrayAdapter<ChatModel> {
 
-    private final Context context;
-    private final ArrayList<ChatModel> chats;
-
     public ChatAdapter(@NonNull Context context, int resource, @NonNull List<ChatModel> chats) {
         super(context, resource, chats);
-        this.context = context;
-        this.chats = (ArrayList<ChatModel>) chats;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
+            LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.chat_markup, parent, false);
         }
-        setupChatModel(convertView, chats.get(position));
+        setupChatModel(convertView, getItem(position));
         return convertView;
     }
 
@@ -48,8 +42,8 @@ public class ChatAdapter extends ArrayAdapter<ChatModel> {
         userName.setText(chatModel.getUserName());
         message.setText(chatModel.getMessage());
         time.setText(chatModel.getTimeString());
-        int resourceID = context.getResources().getIdentifier(chatModel.getImage(),
-                "drawable", context.getPackageName());
+        int resourceID = getContext().getResources().getIdentifier(chatModel.getImage(),
+                "drawable", getContext().getPackageName());
         avatar.setImageResource(resourceID);
     }
 }

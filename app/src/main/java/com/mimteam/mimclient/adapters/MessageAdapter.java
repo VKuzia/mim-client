@@ -14,27 +14,21 @@ import com.mimteam.mimclient.models.MessageModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MessageAdapter extends ArrayAdapter<MessageModel> {
 
-    private final Context context;
-    private final ArrayList<MessageModel> messages;
-
     public MessageAdapter(@NonNull Context context, int resource, @NonNull List<MessageModel> messages) {
         super(context, resource, messages);
-        this.context = context;
-        this.messages = (ArrayList<MessageModel>) messages;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
+            LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.message_markup, parent, false);
         }
-        setupMessageModel(convertView, messages.get(position));
+        setupMessageModel(convertView, getItem(position));
         return convertView;
     }
 
