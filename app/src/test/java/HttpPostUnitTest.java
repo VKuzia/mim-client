@@ -9,11 +9,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class HttpPostUnitTest {
+    private final String url = "http://maxim12321-test.herokuapp.com";
 
     @Test
     public void httpClient_correctGetPost() {
         UserInfo userInfo = new UserInfo(0);
-        String url = "http://maxim12321-test.herokuapp.com";
         HTTPClient httpClient = new HTTPClient(userInfo, url);
         HashMap<String, String> loginData = new HashMap<String, String>() {{
             put("username", "Kuzia");
