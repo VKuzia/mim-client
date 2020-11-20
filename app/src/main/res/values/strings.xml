@@ -6,7 +6,10 @@
     <string name="enter_text">Enter text</string>
     <string name="options">Options</string>
     <string name="send">Send</string>
-
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
 <!--    Message and chat model-->
     <string name="chat_name">Chat %d</string>
     <string name="user_name">User name</string>

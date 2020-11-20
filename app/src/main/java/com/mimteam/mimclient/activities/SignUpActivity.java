@@ -1,13 +1,12 @@
 package com.mimteam.mimclient.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -15,10 +14,11 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText usernameEdit;
     private EditText loginEdit;
     private EditText passwordEdit;
-    private Button createAccountButton;
+    private Button signUpButton;
+    private Button signInButton;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up);
 
@@ -26,26 +26,23 @@ public class SignUpActivity extends AppCompatActivity {
         attachListenersToComponents();
     }
 
-    protected void initializeUIComponents() {
+    private void initializeUIComponents() {
         usernameEdit = findViewById(R.id.signUpUsernameEdit);
         loginEdit = findViewById(R.id.signUpLoginEdit);
         passwordEdit = findViewById(R.id.signUpPasswordEdit);
-        createAccountButton = findViewById(R.id.signUpCreateAccount);
+        signInButton = findViewById(R.id.toSignInButton);
+        signUpButton = findViewById(R.id.signUpButton);
     }
 
-    // Так как тут идет добавление слушателя только для одной кнопки,
-    // может стоит это в инициализацию пихнуть?
-    protected void attachListenersToComponents() {
-       createAccountButton.setOnClickListener(button -> createAccout());
+    private void attachListenersToComponents() {
+        signInButton.setOnClickListener(button -> finish());
+        signUpButton.setOnClickListener(button -> createAccount());
     }
 
-    private void createAccout() {
+    private void createAccount() {
         String username = usernameEdit.getText().toString();
         String login = loginEdit.getText().toString();
         String password = passwordEdit.getText().toString();
-        //ToDo создание нового пользователя
-        Intent intent = new Intent();
-        intent.setClass(SignUpActivity.this, ChatListActivity.class);
-        startActivity(intent);
+        MainActivity.switchActivity(ChatListActivity.class);
     }
 }

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.adapters.MessageAdapter;
 import com.mimteam.mimclient.models.MessageModel;
 import com.mimteam.mimclient.R;
@@ -53,7 +54,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void attachListenersToComponents() {
         sendButton.setOnClickListener(v -> sendMessage());
-        chatToolbar.setNavigationOnClickListener(v -> handleOnNavigationButtonClicked());
+        chatToolbar.setNavigationOnClickListener(v -> MainActivity.switchActivity(ChatListActivity.class));
         inputEdit.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -68,12 +69,6 @@ public class ChatActivity extends AppCompatActivity {
         messages = new ArrayList<>();
         messageAdapter = new MessageAdapter(this, R.layout.message_markup, messages);
         messagesList.setAdapter(messageAdapter);
-    }
-
-    private void handleOnNavigationButtonClicked() {
-        Intent intent = new Intent();
-        intent.setClass(ChatActivity.this, ChatListActivity.class);
-        startActivity(intent);
     }
 
     private boolean sendMessage() {

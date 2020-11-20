@@ -9,6 +9,7 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 
 public class SignInActivity extends AppCompatActivity {
@@ -19,42 +20,30 @@ public class SignInActivity extends AppCompatActivity {
     private Button signUpButton;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_in);
 
         initializeUIComponents();
         attachListenersToComponents();
+        return;
     }
 
-    // Сделал по аналогии с написанными активити, но отбъясните почему тут должно быть protected :(
-    protected void initializeUIComponents() {
+    private void initializeUIComponents() {
         loginEdit = findViewById(R.id.signInLoginEdit);
         passwordEdit = findViewById(R.id.signInPasswordEdit);
-        signUpButton = findViewById(R.id.signUpButton);
+        signUpButton = findViewById(R.id.toSignUpButton);
         signInButton = findViewById(R.id.signInButton);
     }
 
-    protected void attachListenersToComponents() {
-        // так как тут просто переход к другой активити, то решил бахнуть анонимуса
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(SignInActivity.this, SignUpActivity.class);
-                startActivity(intent);
-            }
-        });
+    private void attachListenersToComponents() {
+        signUpButton.setOnClickListener(button -> MainActivity.switchActivity(SignUpActivity.class));
         signInButton.setOnClickListener(button -> authorization());
     }
 
     private void authorization() {
         String login = loginEdit.getText().toString();
         String password = passwordEdit.getText().toString();
-        //ToDo запрос на сервер LET ME IN!!!!
-        //а пока просто идем транзитом
-        Intent intent = new Intent();
-        intent.setClass(SignInActivity.this, ChatListActivity.class);
-        startActivity(intent);
+        MainActivity.switchActivity(ChatListActivity.class);
     }
 }
