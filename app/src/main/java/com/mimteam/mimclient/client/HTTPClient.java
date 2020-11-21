@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -30,8 +29,8 @@ public class HTTPClient {
         this.okHttpClient = new OkHttpClient();
     }
 
-    public String get(String urlPrefix) {
-        return get(urlPrefix, new HashMap<>(), new HashMap<>(), true);
+    public String get(String urlPrefix, Map<String, String> headersParams, Map<String, String> params) {
+        return get(urlPrefix, headersParams, params, true);
     }
 
     public @Nullable String get(String urlPrefix, Map<String, String> headersParams, Map<String, String> params, boolean auth) {
@@ -45,6 +44,10 @@ public class HTTPClient {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String post(String urlPrefix, Map<String, String> headersParams, Map<String, String> params) {
+        return post(urlPrefix, headersParams, params, true);
     }
 
     public @Nullable String post(String urlSuffix, Map<String, String> headersParams, Map<String, String> params, boolean auth) {
@@ -101,7 +104,7 @@ public class HTTPClient {
         Callable<Response> callable = () -> {
             Response response = okHttpClient.newCall(request).execute();
             if (!response.isSuccessful()) {
-                throw new IOException("Unexpected code " + response + ", my friend.");
+                throw new IOException(response + ": " + response.body().string());
             }
             return response;
         };
@@ -122,4 +125,7 @@ public class HTTPClient {
         }
     }
 
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
 }
