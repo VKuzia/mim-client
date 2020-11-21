@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.mimClient.NoActionBar">
         <activity
-            android:name="com.mimteam.mimclient.MainActivity"
+            android:name=".MainActivity"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,9 +19,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mimteam.mimclient.activities.ChatListActivity"
+            android:name=".activities.ChatListActivity"
             android:launchMode="singleTask" />
-        <activity android:name="com.mimteam.mimclient.activities.ChatActivity" />
+        <activity android:name=".activities.ChatActivity" />
+        <activity android:name=".activities.CreateChatActivity"/>
     </application>
 
 </manifest>

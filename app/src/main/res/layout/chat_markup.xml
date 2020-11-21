@@ -43,11 +43,10 @@
         android:text="@string/time"
         android:textSize="12sp" />
 
-    <ImageView
+    <com.mimteam.mimclient.components.ChatAvatar
         android:id="@+id/userAvatar"
         android:layout_width="57dp"
-        android:layout_height="53dp"
-        tools:srcCompat="@drawable/hacker" />
+        android:layout_height="53dp" />
 
     <TextView
         android:id="@+id/userName"
