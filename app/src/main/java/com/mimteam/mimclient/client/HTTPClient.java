@@ -1,5 +1,6 @@
 package com.mimteam.mimclient.client;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.HttpUrl;
