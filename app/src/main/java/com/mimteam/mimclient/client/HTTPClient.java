@@ -1,6 +1,7 @@
 package com.mimteam.mimclient.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Optional;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.HttpUrl;
@@ -30,38 +31,34 @@ public class HTTPClient {
         this.okHttpClient = new OkHttpClient();
     }
 
-    public String get(String urlPrefix, Map<String, String> headersParams, Map<String, String> params) {
+    public Optional<String> get(String urlPrefix, Map<String, String> headersParams, Map<String, String> params) {
         return get(urlPrefix, headersParams, params, true);
     }
 
-    public @Nullable String get(String urlPrefix, Map<String, String> headersParams, Map<String, String> params, boolean auth) {
+    public Optional<String> get(String urlPrefix, Map<String, String> headersParams, Map<String, String> params, boolean auth) {
         Request request = formGetRequest(urlPrefix, headersParams, params, auth);
+        String response = null;
         try {
-            Response response = sendRequest(request);
-            if (response != null) {
-                return response.body().string();
-            }
+            response = sendRequest(request);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return Optional.fromNullable(response);
     }
 
-    public String post(String urlPrefix, Map<String, String> headersParams, Map<String, String> params) {
+    public Optional<String> post(String urlPrefix, Map<String, String> headersParams, Map<String, String> params) {
         return post(urlPrefix, headersParams, params, true);
     }
 
-    public @Nullable String post(String urlSuffix, Map<String, String> headersParams, Map<String, String> params, boolean auth) {
+    public Optional<String> post(String urlSuffix, Map<String, String> headersParams, Map<String, String> params, boolean auth) {
         Request request = formPostRequest(urlSuffix, headersParams, params, auth);
+        String response = null;
         try {
-            Response response = sendRequest(request);
-            if (response != null) {
-                return response.body().string();
-            }
+            response = sendRequest(request);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return Optional.fromNullable(response);
     }
 
     private Request formGetRequest(String urlSuffix, Map<String, String> headersParams, @NotNull Map<String, String> params, boolean auth) {
@@ -100,16 +97,18 @@ public class HTTPClient {
         return Headers.of(headersParams);
     }
 
-    private @Nullable Response sendRequest(Request request) {
+    private @Nullable String sendRequest(Request request) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Callable<Response> callable = () -> {
+        Callable<String> callable = () -> {
             Response response = okHttpClient.newCall(request).execute();
             if (!response.isSuccessful()) {
                 throw new IOException(response + ": " + response.body().string());
             }
-            return response;
+            ObjectMapper mapper = new ObjectMapper();
+            ResponseDTO responseDTO = mapper.readValue(response.body().string(), ResponseDTO.class);
+            return responseDTO.getResponseMessage();
         };
-        Future<Response> future = executor.submit(callable);
+        Future<String> future = executor.submit(callable);
         try {
             return future.get();
         } catch (ExecutionException e) {
