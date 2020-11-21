@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class UserInfo {
     private Integer id;
-    private String token;
+    private String token = "";
     private final ArrayList<Integer> chatIds = new ArrayList<>();
 
     public UserInfo(Integer id) {

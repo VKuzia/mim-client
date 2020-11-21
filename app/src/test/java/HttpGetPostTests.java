@@ -28,7 +28,6 @@ public class HttpGetPostTests {
     @BeforeEach
     public void initialize() {
         this.userInfo = new UserInfo(1);
-        userInfo.setToken("");
         httpWrapper = new HTTPWrapper(userInfo, url);
     }
 
