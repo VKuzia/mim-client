@@ -1,12 +1,15 @@
+import com.google.common.base.Optional;
 import com.mimteam.mimclient.client.HTTPWrapper;
 import com.mimteam.mimclient.client.UserInfo;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class HttpGetPostTests {
@@ -15,68 +18,63 @@ public class HttpGetPostTests {
     private final String login = "LocalTestUser";
     private final String password = "local";
     private final String chatName = "LocalTestChat";
-    private UserInfo userInfo;
-    private final Integer chatId = 2;
-    private HTTPWrapper httpWrapper;
-
-    private void printAssert(Object obj) {
-        assertNotNull(obj);
-        System.out.println(obj.toString());
-    }
-
-    @BeforeEach
-    public void initialize() {
-        this.userInfo = new UserInfo(1);
-        httpWrapper = new HTTPWrapper(userInfo, url);
-    }
+    private UserInfo userInfo = new UserInfo(1);
+    private Integer chatId = 2;
+    private HTTPWrapper httpWrapper = new HTTPWrapper(userInfo, url);
 
     @Test
     @Order(1)
     public void httpWrapper_local_signUp() {
-        String result = httpWrapper.signUp(name, login, password);
-        printAssert(result);
+        Optional<String> result = httpWrapper.signUp(name, login, password);
+        assertTrue(result.isPresent());
     }
 
     @Test
     @Order(2)
     public void httpWrapper_local_login() {
-        String result = httpWrapper.login(login, password);
-        printAssert(result);
+        Optional<Integer> id = httpWrapper.login(login, password);
+        assertTrue(id.isPresent());
+        userInfo.setId(id.get());
+        System.out.println(id.get());
     }
 
     @Test
     @Order(3)
     public void httpWrapper_local_chatList() {
-        String result = httpWrapper.getChatsList();
-        printAssert(result);
+        Optional<List<Integer>> chatList = httpWrapper.getChatsList();
+        assertTrue(chatList.isPresent());
+        System.out.println(chatList);
     }
 
     @Test
     @Order(4)
     public void httpWrapper_local_create() {
-        String result = httpWrapper.createChat(chatName);
-        printAssert(result);
+        Optional<Integer> chatId = httpWrapper.createChat(chatName);
+        assertTrue(chatId.isPresent());
+        this.chatId = chatId.get();
+        System.out.println(this.chatId);
     }
 
     @Test
     @Order(5)
     public void httpWrapper_local_join() {
-        String result = httpWrapper.joinChat(chatId);
-        printAssert(result);
+        Optional<String> result = httpWrapper.joinChat(chatId);
+        assertTrue(result.isPresent());
     }
 
     @Test
     @Order(6)
     public void httpWrapper_local_userList() {
-        String result = httpWrapper.getUserList(chatId);
-        printAssert(result);
+        Optional<List<Integer>> userList = httpWrapper.getUserList(chatId);
+        assertTrue(userList.isPresent());
+        System.out.println(userList);
     }
 
     @Test
     @Order(7)
     public void httpWrapper_local_leave() {
-        String result = httpWrapper.leaveChat(chatId);
-        printAssert(result);
+        Optional<String> result = httpWrapper.leaveChat(chatId);
+        assertTrue(result.isPresent());
     }
 
 }

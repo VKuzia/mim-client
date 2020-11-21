@@ -1,4 +1,5 @@
 package com.mimteam.mimclient.client;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
@@ -21,15 +22,15 @@ public class HTTPWrapper {
             put("chatName", chatName);
         }};
         Optional<String> response = httpClient.post("/chats/create", new HashMap<>(), params);
-        return convertOptional(response, new TypeReference<Integer>() {});
+        return convertOptional(response, new TypeReference<Integer>() {
+        });
     }
 
-    public Optional<Integer> joinChat(Integer chatId) {
+    public Optional<String> joinChat(Integer chatId) {
         HashMap<String, String> params = new HashMap<String, String>() {{
             put("userId", httpClient.getUserInfo().getId().toString());
         }};
-        Optional<String> response = httpClient.post("/chats/" + chatId + "/join", new HashMap<>(), params);
-        return convertOptional(response, new TypeReference<Integer>() {});
+        return httpClient.post("/chats/" + chatId + "/join", new HashMap<>(), params);
     }
 
     public Optional<String> leaveChat(Integer chatId) {
@@ -42,7 +43,8 @@ public class HTTPWrapper {
     public Optional<List<Integer>> getUserList(Integer chatId) {
         Optional<String> response = httpClient.get("/chats/" + chatId + "/userlist",
                 new HashMap<>(), new HashMap<>());
-        return convertOptional(response, new TypeReference<List<Integer>>() {});
+        return convertOptional(response, new TypeReference<List<Integer>>() {
+        });
     }
 
     public Optional<String> signUp(String name, String login, String password) {
@@ -61,17 +63,20 @@ public class HTTPWrapper {
         }};
         Optional<String> response =
                 httpClient.post("/users/login", new HashMap<>(), params, false);
-        return convertOptional(response, new TypeReference<Integer>() {});
+        return convertOptional(response, new TypeReference<Integer>() {
+        });
     }
 
     public Optional<List<Integer>> getChatsList() {
         Integer userId = httpClient.getUserInfo().getId();
         Optional<String> response = httpClient.get("/users/" + userId + "/chatlist",
                 new HashMap<>(), new HashMap<>());
-        return convertOptional(response, new TypeReference<List<Integer>>() {});
+        return convertOptional(response, new TypeReference<List<Integer>>() {
+        });
     }
 
     private static <T, S> Optional<S> convertOptional(@NotNull Optional<T> optional, TypeReference<S> type) {
+        System.out.println(optional.get().toString());
         if (optional.isPresent()) {
             ObjectMapper mapper = new ObjectMapper();
             S result = mapper.convertValue(optional.get(), type);
@@ -79,5 +84,4 @@ public class HTTPWrapper {
         }
         return Optional.absent();
     }
-
 }
