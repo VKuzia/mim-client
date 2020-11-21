@@ -42,7 +42,6 @@ public class ChatAdapter extends ArrayAdapter<ChatModel> {
         userName.setText(chatModel.getUserName());
         message.setText(chatModel.getMessage());
         time.setText(chatModel.getTimeString());
-        System.out.println(chatModel.getChatName());
         avatar.setChatName(chatModel.getChatName());
     }
 }
