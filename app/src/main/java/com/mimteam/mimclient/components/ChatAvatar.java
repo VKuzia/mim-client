@@ -37,24 +37,21 @@ public class ChatAvatar extends RelativeLayout {
     }
 
     public boolean setChatName(String chatName) {
-        List<String> words = getNonEmptyWords(chatName);
-        String text = "";
-
-        if (words.size() > 0) {
-            text += words.get(0).substring(0, 1).toUpperCase();
+        String text = getFirstNonEmptyWord(chatName);
+        if (text.length() > 0) {
+            text = text.substring(0, 1).toUpperCase();
         }
         avatarText.setText(text);
         return text.isEmpty();
     }
 
-    private List<String> getNonEmptyWords(String text) {
+    private String getFirstNonEmptyWord(String text) {
         String[] words = text.split("[^\\w\\d]");
-        List<String> nonEmptyWords = new ArrayList<>();
         for (String word : words) {
             if (!word.isEmpty()) {
-                nonEmptyWords.add(word);
+                return word;
             }
         }
-        return nonEmptyWords;
+        return "";
     }
 }

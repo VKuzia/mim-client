@@ -39,6 +39,7 @@ public class CreateChatActivity extends AppCompatActivity {
 
     private void attachListenersToComponents() {
         createChatButton.setOnClickListener(view -> createChat());
+        createChatToolbar.setNavigationOnClickListener(view -> openChatListActivity());
         chatNameEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -47,7 +48,7 @@ public class CreateChatActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (chatAvatar.setChatName(chatNameEdit.getText().toString())) {
-                    chatNameEdit.setError("Name should contain at least one letter or number");
+                    setChatNameError();
                 }
             }
 
@@ -57,8 +58,19 @@ public class CreateChatActivity extends AppCompatActivity {
         });
     }
 
+    private void openChatListActivity() {
+        Intent intent = new Intent(CreateChatActivity.this, ChatListActivity.class);
+        startActivity(intent);
+    }
+
+    private void setChatNameError() {
+        chatNameEdit.requestFocus();
+        chatNameEdit.setError("Name should contain at least one letter or number");
+    }
+
     private void createChat() {
         if (chatNameEdit.getError() != null || chatNameEdit.getText().length() == 0) {
+            setChatNameError();
             return;
         }
         Intent intent = new Intent(CreateChatActivity.this, ChatListActivity.class);

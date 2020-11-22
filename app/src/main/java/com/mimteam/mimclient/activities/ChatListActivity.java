@@ -75,7 +75,7 @@ public class ChatListActivity extends AppCompatActivity {
 
     private void createChat(String chatName) {
         MessageModel messageModel = new MessageModel(getString(R.string.user_name), getString(R.string.test_message));
-        chats.add(new ChatModel(messageModel, chatName, "@drawable/hacker"));
+        chats.add(new ChatModel(messageModel, chatName));
         chatAdapter.notifyDataSetChanged();
     }
 }
