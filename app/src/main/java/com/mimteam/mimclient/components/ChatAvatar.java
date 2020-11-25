@@ -4,18 +4,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mimteam.mimclient.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ChatAvatar extends RelativeLayout {
-    private ImageView avatarImage;
-
     private TextView avatarText;
 
     public ChatAvatar(Context context) {
@@ -32,7 +26,6 @@ public class ChatAvatar extends RelativeLayout {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.chat_avatar_component, this);
 
-        avatarImage = view.findViewById(R.id.avatarImage);
         avatarText = view.findViewById(R.id.avatarText);
     }
 

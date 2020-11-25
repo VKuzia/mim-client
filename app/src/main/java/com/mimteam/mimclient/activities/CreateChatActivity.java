@@ -65,7 +65,7 @@ public class CreateChatActivity extends AppCompatActivity {
 
     private void setChatNameError() {
         chatNameEdit.requestFocus();
-        chatNameEdit.setError("Name should contain at least one letter or number");
+        chatNameEdit.setError(getString(R.string.chat_name_error));
     }
 
     private void createChat() {
@@ -74,7 +74,7 @@ public class CreateChatActivity extends AppCompatActivity {
             return;
         }
         Intent intent = new Intent(CreateChatActivity.this, ChatListActivity.class);
-        intent.putExtra("chatName", chatNameEdit.getText().toString());
+        intent.putExtra(getString(R.string.chat_name_variable), chatNameEdit.getText().toString());
         startActivity(intent);
     }
 }
