@@ -25,6 +25,6 @@ public class ResponseDTO {
     }
 
     public void setResponseMessage(String responseMessage) {
-        this.responseMessage = responseMessage;
+        this.responseMessage = responseMessage != null ? responseMessage : "";
     }
 }

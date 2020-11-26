@@ -1,10 +1,9 @@
 package com.mimteam.mimclient.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +12,8 @@ public class HTTPWrapper {
 
     private final HTTPClient httpClient;
 
-    public HTTPWrapper(UserInfo userInfo, String url) {
-        this.httpClient = new HTTPClient(userInfo, url);
+    public HTTPWrapper(HTTPClient httpClient) {
+        this.httpClient = httpClient;
     }
 
     public Optional<Integer> createChat(String chatName) {
@@ -22,7 +21,7 @@ public class HTTPWrapper {
             put("chatName", chatName);
         }};
         Optional<String> response = httpClient.post("/chats/create", new HashMap<>(), params);
-        return convertOptional(response, new TypeReference<Integer>() {
+        return toOptional(response.orNull(), new TypeReference<Integer>() {
         });
     }
 
@@ -43,7 +42,7 @@ public class HTTPWrapper {
     public Optional<List<Integer>> getUserList(Integer chatId) {
         Optional<String> response = httpClient.get("/chats/" + chatId + "/userlist",
                 new HashMap<>(), new HashMap<>());
-        return convertOptional(response, new TypeReference<List<Integer>>() {
+        return toOptional(response.orNull(), new TypeReference<List<Integer>>() {
         });
     }
 
@@ -63,7 +62,7 @@ public class HTTPWrapper {
         }};
         Optional<String> response =
                 httpClient.post("/users/login", new HashMap<>(), params, false);
-        return convertOptional(response, new TypeReference<Integer>() {
+        return toOptional(response.orNull(), new TypeReference<Integer>() {
         });
     }
 
@@ -71,15 +70,18 @@ public class HTTPWrapper {
         Integer userId = httpClient.getUserInfo().getId();
         Optional<String> response = httpClient.get("/users/" + userId + "/chatlist",
                 new HashMap<>(), new HashMap<>());
-        return convertOptional(response, new TypeReference<List<Integer>>() {
-        });
+        return toOptional(response.orNull(), new TypeReference<List<Integer>>() {});
     }
 
-    private static <T, S> Optional<S> convertOptional(@NotNull Optional<T> optional, TypeReference<S> type) {
-        System.out.println(optional.get().toString());
-        if (optional.isPresent()) {
+    private static <T> Optional<T> toOptional(String data, TypeReference<T> type) {
+        if (data != null) {
             ObjectMapper mapper = new ObjectMapper();
-            S result = mapper.convertValue(optional.get(), type);
+            T result = null;
+            try {
+                result = mapper.readValue(data, type);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
             return Optional.fromNullable(result);
         }
         return Optional.absent();

@@ -1,4 +1,5 @@
 import com.google.common.base.Optional;
+import com.mimteam.mimclient.client.HTTPClient;
 import com.mimteam.mimclient.client.HTTPWrapper;
 import com.mimteam.mimclient.client.UserInfo;
 
@@ -20,7 +21,7 @@ public class HttpGetPostTests {
     private final String chatName = "LocalTestChat";
     private UserInfo userInfo = new UserInfo(1);
     private Integer chatId = 2;
-    private HTTPWrapper httpWrapper = new HTTPWrapper(userInfo, url);
+    private HTTPWrapper httpWrapper = new HTTPWrapper(new HTTPClient(userInfo, url));
 
     @Test
     @Order(1)
