@@ -20,7 +20,7 @@ public class HTTPWrapper {
         HashMap<String, String> params = new HashMap<String, String>() {{
             put("chatName", chatName);
         }};
-        Optional<String> response = httpClient.post("/chats/create", new HashMap<>(), params);
+        Optional<String> response = httpClient.post("/chats/create", params);
         return toOptional(response.orNull(), new TypeReference<Integer>() {
         });
     }
@@ -29,19 +29,18 @@ public class HTTPWrapper {
         HashMap<String, String> params = new HashMap<String, String>() {{
             put("userId", httpClient.getUserInfo().getId().toString());
         }};
-        return httpClient.post("/chats/" + chatId + "/join", new HashMap<>(), params);
+        return httpClient.post("/chats/" + chatId + "/join", params);
     }
 
     public Optional<String> leaveChat(Integer chatId) {
         HashMap<String, String> params = new HashMap<String, String>() {{
             put("userId", httpClient.getUserInfo().getId().toString());
         }};
-        return httpClient.post("/chats/" + chatId + "/leave", new HashMap<>(), params);
+        return httpClient.post("/chats/" + chatId + "/leave", params);
     }
 
     public Optional<List<Integer>> getUserList(Integer chatId) {
-        Optional<String> response = httpClient.get("/chats/" + chatId + "/userlist",
-                new HashMap<>(), new HashMap<>());
+        Optional<String> response = httpClient.get("/chats/" + chatId + "/userlist", new HashMap<>());
         return toOptional(response.orNull(), new TypeReference<List<Integer>>() {
         });
     }
@@ -52,7 +51,7 @@ public class HTTPWrapper {
             put("login", login);
             put("password", password);
         }};
-        return httpClient.post("/users/signup", new HashMap<>(), params, false);
+        return httpClient.post("/users/signup", params);
     }
 
     public Optional<Integer> login(String login, String password) {
@@ -61,16 +60,16 @@ public class HTTPWrapper {
             put("password", password);
         }};
         Optional<String> response =
-                httpClient.post("/users/login", new HashMap<>(), params, false);
+                httpClient.post("/users/login", params);
         return toOptional(response.orNull(), new TypeReference<Integer>() {
         });
     }
 
     public Optional<List<Integer>> getChatsList() {
         Integer userId = httpClient.getUserInfo().getId();
-        Optional<String> response = httpClient.get("/users/" + userId + "/chatlist",
-                new HashMap<>(), new HashMap<>());
-        return toOptional(response.orNull(), new TypeReference<List<Integer>>() {});
+        Optional<String> response = httpClient.get("/users/" + userId + "/chatlist", new HashMap<>());
+        return toOptional(response.orNull(), new TypeReference<List<Integer>>() {
+        });
     }
 
     private static <T> Optional<T> toOptional(String data, TypeReference<T> type) {

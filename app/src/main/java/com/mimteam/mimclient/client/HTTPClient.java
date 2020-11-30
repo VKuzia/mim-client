@@ -31,12 +31,8 @@ public class HTTPClient {
         this.okHttpClient = new OkHttpClient();
     }
 
-    public Optional<String> get(String urlPrefix, Map<String, String> headersParams, Map<String, String> params) {
-        return get(urlPrefix, headersParams, params, true);
-    }
-
-    public Optional<String> get(String urlPrefix, Map<String, String> headersParams, Map<String, String> params, boolean auth) {
-        Request request = formGetRequest(urlPrefix, headersParams, params, auth);
+    public Optional<String> get(String urlPrefix, Map<String, String> params) {
+        Request request = formGetRequest(urlPrefix, params);
         String response = null;
         try {
             response = sendRequest(request);
@@ -46,12 +42,8 @@ public class HTTPClient {
         return Optional.fromNullable(response);
     }
 
-    public Optional<String> post(String urlPrefix, Map<String, String> headersParams, Map<String, String> params) {
-        return post(urlPrefix, headersParams, params, true);
-    }
-
-    public Optional<String> post(String urlSuffix, Map<String, String> headersParams, Map<String, String> params, boolean auth) {
-        Request request = formPostRequest(urlSuffix, headersParams, params, auth);
+    public Optional<String> post(String urlSuffix, Map<String, String> params) {
+        Request request = formPostRequest(urlSuffix, params);
         String response = null;
         try {
             response = sendRequest(request);
@@ -61,12 +53,12 @@ public class HTTPClient {
         return Optional.fromNullable(response);
     }
 
-    private Request formGetRequest(String urlSuffix, Map<String, String> headersParams, @NotNull Map<String, String> params, boolean auth) {
+    private Request formGetRequest(String urlSuffix, @NotNull Map<String, String> params) {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(url + urlSuffix).newBuilder();
         for (Map.Entry<String, String> param : params.entrySet()) {
             urlBuilder.addQueryParameter(param.getKey(), param.getValue());
         }
-        Headers headers = createHeaders(headersParams, auth);
+        Headers headers = createHeaders();
         return new Request.Builder()
                 .url(urlBuilder.build().url().toString())
                 .headers(headers)
@@ -74,12 +66,12 @@ public class HTTPClient {
                 .build();
     }
 
-    private Request formPostRequest(String urlSuffix, Map<String, String> headersParams, @NotNull Map<String, String> params, boolean auth) {
+    private Request formPostRequest(String urlSuffix, @NotNull Map<String, String> params) {
         FormEncodingBuilder formBody = new FormEncodingBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
             formBody.add(entry.getKey(), entry.getValue());
         }
-        Headers headers = createHeaders(headersParams, auth);
+        Headers headers = createHeaders();
         return new Request.Builder()
                 .url(url + urlSuffix)
                 .headers(headers)
@@ -87,14 +79,8 @@ public class HTTPClient {
                 .build();
     }
 
-    private @NotNull Headers createHeaders(Map<String, String> headersParams, boolean auth) {
-        if (auth) {
-            if (userInfo.getToken() == null) {
-                throw new NullTokenException();
-            }
-            headersParams.put("Authorization", "Bearer " + userInfo.getToken());
-        }
-        return Headers.of(headersParams);
+    private @NotNull Headers createHeaders() {
+        return Headers.of("Authorization", "Bearer " + userInfo.getToken());
     }
 
     private @Nullable String sendRequest(Request request) {
