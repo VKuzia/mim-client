@@ -1,12 +1,10 @@
 package com.mimteam.mimclient.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mimteam.mimclient.MainActivity;
@@ -17,7 +15,7 @@ public class SignInActivity extends AppCompatActivity {
     private EditText loginEdit;
     private EditText passwordEdit;
     private Button signInButton;
-    private Button signUpButton;
+    private TextView toSignUpView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,18 +24,17 @@ public class SignInActivity extends AppCompatActivity {
 
         initializeUIComponents();
         attachListenersToComponents();
-        return;
     }
 
     private void initializeUIComponents() {
         loginEdit = findViewById(R.id.signInLoginEdit);
         passwordEdit = findViewById(R.id.signInPasswordEdit);
-        signUpButton = findViewById(R.id.toSignUpButton);
+        toSignUpView = findViewById(R.id.toSignUp);
         signInButton = findViewById(R.id.signInButton);
     }
 
     private void attachListenersToComponents() {
-        signUpButton.setOnClickListener(button -> MainActivity.switchActivity(SignUpActivity.class));
+        toSignUpView.setOnClickListener(button -> MainActivity.switchActivity(SignUpActivity.class));
         signInButton.setOnClickListener(button -> authorization());
     }
 

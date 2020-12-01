@@ -8,38 +8,21 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/signInLabel"
+        android:id="@+id/MiMLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="150dp"
-        android:text="@string/sign_in"
+        android:text="@string/app_name"
         android:textSize="40sp"
         android:textColor="@color/black"/>
-
-    <Button
-        android:id="@+id/toSignUpButton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_toRightOf="@id/signInLabel"
-        android:layout_toEndOf="@id/signInLabel"
-        android:layout_alignTop="@id/signInLabel"
-        android:layout_alignBottom="@id/signInLabel"
-        android:layout_marginLeft="30dp"
-        android:layout_marginStart="30dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/sign_up"
-        android:textSize="17sp"
-        android:textColor="@color/gray"
-        android:background="@android:color/transparent" />
 
     <EditText
         android:id="@+id/signInLoginEdit"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_below="@id/signInLabel"
+        android:layout_below="@id/MiMLabel"
         android:layout_marginTop="60dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -82,7 +65,43 @@
         android:layout_marginTop="50dp"
         android:clickable="true"
         android:focusable="true"
-        android:text="@string/sign_in"
+        android:text="@string/login"
         android:textSize="15sp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@id/signInButton"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/textLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/login_label"
+            android:autoSizeTextType="uniform" />
+
+        <TextView
+            android:id="@+id/toSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/textLabel"
+            android:layout_toEndOf="@id/textLabel"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/to_signup"
+            android:textColor="@color/purple_500"
+            android:autoSizeTextType="uniform"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>
