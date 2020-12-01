@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.mimteam.mimclient.R;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ChatAvatar extends RelativeLayout {
     private TextView avatarText;
 
@@ -30,6 +32,9 @@ public class ChatAvatar extends RelativeLayout {
     }
 
     public boolean setChatName(String chatName) {
+        if (chatName == null) {
+            return true;
+        }
         String text = getFirstNonEmptyWord(chatName);
         if (text.length() > 0) {
             text = text.substring(0, 1).toUpperCase();
@@ -38,7 +43,7 @@ public class ChatAvatar extends RelativeLayout {
         return text.isEmpty();
     }
 
-    private String getFirstNonEmptyWord(String text) {
+    private String getFirstNonEmptyWord(@NotNull String text) {
         String[] words = text.split("[^\\w\\d]");
         for (String word : words) {
             if (!word.isEmpty()) {

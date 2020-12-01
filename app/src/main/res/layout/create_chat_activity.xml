@@ -39,6 +39,7 @@
         android:hint="@string/chat_name_hint"
         android:importantForAutofill="no"
         android:inputType="textShortMessage"
+        android:maxLength="25"
         android:maxLines="1"
         android:textSize="25sp" />
 
