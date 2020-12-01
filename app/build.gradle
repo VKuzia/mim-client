@@ -16,7 +16,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -32,7 +32,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.navigation:navigation-fragment:2.3.1'
     implementation 'androidx.navigation:navigation-ui:2.3.1'
-    implementation "androidx.navigation:navigation-fragment:2.3.1"
-    implementation "androidx.navigation:navigation-ui:2.3.1"
     implementation 'org.jetbrains:annotations:19.0.0'
+    implementation group: 'com.squareup.okhttp', name: 'okhttp', version: '2.7.5'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
+    implementation group: 'com.google.guava', name: 'guava', version: '30.0-android'
 }
