@@ -19,7 +19,7 @@ public class HTTPWrapper {
     public Optional<Integer> createChat(String chatName) {
         ImmutableMap<String, String> params = ImmutableMap.of("chatName", chatName);
         Optional<String> response = httpClient.post("/chats/create", params);
-        return toOptional(response.orNull(), new TypeReference<Integer>() {});
+        return parseResponse(response.orNull(), new TypeReference<Integer>() {});
     }
 
     public Optional<String> joinChat(Integer chatId) {
@@ -35,9 +35,8 @@ public class HTTPWrapper {
     }
 
     public Optional<List<Integer>> getUserList(Integer chatId) {
-        Optional<String> response = httpClient.get("/chats/" + chatId + "/userlist",
-                ImmutableMap.of());
-        return toOptional(response.orNull(), new TypeReference<List<Integer>>() {});
+        Optional<String> response = httpClient.get("/chats/" + chatId + "/userlist");
+        return parseResponse(response.orNull(), new TypeReference<List<Integer>>() {});
     }
 
     public Optional<String> signUp(String name, String login, String password) {
@@ -50,27 +49,26 @@ public class HTTPWrapper {
         ImmutableMap<String, String> params = ImmutableMap.of(
                 "login", login, "password", password);
         Optional<String> response = httpClient.post("/users/login", params);
-        return toOptional(response.orNull(), new TypeReference<Integer>() {});
+        return parseResponse(response.orNull(), new TypeReference<Integer>() {});
     }
 
     public Optional<List<Integer>> getChatsList() {
         Integer userId = httpClient.getUserInfo().getId();
-        Optional<String> response = httpClient.get("/users/" + userId + "/chatlist",
-                ImmutableMap.of());
-        return toOptional(response.orNull(), new TypeReference<List<Integer>>() {});
+        Optional<String> response = httpClient.get("/users/" + userId + "/chatlist");
+        return parseResponse(response.orNull(), new TypeReference<List<Integer>>() {});
     }
 
-    private static <T> Optional<T> toOptional(String data, TypeReference<T> type) {
-        if (data != null) {
-            ObjectMapper mapper = new ObjectMapper();
-            T result = null;
-            try {
-                result = mapper.readValue(data, type);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            return Optional.fromNullable(result);
+    private static <T> Optional<T> parseResponse(String response, TypeReference<T> outputType) {
+        if (response == null) {
+            return Optional.absent();
         }
-        return Optional.absent();
+        ObjectMapper mapper = new ObjectMapper();
+        T result = null;
+        try {
+            result = mapper.readValue(response, outputType);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return Optional.fromNullable(result);
     }
 }

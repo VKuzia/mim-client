@@ -2,6 +2,7 @@ package com.mimteam.mimclient.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.HttpUrl;
@@ -31,26 +32,18 @@ public class HTTPClient {
         this.okHttpClient = new OkHttpClient();
     }
 
-    public Optional<String> get(String urlPrefix, Map<String, String> params) {
-        Request request = formGetRequest(urlPrefix, params);
-        String response = null;
-        try {
-            response = sendRequest(request);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Optional.fromNullable(response);
+    public Optional<String> get(String urlSuffix) {
+        return get(urlSuffix, ImmutableMap.of());
+    }
+
+    public Optional<String> get(String urlSuffix, Map<String, String> params) {
+        Request request = formGetRequest(urlSuffix, params);
+        return sendRequest(request);
     }
 
     public Optional<String> post(String urlSuffix, Map<String, String> params) {
         Request request = formPostRequest(urlSuffix, params);
-        String response = null;
-        try {
-            response = sendRequest(request);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Optional.fromNullable(response);
+        return sendRequest(request);
     }
 
     private Request formGetRequest(String urlSuffix, @NotNull Map<String, String> params) {
@@ -83,7 +76,7 @@ public class HTTPClient {
         return Headers.of("Authorization", "Bearer " + userInfo.getToken());
     }
 
-    private @Nullable String sendRequest(Request request) {
+    private @Nullable Optional<String> sendRequest(Request request) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Callable<String> callable = () -> {
             Response response = okHttpClient.newCall(request).execute();
@@ -96,13 +89,11 @@ public class HTTPClient {
         };
         Future<String> future = executor.submit(callable);
         try {
-            return future.get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+            return Optional.fromNullable(future.get());
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-        return null;
+        return Optional.absent();
     }
 
     public UserInfo getUserInfo() {
