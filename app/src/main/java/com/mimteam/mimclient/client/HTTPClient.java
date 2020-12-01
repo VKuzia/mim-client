@@ -105,12 +105,6 @@ public class HTTPClient {
         return null;
     }
 
-    public static class NullTokenException extends RuntimeException {
-        public NullTokenException() {
-            super("User token is null");
-        }
-    }
-
     public UserInfo getUserInfo() {
         return userInfo;
     }

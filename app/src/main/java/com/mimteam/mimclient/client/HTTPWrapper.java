@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class HTTPWrapper {
@@ -17,59 +17,47 @@ public class HTTPWrapper {
     }
 
     public Optional<Integer> createChat(String chatName) {
-        HashMap<String, String> params = new HashMap<String, String>() {{
-            put("chatName", chatName);
-        }};
+        ImmutableMap<String, String> params = ImmutableMap.of("chatName", chatName);
         Optional<String> response = httpClient.post("/chats/create", params);
-        return toOptional(response.orNull(), new TypeReference<Integer>() {
-        });
+        return toOptional(response.orNull(), new TypeReference<Integer>() {});
     }
 
     public Optional<String> joinChat(Integer chatId) {
-        HashMap<String, String> params = new HashMap<String, String>() {{
-            put("userId", httpClient.getUserInfo().getId().toString());
-        }};
+        ImmutableMap<String, String> params = ImmutableMap.of("userId",
+                httpClient.getUserInfo().getId().toString());
         return httpClient.post("/chats/" + chatId + "/join", params);
     }
 
     public Optional<String> leaveChat(Integer chatId) {
-        HashMap<String, String> params = new HashMap<String, String>() {{
-            put("userId", httpClient.getUserInfo().getId().toString());
-        }};
+        ImmutableMap<String, String> params = ImmutableMap.of("userId",
+                httpClient.getUserInfo().getId().toString());
         return httpClient.post("/chats/" + chatId + "/leave", params);
     }
 
     public Optional<List<Integer>> getUserList(Integer chatId) {
-        Optional<String> response = httpClient.get("/chats/" + chatId + "/userlist", new HashMap<>());
-        return toOptional(response.orNull(), new TypeReference<List<Integer>>() {
-        });
+        Optional<String> response = httpClient.get("/chats/" + chatId + "/userlist",
+                ImmutableMap.of());
+        return toOptional(response.orNull(), new TypeReference<List<Integer>>() {});
     }
 
     public Optional<String> signUp(String name, String login, String password) {
-        HashMap<String, String> params = new HashMap<String, String>() {{
-            put("name", name);
-            put("login", login);
-            put("password", password);
-        }};
+        ImmutableMap<String, String> params = ImmutableMap.of(
+                "name", name, "login", login, "password", password);
         return httpClient.post("/users/signup", params);
     }
 
     public Optional<Integer> login(String login, String password) {
-        HashMap<String, String> params = new HashMap<String, String>() {{
-            put("login", login);
-            put("password", password);
-        }};
-        Optional<String> response =
-                httpClient.post("/users/login", params);
-        return toOptional(response.orNull(), new TypeReference<Integer>() {
-        });
+        ImmutableMap<String, String> params = ImmutableMap.of(
+                "login", login, "password", password);
+        Optional<String> response = httpClient.post("/users/login", params);
+        return toOptional(response.orNull(), new TypeReference<Integer>() {});
     }
 
     public Optional<List<Integer>> getChatsList() {
         Integer userId = httpClient.getUserInfo().getId();
-        Optional<String> response = httpClient.get("/users/" + userId + "/chatlist", new HashMap<>());
-        return toOptional(response.orNull(), new TypeReference<List<Integer>>() {
-        });
+        Optional<String> response = httpClient.get("/users/" + userId + "/chatlist",
+                ImmutableMap.of());
+        return toOptional(response.orNull(), new TypeReference<List<Integer>>() {});
     }
 
     private static <T> Optional<T> toOptional(String data, TypeReference<T> type) {
