@@ -35,6 +35,16 @@ public class ChatListActivity extends AppCompatActivity {
         setupChatList();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        String createdChatName = intent.getStringExtra(getString(R.string.chat_name_variable));
+        if (createdChatName != null) {
+            createChat(createdChatName);
+        }
+    }
+
     protected void initializeUIComponents() {
         chatsList = findViewById(R.id.listOfChats);
         chatListToolbar = findViewById(R.id.toolBarChat);
@@ -53,7 +63,8 @@ public class ChatListActivity extends AppCompatActivity {
     }
 
     private void handleAddChatButtonClicked() {
-        createChat();
+        Intent intent = new Intent(ChatListActivity.this, CreateChatActivity.class);
+        startActivity(intent);
     }
 
     private void handleListViewItemClicked() {
@@ -62,10 +73,9 @@ public class ChatListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void createChat() {
+    private void createChat(String chatName) {
         MessageModel messageModel = new MessageModel(getString(R.string.user_name), getString(R.string.test_message));
-        String chatName = String.format(getString(R.string.chat_name), chats.size());
-        chats.add(new ChatModel(messageModel, chatName, "@drawable/hacker"));
+        chats.add(new ChatModel(messageModel, chatName));
         chatAdapter.notifyDataSetChanged();
     }
 }
