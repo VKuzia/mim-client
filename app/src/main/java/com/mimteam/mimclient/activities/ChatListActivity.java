@@ -43,7 +43,8 @@ public class ChatListActivity extends AppCompatActivity {
 
     private void attachListenersToComponents() {
         addChat.setOnClickListener(view -> handleAddChatButtonClicked());
-        chatsList.setOnItemClickListener((parent, view, position, id) -> MainActivity.switchActivity(ChatActivity.class));
+        chatsList.setOnItemClickListener(
+                (parent, view, position, id) -> MainActivity.switchActivity(ChatActivity.class));
     }
 
     private void setupChatList() {

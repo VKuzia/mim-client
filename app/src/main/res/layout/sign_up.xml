@@ -33,6 +33,7 @@
         android:layout_marginRight="30dp"
         android:gravity="center"
         android:hint="@string/user_name"
+        android:maxLength="30"
         android:importantForAutofill="no"
         android:inputType="text" />
 
@@ -52,6 +53,7 @@
         android:layout_marginRight="30dp"
         android:gravity="center"
         android:hint="@string/login"
+        android:maxLength="30"
         android:importantForAutofill="no"
         android:inputType="text" />
 
@@ -71,6 +73,7 @@
         android:layout_marginRight="30dp"
         android:gravity="center"
         android:hint="@string/password"
+        android:maxLength="30"
         android:importantForAutofill="no"
         android:inputType="textPassword" />
 
@@ -103,7 +106,7 @@
             android:gravity="center"
             android:maxLines="1"
             android:text="@string/signup_label"
-            android:autoSizeTextType="uniform"
+            app:autoSizeTextType="uniform"
             android:textColor="@color/gray" />
 
         <TextView
@@ -114,7 +117,7 @@
             android:layout_toEndOf="@id/textLabel"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
-            android:autoSizeTextType="uniform"
+            app:autoSizeTextType="uniform"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
