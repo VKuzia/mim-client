@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mimteam.mimclient.models.ws.MessageDTO;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import java.util.Objects;
 import io.reactivex.CompletableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -28,14 +28,13 @@ public class WSClient {
     private final UserInfo userInfo;
     private final ObjectMapper jsonMapper;
     private StompClient stompClient;
-    private CompositeDisposable subscriptions;
+    private Disposable lifecycleSubscription;
     private ArrayList<Disposable> messages;
     private HashMap<Integer, Disposable> idToSubscription;
 
     public WSClient(@NotNull UserInfo userInfo) {
         this.userInfo = userInfo;
         this.jsonMapper = new ObjectMapper();
-        this.subscriptions = new CompositeDisposable();
         this.messages = new ArrayList<>();
         this.idToSubscription = new HashMap<>();
     }
@@ -44,8 +43,7 @@ public class WSClient {
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url);
         stompClient.withClientHeartbeat(1000).withServerHeartbeat(1000);
         resetSubscriptions();
-
-        Disposable disposableLifecycle = stompClient.lifecycle()
+        lifecycleSubscription = stompClient.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(lifecycleEvent -> {
@@ -65,7 +63,6 @@ public class WSClient {
                             break;
                     }
                 });
-        subscriptions.add(disposableLifecycle);
         stompClient.connect();
     }
 
@@ -78,14 +75,12 @@ public class WSClient {
                 .subscribe(this::handleReceivedMessage,
                         throwable -> Log.e(LOG_TAG, "ERROR on subscribe topic", throwable));
         idToSubscription.put(id, disposableSubscription);
-        subscriptions.add(disposableSubscription);
     }
 
     public void unsubscribe(Integer id) {
         Log.d(LOG_TAG, "UNSUBSCRIBE FROM " + id);
         Disposable subscriptionToDelete = idToSubscription.get(id);
         Log.d(LOG_TAG, Objects.requireNonNull(subscriptionToDelete).toString());
-        subscriptions.remove(Objects.requireNonNull(subscriptionToDelete));
         idToSubscription.remove(id);
     }
 
@@ -115,7 +110,8 @@ public class WSClient {
         messages.add(disposableMessage);
     }
 
-    protected CompletableTransformer applySchedulers() {
+    @Contract(pure = true)
+    private @NotNull CompletableTransformer applySchedulers() {
         return upstream -> upstream
                 .unsubscribeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.io())
@@ -124,7 +120,7 @@ public class WSClient {
 
     private void resetSubscriptions() {
         dispose();
-        subscriptions = new CompositeDisposable();
+        lifecycleSubscription = null;
         messages = new ArrayList<>();
         idToSubscription = new HashMap<>();
     }
@@ -141,7 +137,9 @@ public class WSClient {
 
     public void dispose() {
         idToSubscription.clear();
-        subscriptions.dispose();
+        if (lifecycleSubscription != null) {
+            lifecycleSubscription.dispose();
+        }
         for (Disposable item : messages) {
             item.dispose();
         }
