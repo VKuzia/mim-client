@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.adapters.ChatAdapter;
 import com.mimteam.mimclient.models.ChatModel;
 import com.mimteam.mimclient.models.MessageModel;
@@ -45,32 +46,22 @@ public class ChatListActivity extends AppCompatActivity {
         }
     }
 
-    protected void initializeUIComponents() {
+    private void initializeUIComponents() {
         chatsList = findViewById(R.id.listOfChats);
         chatListToolbar = findViewById(R.id.toolBarChat);
         addChat = findViewById(R.id.fab);
     }
 
-    protected void attachListenersToComponents() {
-        addChat.setOnClickListener(view -> handleAddChatButtonClicked());
-        chatsList.setOnItemClickListener((parent, view, position, id) -> handleListViewItemClicked());
+    private void attachListenersToComponents() {
+        addChat.setOnClickListener(view -> MainActivity.switchActivity(CreateChatActivity.class));
+        chatsList.setOnItemClickListener(
+                (parent, view, position, id) -> MainActivity.switchActivity(ChatActivity.class));
     }
 
     private void setupChatList() {
         chats = new ArrayList<>();
         chatAdapter = new ChatAdapter(this, R.layout.chat_markup, chats);
         chatsList.setAdapter(chatAdapter);
-    }
-
-    private void handleAddChatButtonClicked() {
-        Intent intent = new Intent(ChatListActivity.this, CreateChatActivity.class);
-        startActivity(intent);
-    }
-
-    private void handleListViewItemClicked() {
-        Intent intent = new Intent();
-        intent.setClass(ChatListActivity.this, ChatActivity.class);
-        startActivity(intent);
     }
 
     private void createChat(String chatName) {
