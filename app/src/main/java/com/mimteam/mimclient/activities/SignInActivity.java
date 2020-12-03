@@ -40,7 +40,18 @@ public class SignInActivity extends AppCompatActivity {
 
     private void authorization() {
         String login = loginEdit.getText().toString();
+        if (login.length() == 0) {
+            loginEdit.setError(getString(R.string.sign_in_error) + " " +
+                    getString(R.string.login).toLowerCase());
+        }
         String password = passwordEdit.getText().toString();
+        if (password.length() == 0) {
+            passwordEdit.setError(getString(R.string.sign_in_error) + " " +
+                    getString(R.string.password).toLowerCase());
+        }
+        if (passwordEdit.getError() != null || loginEdit.getError() != null) {
+            return;
+        }
         MainActivity.switchActivity(ChatListActivity.class);
     }
 }

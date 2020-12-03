@@ -42,8 +42,25 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void createAccount() {
         String username = usernameEdit.getText().toString();
+        if (username.length() == 0) {
+            usernameEdit.setError(getString(R.string.user_name) + " " +
+                    getString(R.string.sign_up_error));
+        }
         String login = loginEdit.getText().toString();
+        if (login.length() == 0) {
+            loginEdit.setError(getString(R.string.login) + " " +
+                    getString(R.string.sign_up_error));
+        }
         String password = passwordEdit.getText().toString();
+        if (password.length() == 0) {
+            passwordEdit.setError(getString(R.string.password) + " " +
+                    getString(R.string.sign_up_error));
+        }
+        if (usernameEdit.getError() != null ||
+                loginEdit.getError() != null ||
+                passwordEdit.getError() != null) {
+            return;
+        }
         MainActivity.switchActivity(ChatListActivity.class);
     }
 }
