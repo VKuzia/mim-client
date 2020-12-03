@@ -1,0 +1,11 @@
+language: android
+
+dist: trusty
+
+before_install:
+  - yes | sdkmanager "platforms;android-30"
+
+android:
+  components:
+    - build-tools-30.0.2
+    - android-30

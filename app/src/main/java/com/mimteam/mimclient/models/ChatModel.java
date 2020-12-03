@@ -3,12 +3,10 @@ package com.mimteam.mimclient.models;
 public class ChatModel {
     private MessageModel messageModel;
     private String chatName;
-    private String image;
 
-    public ChatModel(MessageModel messageModel, String chatName, String image) {
+    public ChatModel(MessageModel messageModel, String chatName) {
         this.messageModel = messageModel;
         this.chatName = chatName;
-        this.image = image;
     }
 
     public String getMessage() {
@@ -29,9 +27,5 @@ public class ChatModel {
 
     public String getChatName() {
         return chatName;
-    }
-
-    public String getImage() {
-        return image;
     }
 }

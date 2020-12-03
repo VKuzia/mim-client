@@ -3,6 +3,7 @@ package com.mimteam.mimclient.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 
@@ -35,6 +36,16 @@ public class ChatListActivity extends AppCompatActivity {
         setupChatList();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        String createdChatName = intent.getStringExtra(getString(R.string.chat_name_variable));
+        if (createdChatName != null) {
+            createChat(createdChatName);
+        }
+    }
+
     private void initializeUIComponents() {
         chatsList = findViewById(R.id.listOfChats);
         chatListToolbar = findViewById(R.id.toolBarChat);
@@ -42,7 +53,7 @@ public class ChatListActivity extends AppCompatActivity {
     }
 
     private void attachListenersToComponents() {
-        addChat.setOnClickListener(view -> handleAddChatButtonClicked());
+        addChat.setOnClickListener(view -> MainActivity.switchActivity(CreateChatActivity.class));
         chatsList.setOnItemClickListener(
                 (parent, view, position, id) -> MainActivity.switchActivity(ChatActivity.class));
     }
@@ -53,14 +64,9 @@ public class ChatListActivity extends AppCompatActivity {
         chatsList.setAdapter(chatAdapter);
     }
 
-    private void handleAddChatButtonClicked() {
-        createChat();
-    }
-
-    private void createChat() {
+    private void createChat(String chatName) {
         MessageModel messageModel = new MessageModel(getString(R.string.user_name), getString(R.string.test_message));
-        String chatName = String.format(getString(R.string.chat_name), chats.size());
-        chats.add(new ChatModel(messageModel, chatName, "@drawable/hacker"));
+        chats.add(new ChatModel(messageModel, chatName));
         chatAdapter.notifyDataSetChanged();
     }
 }

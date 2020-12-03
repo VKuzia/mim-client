@@ -8,20 +8,26 @@
     <string name="send">Send</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
-
-    <!--    Authorization UI-->
     <string name="sign_up">Sign up</string>
     <string name="login_label">No account yet?</string>
     <string name="signup_label">Already have an account?</string>
     <string name="to_login">Login now</string>
     <string name="to_signup">Sign up now</string>
+    <string name="chat_name_hint">Chat Name</string>
+    <string name="create_button">Create</string>
+    <string name="avatar">W</string>
 
-    <!--    Error messages-->
+    <!--    Message and chat model-->
     <string name="sign_in_error">Enter your</string>
     <string name="sign_up_error">should contain at least one letter or number</string>
-    <!--    Message and chat model-->
     <string name="chat_name">Chat %d</string>
     <string name="user_name">Username</string>
     <string name="test_message">How are you doing? Go. I wish you good luck. Happy New Year</string>
     <string name="time">20:00</string>
+
+    <!--    Error Messages-->
+    <string name="chat_name_error">Name should contain at least one letter or number</string>
+
+    <!--    Intent Variables-->
+    <string name="chat_name_variable">chatName</string>
 </resources>
