@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
-
 public class TextMessage implements Transferable {
     private Integer userId;
     private Integer chatId;

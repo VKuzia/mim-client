@@ -1,7 +1,7 @@
 package com.mimteam.mimclient.models.ws;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.mimteam.mimclient.models.ws.messages.ChatMembershipMessage;
+import com.mimteam.mimclient.models.ws.messages.ChatMembershipMessage.ChatMembershipMessageType;
 
 import java.util.Date;
 
@@ -13,7 +13,7 @@ public class MessageDTO {
     private String content;
     private Date time;
 
-    private ChatMembershipMessage.ChatMembershipMessageType chatMembershipMessageType;
+    private ChatMembershipMessageType chatMembershipMessageType;
 
     public enum MessageType {
         TEXT_MESSAGE, CHAT_MEMBERSHIP_MESSAGE
@@ -59,11 +59,11 @@ public class MessageDTO {
         this.time = time;
     }
 
-    public ChatMembershipMessage.ChatMembershipMessageType getChatMembershipMessageType() {
+    public ChatMembershipMessageType getChatMembershipMessageType() {
         return chatMembershipMessageType;
     }
 
-    public void setChatMembershipMessageType(ChatMembershipMessage.ChatMembershipMessageType chatMembershipMessageType) {
+    public void setChatMembershipMessageType(ChatMembershipMessageType chatMembershipMessageType) {
         this.chatMembershipMessageType = chatMembershipMessageType;
     }
 }

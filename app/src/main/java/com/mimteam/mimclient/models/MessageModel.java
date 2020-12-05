@@ -1,5 +1,7 @@
 package com.mimteam.mimclient.models;
 
+import com.mimteam.mimclient.util.DateAssistant;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -8,9 +10,6 @@ public class MessageModel {
     private String userName;
     private String message;
     private Date dateTime;
-
-    private final SimpleDateFormat timeFormatter = new SimpleDateFormat("HH mm", Locale.ENGLISH);
-    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy MM dd", Locale.ENGLISH);
 
     public MessageModel(String userName, String message) {
         this(userName, message, new Date());
@@ -31,10 +30,10 @@ public class MessageModel {
     }
 
     public String getTimeString() {
-        return timeFormatter.format(dateTime);
+        return DateAssistant.timeToString(dateTime);
     }
 
     public String getDateString() {
-        return dateFormatter.format(dateTime);
+        return DateAssistant.dateToString(dateTime);
     }
 }

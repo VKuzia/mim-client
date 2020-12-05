@@ -27,10 +27,10 @@ public class WSClient {
     private final String LOG_TAG = "WS_CLIENT";
     private final UserInfo userInfo;
     private final ObjectMapper jsonMapper;
+    private final ArrayList<Disposable> messages;
+    private final HashMap<Integer, Disposable> idToSubscription;
     private StompClient stompClient;
     private Disposable lifecycleSubscription;
-    private ArrayList<Disposable> messages;
-    private HashMap<Integer, Disposable> idToSubscription;
 
     public WSClient(@NotNull UserInfo userInfo) {
         this.userInfo = userInfo;
@@ -42,7 +42,7 @@ public class WSClient {
     public void connect(String url) {
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url);
         stompClient.withClientHeartbeat(1000).withServerHeartbeat(1000);
-        resetSubscriptions();
+        dispose();
         lifecycleSubscription = stompClient.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -56,7 +56,7 @@ public class WSClient {
                             break;
                         case CLOSED:
                             Log.i(LOG_TAG, "Stomp connection closed");
-                            resetSubscriptions();
+                            dispose();
                             break;
                         case FAILED_SERVER_HEARTBEAT:
                             Log.e(LOG_TAG, "Stomp failed server heartbeat");
@@ -85,19 +85,19 @@ public class WSClient {
     }
 
     public void sendMessage(@NotNull MessageDTO message) {
-        String payload = null;
+        String payload;
         try {
             payload = jsonMapper.writeValueAsString(message);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            return;
         }
-        String finalPayload = payload;
-        Disposable disposableMessage = stompClient.send("/app/chats/" + message.getChatId() + "/message", finalPayload)
+        Disposable disposableMessage = stompClient.send("/app/chats/" + message.getChatId() + "/message", payload)
                 .compose(applySchedulers())
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        Log.i(LOG_TAG, "\nSEND: " + finalPayload + "\n");
+                        Log.i(LOG_TAG, "\nSEND: " + payload + "\n");
                         dispose();
                     }
 
@@ -116,13 +116,6 @@ public class WSClient {
                 .unsubscribeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    private void resetSubscriptions() {
-        dispose();
-        lifecycleSubscription = null;
-        messages = new ArrayList<>();
-        idToSubscription = new HashMap<>();
     }
 
     private void handleReceivedMessage(@NotNull StompMessage message) {
