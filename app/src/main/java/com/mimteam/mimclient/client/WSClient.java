@@ -25,23 +25,25 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class WSClient {
     private final String LOG_TAG = "WS_CLIENT";
+    private final ObjectMapper jsonMapper = new ObjectMapper();
+    private final ArrayList<Disposable> messages = new ArrayList<>();
+    private final HashMap<Integer, Disposable> idToSubscription = new HashMap<>();
     private final UserInfo userInfo;
-    private final ObjectMapper jsonMapper;
-    private final ArrayList<Disposable> messages;
-    private final HashMap<Integer, Disposable> idToSubscription;
     private StompClient stompClient;
     private Disposable lifecycleSubscription;
 
     public WSClient(@NotNull UserInfo userInfo) {
         this.userInfo = userInfo;
-        this.jsonMapper = new ObjectMapper();
-        this.messages = new ArrayList<>();
-        this.idToSubscription = new HashMap<>();
+    }
+
+    public static @NotNull StompClient createStompClient(String url) {
+        return Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
+                .withClientHeartbeat(1000)
+                .withServerHeartbeat(1000);
     }
 
     public void connect(String url) {
-        stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url);
-        stompClient.withClientHeartbeat(1000).withServerHeartbeat(1000);
+        stompClient = WSClient.createStompClient(url);
         dispose();
         lifecycleSubscription = stompClient.lifecycle()
                 .subscribeOn(Schedulers.io())
@@ -110,6 +112,17 @@ public class WSClient {
         messages.add(disposableMessage);
     }
 
+    public void dispose() {
+        idToSubscription.clear();
+        if (lifecycleSubscription != null) {
+            lifecycleSubscription.dispose();
+        }
+        for (Disposable item : messages) {
+            item.dispose();
+        }
+        messages.clear();
+    }
+
     @Contract(pure = true)
     private @NotNull CompletableTransformer applySchedulers() {
         return upstream -> upstream
@@ -126,17 +139,6 @@ public class WSClient {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-    }
-
-    public void dispose() {
-        idToSubscription.clear();
-        if (lifecycleSubscription != null) {
-            lifecycleSubscription.dispose();
-        }
-        for (Disposable item : messages) {
-            item.dispose();
-        }
-        messages.clear();
     }
 
     public UserInfo getUserInfo() {
