@@ -43,8 +43,11 @@ public class WSClient {
     }
 
     public void connect(String url) {
-        stompClient = WSClient.createStompClient(url);
-        dispose();
+        setStompClient(createStompClient(url));
+        connect();
+    }
+
+    private void connect() {
         lifecycleSubscription = stompClient.lifecycle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -69,6 +72,9 @@ public class WSClient {
     }
 
     public void subscribe(Integer id) {
+        if (stompClient == null || !stompClient.isConnected()) {
+            return;
+        }
         Log.d(LOG_TAG, "SUBSCRIBE TO " + id);
         String fullUrl = "/chats/" + id;
         Disposable disposableSubscription = stompClient.topic(fullUrl)
@@ -87,6 +93,9 @@ public class WSClient {
     }
 
     public void sendMessage(@NotNull MessageDTO message) {
+        if (stompClient == null || !stompClient.isConnected()) {
+            return;
+        }
         String payload;
         try {
             payload = jsonMapper.writeValueAsString(message);
@@ -139,6 +148,14 @@ public class WSClient {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setStompClient(StompClient client) {
+        if (stompClient != null && stompClient.isConnected()) {
+            stompClient.disconnect();
+            dispose();
+        }
+        stompClient = client;
     }
 
     public UserInfo getUserInfo() {
