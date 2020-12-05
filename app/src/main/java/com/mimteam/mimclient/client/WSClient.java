@@ -89,6 +89,7 @@ public class WSClient {
         Log.d(LOG_TAG, "UNSUBSCRIBE FROM " + id);
         Disposable subscriptionToDelete = idToSubscription.get(id);
         Log.d(LOG_TAG, Objects.requireNonNull(subscriptionToDelete).toString());
+        subscriptionToDelete.dispose();
         idToSubscription.remove(id);
     }
 
@@ -104,7 +105,9 @@ public class WSClient {
             return;
         }
         Disposable disposableMessage = stompClient.send("/app/chats/" + message.getChatId() + "/message", payload)
-                .compose(applySchedulers())
+                .unsubscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
@@ -130,14 +133,6 @@ public class WSClient {
             item.dispose();
         }
         messages.clear();
-    }
-
-    @Contract(pure = true)
-    private @NotNull CompletableTransformer applySchedulers() {
-        return upstream -> upstream
-                .unsubscribeOn(Schedulers.newThread())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
     }
 
     private void handleReceivedMessage(@NotNull StompMessage message) {
