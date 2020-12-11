@@ -27,6 +27,8 @@
             android:name=".activities.ChatListActivity"
             android:launchMode="singleTask" />
         <activity android:name=".activities.ChatActivity" />
+        <activity android:name=".activities.SignUpActivity" />
+        <activity android:name=".activities.SignInActivity" />
         <activity android:name=".activities.CreateChatActivity"/>
     </application>
 
