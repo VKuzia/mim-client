@@ -28,6 +28,8 @@
     <string name="chat_name_error">Name should contain at least one letter or number</string>
     <string name="sign_up_error">Something went wrong on signing up</string>
     <string name="sign_up_error_title">Sign up error</string>
+    <string name="sign_up_ok">You\'ve signed up successfully!</string>
+    <string name="sign_up_ok_title">Signed up</string>
     <string name="sign_in_error">Sorry, no user with such login and password</string>
     <string name="sign_in_error_title">Sign in error</string>
 
@@ -36,5 +38,5 @@
 
     <!--    URLs-->
     <string name="local_ws_endpoint">ws://localhost:8080/ws</string>
-    <string name="local_http_url">http://10.0.2.2:8080//</string>
+    <string name="local_http_url">http://10.0.2.2:8080</string>
 </resources>

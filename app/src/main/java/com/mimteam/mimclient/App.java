@@ -23,14 +23,22 @@ public class App extends Application {
         httpWrapper = new HTTPWrapper(new HTTPClient(userInfo, getString(R.string.local_http_url)));
     }
 
+    public interface Operable {
+        void operate();
+
+    }
+
     public void showNotification(Context context, String message, String title) {
+        showNotification(context, message, title, () -> {});
+    }
+
+    public void showNotification(Context context, String message, String title, Operable onClose) {
         new AlertDialog.Builder(context)
                 .setMessage(message)
                 .setTitle(title)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).create().show();
+                .setPositiveButton("OK", (dialog, which) -> onClose.operate())
+                .create()
+                .show();
     }
 
     public WSClient getWsClient() {

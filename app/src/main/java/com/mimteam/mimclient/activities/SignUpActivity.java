@@ -70,6 +70,9 @@ public class SignUpActivity extends AppCompatActivity {
                     getString(R.string.sign_up_error), getString(R.string.sign_up_error_title));
             return;
         }
-        MainActivity.switchActivity(SignInActivity.class);
+        ((App) getApplication()).showNotification(this,
+                getString(R.string.sign_up_ok),
+                getString(R.string.sign_up_ok_title),
+                this::finish);
     }
 }
