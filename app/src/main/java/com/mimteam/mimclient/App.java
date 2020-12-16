@@ -25,7 +25,7 @@ public class App extends Application {
     private HTTPWrapper httpWrapper;
     private UserInfo userInfo;
 
-    private Integer openedChatId = 1;
+    private Integer openedChatId;
 
     @Override
     public void onCreate() {
@@ -34,15 +34,14 @@ public class App extends Application {
         messagesStorage = new MessagesStorage();
         messagesEventBus.register(messagesStorage);
 
-        userInfo = new UserInfo(-1);
+        userInfo = new UserInfo();
 
         httpWrapper = new HTTPWrapper(new HTTPClient(userInfo, getString(R.string.local_http_url)));
-
-        wsClient = new WSClient(userInfo);
-        wsClient.setMessagesEventBus(messagesEventBus);
     }
 
     public void connectWebSocket() {
+        wsClient = new WSClient(userInfo);
+        wsClient.setMessagesEventBus(messagesEventBus);
         wsClient.connect(getString(R.string.local_ws_endpoint), this::subscribeToChats);
     }
 

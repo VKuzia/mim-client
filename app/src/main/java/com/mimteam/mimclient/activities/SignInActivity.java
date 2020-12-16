@@ -42,6 +42,8 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void authorize() {
+        App application = (App) getApplication();
+
         String login = loginEdit.getText().toString();
         if (login.length() == 0) {
             loginEdit.setError(getString(R.string.sign_in_error) + " " +
@@ -55,14 +57,14 @@ public class SignInActivity extends AppCompatActivity {
         if (passwordEdit.getError() != null || loginEdit.getError() != null) {
             return;
         }
-        Optional<String> response = ((App) getApplication()).getHttpWrapper().login(login, password);
-        System.out.println(response);
+        Optional<String> response = application.getHttpWrapper().login(login, password);
         if (!response.isPresent()) {
-            ((App) getApplication()).showNotification(this,
+            application.showNotification(this,
                     getString(R.string.sign_in_error), getString(R.string.sign_in_error_title));
             return;
         }
-        ((App) getApplication()).getUserInfo().setToken(response.get());
+        application.getUserInfo().setToken(response.get());
+        application.getUserInfo().setId(application.getHttpWrapper().getUserId().or(-1));
         Log.d("SIGN_IN", response.get());
 
         MainActivity.switchActivity(ChatListActivity.class);

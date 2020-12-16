@@ -63,6 +63,11 @@ public class HTTPWrapper {
         return parseResponse(response.orNull(), new TypeReference<List<MessageDTO>>() {});
     }
 
+    public Optional<Integer> getUserId() {
+        Optional<String> response = httpClient.get("/users/getid");
+        return parseResponse(response.orNull(), new TypeReference<Integer>() {});
+    }
+
     private static <T> Optional<T> parseResponse(String response, TypeReference<T> outputType) {
         if (response == null) {
             return Optional.absent();

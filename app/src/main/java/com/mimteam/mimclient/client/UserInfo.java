@@ -12,10 +12,6 @@ public class UserInfo {
 
     private App.Operable onChatListChanged;
 
-    public UserInfo(Integer id) {
-        this.id = id;
-    }
-
     public Integer getId() {
         return id;
     }

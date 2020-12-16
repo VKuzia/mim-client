@@ -19,6 +19,8 @@ import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.models.dto.ChatDTO;
 import com.mimteam.mimclient.models.dto.MessageDTO;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -55,7 +57,7 @@ public class ChatListActivity extends AppCompatActivity {
     private void updateChatList() {
         chats.clear();
         for (ChatDTO chat : userInfo.getChats()) {
-            createChat(chat);
+            addChat(chat);
         }
         Collections.sort(chats, (chat1, chat2) -> chat2.getDateTime().compareTo(chat1.getDateTime()));
         chatAdapter.notifyDataSetChanged();
@@ -92,7 +94,7 @@ public class ChatListActivity extends AppCompatActivity {
         chatsList.setAdapter(chatAdapter);
     }
 
-    private void createChat(ChatDTO chat) {
+    private void addChat(@NotNull ChatDTO chat) {
         MessageDTO lastMessage = messagesStorage.getLastMessageInChat(chat.getChatId());
         MessageModel messageModel = new MessageModel(getString(R.string.user_name), getString(R.string.test_message));
         if (lastMessage != null) {

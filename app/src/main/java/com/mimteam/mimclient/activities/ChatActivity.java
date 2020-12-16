@@ -21,6 +21,8 @@ import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.models.dto.MessageDTO;
 import com.mimteam.mimclient.models.ws.messages.TextMessage;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +107,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void handleReceivedMessage(MessageDTO messageDTO) {
+    public void handleReceivedMessage(@NotNull MessageDTO messageDTO) {
         messages.add(new MessageModel(messageDTO.getUserId().toString(),
                 messageDTO.getContent(),
                 messageDTO.getDateTime()));

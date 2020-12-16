@@ -174,6 +174,12 @@ public class WSClient {
         }
     }
 
+    private @NotNull List<StompHeader> createAuthorizationHeaders() {
+        ArrayList<StompHeader> stompHeaders = new ArrayList<>();
+        stompHeaders.add(new StompHeader(AUTHORIZATION_HEADER, TOKEN_PREFIX + userInfo.getToken()));
+        return stompHeaders;
+    }
+
     private void setStompClient(StompClient client) {
         if (stompClient != null && stompClient.isConnected()) {
             stompClient.disconnect();
@@ -188,11 +194,5 @@ public class WSClient {
 
     public void setMessagesEventBus(EventBus messagesEventBus) {
         this.messagesEventBus = messagesEventBus;
-    }
-
-    private List<StompHeader> createAuthorizationHeaders() {
-        ArrayList<StompHeader> stompHeaders = new ArrayList<>();
-        stompHeaders.add(new StompHeader(AUTHORIZATION_HEADER, TOKEN_PREFIX + userInfo.getToken()));
-        return stompHeaders;
     }
 }

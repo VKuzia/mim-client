@@ -3,6 +3,8 @@ package com.mimteam.mimclient.client;
 import com.google.common.eventbus.Subscribe;
 import com.mimteam.mimclient.models.dto.MessageDTO;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,14 +25,11 @@ public class MessagesStorage {
     }
 
     @Subscribe
-    public void handleReceivedMessage(MessageDTO messageDTO) {
+    public void handleReceivedMessage(@NotNull MessageDTO messageDTO) {
         getChatMessageList(messageDTO.getChatId()).add(messageDTO);
     }
 
-    public void addMessages(Integer chatId, List<MessageDTO> messages) {
-        if (messages == null) {
-            return;
-        }
+    public void addMessages(Integer chatId, @NotNull List<MessageDTO> messages) {
         getChatMessageList(chatId).addAll(messages);
     }
 
