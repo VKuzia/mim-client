@@ -30,4 +30,8 @@
 
     <!--    Intent Variables-->
     <string name="chat_name_variable">chatName</string>
+
+    <!--    URLs-->
+    <string name="local_ws_endpoint">ws://10.0.2.2:8080/ws</string>
+    <string name="local_http_url">http://10.0.2.2/</string>
 </resources>
