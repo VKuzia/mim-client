@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.mimteam.mimclient.client.UserInfo;
 import com.mimteam.mimclient.client.WSClient;
+import com.mimteam.mimclient.models.dto.ChatDTO;
 
 import java.util.List;
 
@@ -46,19 +47,18 @@ public class App extends Application {
     }
 
     public void subscribeToChats() {
-        Optional<List<Integer>> chatsList = httpWrapper.getChatsList();
+        Optional<List<ChatDTO>> chatsList = httpWrapper.getChatsList();
         if (!chatsList.isPresent()) {
             showNotification(this, "Error getting chat list", "ERROR");
             return;
         }
-        for (Integer chatId : chatsList.get()) {
-            wsClient.subscribe(chatId);
-            userInfo.addChat(chatId);
+        for (ChatDTO chat : chatsList.get()) {
+            wsClient.subscribe(chat.getChatId());
+            messagesStorage.addMessages(chat.getChatId(), httpWrapper.getChatMessages(chat.getChatId()).orNull());
+            Log.i("APP", "Subscribing to " + chat.getChatId() + "(" + chat.getChatName() + ")");
 
-            messagesStorage.addMessages(chatId, httpWrapper.getChatMessages(chatId).orNull());
-            Log.i("APP", "Subscribing to " + chatId);
+            userInfo.addChat(chat);
         }
-
     }
 
     public EventBus getMessagesEventBus() {

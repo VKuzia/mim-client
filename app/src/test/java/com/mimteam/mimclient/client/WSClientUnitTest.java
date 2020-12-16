@@ -2,7 +2,7 @@ package com.mimteam.mimclient.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mimteam.mimclient.models.ws.MessageDTO;
+import com.mimteam.mimclient.models.dto.MessageDTO;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

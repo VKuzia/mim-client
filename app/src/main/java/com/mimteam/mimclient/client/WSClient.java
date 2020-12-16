@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.eventbus.EventBus;
 import com.mimteam.mimclient.App;
-import com.mimteam.mimclient.models.ws.MessageDTO;
+import com.mimteam.mimclient.models.dto.MessageDTO;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -45,10 +45,18 @@ public class WSClient {
         this.userInfo = userInfo;
     }
 
+    public static @NotNull StompClient createStompClient(String url) {
+        return createStompClient(url, ImmutableMap.of());
+    }
+
     public static @NotNull StompClient createStompClient(String url, ImmutableMap<String, String> headers) {
         return Stomp.over(Stomp.ConnectionProvider.OKHTTP, url, headers)
                 .withClientHeartbeat(1000)
                 .withServerHeartbeat(1000);
+    }
+
+    public void connect(String url) {
+        connect(url, () -> {});
     }
 
     public void connect(String url, App.Operable onConnected) {

@@ -1,7 +1,7 @@
 package com.mimteam.mimclient.client;
 
 import com.google.common.eventbus.Subscribe;
-import com.mimteam.mimclient.models.ws.MessageDTO;
+import com.mimteam.mimclient.models.dto.MessageDTO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +13,13 @@ public class MessagesStorage {
 
     public List<MessageDTO> getMessagesInChat(Integer chatId) {
         return getChatMessageList(chatId);
+    }
+
+    public MessageDTO getLastMessageInChat(Integer chatId) {
+        if (!chatMessages.containsKey(chatId) || chatMessages.get(chatId).isEmpty()) {
+            return null;
+        }
+        return chatMessages.get(chatId).get(chatMessages.get(chatId).size() - 1);
     }
 
     @Subscribe

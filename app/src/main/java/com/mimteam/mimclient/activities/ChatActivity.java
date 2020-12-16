@@ -18,7 +18,7 @@ import com.mimteam.mimclient.client.UserInfo;
 import com.mimteam.mimclient.client.WSClient;
 import com.mimteam.mimclient.models.MessageModel;
 import com.mimteam.mimclient.R;
-import com.mimteam.mimclient.models.ws.MessageDTO;
+import com.mimteam.mimclient.models.dto.MessageDTO;
 import com.mimteam.mimclient.models.ws.messages.TextMessage;
 
 import java.util.ArrayList;
@@ -106,7 +106,9 @@ public class ChatActivity extends AppCompatActivity {
 
     @Subscribe
     public void handleReceivedMessage(MessageDTO messageDTO) {
-        messages.add(new MessageModel(messageDTO.getUserId().toString(), messageDTO.getContent()));
+        messages.add(new MessageModel(messageDTO.getUserId().toString(),
+                messageDTO.getContent(),
+                messageDTO.getDateTime()));
         messageAdapter.notifyDataSetChanged();
     }
 }
