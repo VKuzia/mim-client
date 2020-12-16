@@ -2,15 +2,19 @@ package com.mimteam.mimclient;
 
 import android.app.Application;
 
+import com.google.common.base.Optional;
 import com.google.common.eventbus.EventBus;
 import com.mimteam.mimclient.client.HTTPClient;
 import com.mimteam.mimclient.client.HTTPWrapper;
 import com.mimteam.mimclient.client.MessagesStorage;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 
 import com.mimteam.mimclient.client.UserInfo;
 import com.mimteam.mimclient.client.WSClient;
+
+import java.util.List;
 
 public class App extends Application {
     private EventBus messagesEventBus;
@@ -29,15 +33,32 @@ public class App extends Application {
         messagesStorage = new MessagesStorage();
         messagesEventBus.register(messagesStorage);
 
-        userInfo = new UserInfo(1);
-        userInfo.setToken("test_token");
+        userInfo = new UserInfo(-1);
 
         httpWrapper = new HTTPWrapper(new HTTPClient(userInfo, getString(R.string.local_http_url)));
 
         wsClient = new WSClient(userInfo);
         wsClient.setMessagesEventBus(messagesEventBus);
+    }
 
-        wsClient.connect(getString(R.string.local_ws_endpoint));
+    public void connectWebSocket() {
+        wsClient.connect(getString(R.string.local_ws_endpoint), this::subscribeToChats);
+    }
+
+    public void subscribeToChats() {
+        Optional<List<Integer>> chatsList = httpWrapper.getChatsList();
+        if (!chatsList.isPresent()) {
+            showNotification(this, "Error getting chat list", "ERROR");
+            return;
+        }
+        for (Integer chatId : chatsList.get()) {
+            wsClient.subscribe(chatId);
+            userInfo.addChat(chatId);
+
+            messagesStorage.addMessages(chatId, httpWrapper.getChatMessages(chatId).orNull());
+            Log.i("APP", "Subscribing to " + chatId);
+        }
+
     }
 
     public EventBus getMessagesEventBus() {
@@ -79,5 +100,9 @@ public class App extends Application {
 
     public Integer getOpenedChatId() {
         return openedChatId;
+    }
+
+    public void setOpenedChatId(Integer openedChatId) {
+        this.openedChatId = openedChatId;
     }
 }

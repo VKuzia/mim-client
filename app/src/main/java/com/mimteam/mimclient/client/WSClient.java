@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.eventbus.EventBus;
+import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.models.ws.MessageDTO;
 
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,7 @@ public class WSClient {
     private Disposable lifecycleSubscription;
 
     private EventBus messagesEventBus;
+    private App.Operable onConnected;
 
     public WSClient(@NotNull UserInfo userInfo) {
         this.userInfo = userInfo;
@@ -49,7 +51,9 @@ public class WSClient {
                 .withServerHeartbeat(1000);
     }
 
-    public void connect(String url) {
+    public void connect(String url, App.Operable onConnected) {
+        this.onConnected = onConnected;
+
         ImmutableMap<String, String> authHeaders =
                 ImmutableMap.of(AUTHORIZATION_HEADER, TOKEN_PREFIX + userInfo.getToken());
         setStompClient(createStompClient(url, authHeaders));
@@ -64,8 +68,7 @@ public class WSClient {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
                             Log.i(LOG_TAG, "Stomp connection opened");
-                            // TODO: real subscriptions
-                            subscribe(1);
+                            onConnected.operate();
                             break;
                         case ERROR:
                             Log.e(LOG_TAG, "Stomp connection error", lifecycleEvent.getException());

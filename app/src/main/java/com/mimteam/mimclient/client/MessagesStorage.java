@@ -20,6 +20,13 @@ public class MessagesStorage {
         getChatMessageList(messageDTO.getChatId()).add(messageDTO);
     }
 
+    public void addMessages(Integer chatId, List<MessageDTO> messages) {
+        if (messages == null) {
+            return;
+        }
+        getChatMessageList(chatId).addAll(messages);
+    }
+
     private List<MessageDTO> getChatMessageList(Integer chatId) {
         if (!chatMessages.containsKey(chatId)) {
             chatMessages.put(chatId, new ArrayList<>());

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
+import com.mimteam.mimclient.models.ws.MessageDTO;
 
 import java.util.List;
 
@@ -52,9 +53,13 @@ public class HTTPWrapper {
     }
 
     public Optional<List<Integer>> getChatsList() {
-        Integer userId = httpClient.getUserInfo().getId();
-        Optional<String> response = httpClient.get("/users/" + userId + "/chatlist");
+        Optional<String> response = httpClient.get("/users/chatlist");
         return parseResponse(response.orNull(), new TypeReference<List<Integer>>() {});
+    }
+
+    public Optional<List<MessageDTO>> getChatMessages(Integer chatId) {
+        Optional<String> response = httpClient.get("/chats/" + chatId + "/messages");
+        return parseResponse(response.orNull(), new TypeReference<List<MessageDTO>>() {});
     }
 
     private static <T> Optional<T> parseResponse(String response, TypeReference<T> outputType) {

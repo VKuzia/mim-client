@@ -5,11 +5,14 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.adapters.ChatAdapter;
+import com.mimteam.mimclient.client.UserInfo;
 import com.mimteam.mimclient.models.ChatModel;
 import com.mimteam.mimclient.models.MessageModel;
 import com.mimteam.mimclient.R;
@@ -25,6 +28,8 @@ public class ChatListActivity extends AppCompatActivity {
     private ArrayList<ChatModel> chats;
     private ChatAdapter chatAdapter;
 
+    private UserInfo userInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +39,18 @@ public class ChatListActivity extends AppCompatActivity {
         setSupportActionBar(chatListToolbar);
         attachListenersToComponents();
         setupChatList();
+
+        userInfo = ((App) getApplication()).getUserInfo();
+
+        ((App) getApplication()).connectWebSocket();
+        userInfo.setOnChatListChanged(this::updateChatList);
+    }
+
+    private void updateChatList() {
+        chats.clear();
+        for (Integer chatId : userInfo.getChatIds()) {
+            createChat(chatId.toString());
+        }
     }
 
     @Override
@@ -55,7 +72,11 @@ public class ChatListActivity extends AppCompatActivity {
     private void attachListenersToComponents() {
         addChat.setOnClickListener(view -> MainActivity.switchActivity(CreateChatActivity.class));
         chatsList.setOnItemClickListener(
-                (parent, view, position, id) -> MainActivity.switchActivity(ChatActivity.class));
+                (parent, view, position, id) -> {
+                    Log.i("CHAT_NAME", chats.get((int) id).getChatName());
+                    ((App) getApplication()).setOpenedChatId(Integer.valueOf(chats.get((int) id).getChatName()));
+                    MainActivity.switchActivity(ChatActivity.class);
+                });
     }
 
     private void setupChatList() {
