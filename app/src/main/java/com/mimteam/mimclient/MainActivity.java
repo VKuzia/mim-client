@@ -27,15 +27,4 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(appContext, activity);
         appContext.startActivity(intent);
     }
-
-    public static void showNotification(String message) {
-//        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(appContext)
-//                .setMessage(message)
-//                .setTitle("App Title")
-//                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                    }
-//                });
-//        dlgAlert.create().show();
-    }
 }

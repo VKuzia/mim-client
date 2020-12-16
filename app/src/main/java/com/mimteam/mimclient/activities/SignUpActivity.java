@@ -66,7 +66,8 @@ public class SignUpActivity extends AppCompatActivity {
         Optional<String> response =
                 ((App) getApplication()).getHttpWrapper().signUp(username, login, password);
         if (!response.isPresent()) {
-            MainActivity.showNotification(getString(R.string.sing_up_error));
+            ((App) getApplication()).showNotification(this,
+                    getString(R.string.sign_up_error), getString(R.string.sign_up_error_title));
             return;
         }
         MainActivity.switchActivity(SignInActivity.class);

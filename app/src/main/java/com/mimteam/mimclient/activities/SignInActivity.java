@@ -1,5 +1,7 @@
 package com.mimteam.mimclient.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -57,12 +59,13 @@ public class SignInActivity extends AppCompatActivity {
         }
         Optional<String> response = ((App) getApplication()).getHttpWrapper().login(login, password);
         if (!response.isPresent()) {
-            MainActivity.showNotification(getString(R.string.incorrect_sign_in_data));
+            ((App) getApplication()).showNotification(this,
+                    getString(R.string.sign_in_error), getString(R.string.sign_in_error_title));
             return;
         }
         ((App) getApplication()).getUserInfo().setToken(response.get());
         Log.d("SIGN_IN", response.get());
-        MainActivity.switchActivity(ChatListActivity.class);
 
+        MainActivity.switchActivity(ChatListActivity.class);
     }
 }

@@ -18,7 +18,6 @@
     <string name="avatar">W</string>
 
     <!--    Message and chat model-->
-    <string name="sign_in_error">Enter your</string>
     <string name="sign_up_field_error">should contain at least one letter or number</string>
     <string name="chat_name">Chat %d</string>
     <string name="user_name">Username</string>
@@ -27,8 +26,10 @@
 
     <!--    Error Messages-->
     <string name="chat_name_error">Name should contain at least one letter or number</string>
-    <string name="sing_up_error">Something went wrong on signing up</string>
-    <string name="incorrect_sign_in_data">Sorry, no user with such login and password</string>
+    <string name="sign_up_error">Something went wrong on signing up</string>
+    <string name="sign_up_error_title">Sign up error</string>
+    <string name="sign_in_error">Sorry, no user with such login and password</string>
+    <string name="sign_in_error_title">Sign in error</string>
 
     <!--    Intent Variables-->
     <string name="chat_name_variable">chatName</string>
