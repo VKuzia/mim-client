@@ -82,9 +82,8 @@ public class HTTPClient {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Callable<String> callable = () -> {
             Response response = okHttpClient.newCall(request).execute();
+            Log.d("HTTP CLIENT", response + ": " + response.body().string());
             if (!response.isSuccessful()) {
-                Log.d("HTTP CLIENT", response + ": " + response.body().string());
-//                throw new IOException(response + ": " + response.body().string());
                 return null;
             }
             ObjectMapper mapper = new ObjectMapper();

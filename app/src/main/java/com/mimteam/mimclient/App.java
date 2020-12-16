@@ -25,7 +25,6 @@ public class App extends Application {
 
     public interface Operable {
         void operate();
-
     }
 
     public void showNotification(Context context, String message, String title) {
