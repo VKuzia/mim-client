@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.common.base.Optional;
+import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 
@@ -44,23 +46,29 @@ public class SignUpActivity extends AppCompatActivity {
         String username = usernameEdit.getText().toString();
         if (username.length() == 0) {
             usernameEdit.setError(getString(R.string.user_name) + " " +
-                    getString(R.string.sign_up_error));
+                    getString(R.string.sign_up_field_error));
         }
         String login = loginEdit.getText().toString();
         if (login.length() == 0) {
             loginEdit.setError(getString(R.string.login) + " " +
-                    getString(R.string.sign_up_error));
+                    getString(R.string.sign_up_field_error));
         }
         String password = passwordEdit.getText().toString();
         if (password.length() == 0) {
             passwordEdit.setError(getString(R.string.password) + " " +
-                    getString(R.string.sign_up_error));
+                    getString(R.string.sign_up_field_error));
         }
         if (usernameEdit.getError() != null ||
                 loginEdit.getError() != null ||
                 passwordEdit.getError() != null) {
             return;
         }
-        MainActivity.switchActivity(ChatListActivity.class);
+        Optional<String> response =
+                ((App) getApplication()).getHttpWrapper().signUp(username, login, password);
+        if (!response.isPresent()) {
+            MainActivity.showNotification(getString(R.string.sing_up_error));
+            return;
+        }
+        MainActivity.switchActivity(SignInActivity.class);
     }
 }

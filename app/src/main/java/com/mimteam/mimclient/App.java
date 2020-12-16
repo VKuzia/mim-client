@@ -1,6 +1,8 @@
 package com.mimteam.mimclient;
 
+import android.app.AlertDialog;
 import android.app.Application;
+import android.content.DialogInterface;
 
 import com.mimteam.mimclient.client.HTTPClient;
 import com.mimteam.mimclient.client.HTTPWrapper;

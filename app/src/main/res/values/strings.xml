@@ -19,7 +19,7 @@
 
     <!--    Message and chat model-->
     <string name="sign_in_error">Enter your</string>
-    <string name="sign_up_error">should contain at least one letter or number</string>
+    <string name="sign_up_field_error">should contain at least one letter or number</string>
     <string name="chat_name">Chat %d</string>
     <string name="user_name">Username</string>
     <string name="test_message">How are you doing? Go. I wish you good luck. Happy New Year</string>
@@ -27,11 +27,13 @@
 
     <!--    Error Messages-->
     <string name="chat_name_error">Name should contain at least one letter or number</string>
+    <string name="sing_up_error">Something went wrong on signing up</string>
+    <string name="incorrect_sign_in_data">Sorry, no user with such login and password</string>
 
     <!--    Intent Variables-->
     <string name="chat_name_variable">chatName</string>
 
     <!--    URLs-->
     <string name="local_ws_endpoint">ws://localhost:8080/ws</string>
-    <string name="local_http_url">http://10.0.2.2/</string>
+    <string name="local_http_url">http://10.0.2.2:8080//</string>
 </resources>
