@@ -1,5 +1,7 @@
 package com.mimteam.mimclient.client;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
@@ -80,8 +82,9 @@ public class HTTPClient {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Callable<String> callable = () -> {
             Response response = okHttpClient.newCall(request).execute();
+            Log.d("HTTP CLIENT", response + ": " + response.body().string());
             if (!response.isSuccessful()) {
-                throw new IOException(response + ": " + response.body().string());
+                return null;
             }
             ObjectMapper mapper = new ObjectMapper();
             ResponseDTO responseDTO = mapper.readValue(response.body().string(), ResponseDTO.class);

@@ -45,11 +45,10 @@ public class HTTPWrapper {
         return httpClient.post("/users/signup", params);
     }
 
-    public Optional<Integer> login(String login, String password) {
+    public Optional<String> login(String login, String password) {
         ImmutableMap<String, String> params = ImmutableMap.of(
                 "login", login, "password", password);
-        Optional<String> response = httpClient.post("/users/login", params);
-        return parseResponse(response.orNull(), new TypeReference<Integer>() {});
+        return  httpClient.post("/users/login", params);
     }
 
     public Optional<List<Integer>> getChatsList() {

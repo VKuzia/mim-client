@@ -1,12 +1,17 @@
 package com.mimteam.mimclient.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.common.base.Optional;
+import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 
@@ -35,10 +40,10 @@ public class SignInActivity extends AppCompatActivity {
 
     private void attachListenersToComponents() {
         toSignUpView.setOnClickListener(button -> MainActivity.switchActivity(SignUpActivity.class));
-        signInButton.setOnClickListener(button -> authorization());
+        signInButton.setOnClickListener(button -> authorize());
     }
 
-    private void authorization() {
+    private void authorize() {
         String login = loginEdit.getText().toString();
         if (login.length() == 0) {
             loginEdit.setError(getString(R.string.sign_in_error) + " " +
@@ -52,6 +57,15 @@ public class SignInActivity extends AppCompatActivity {
         if (passwordEdit.getError() != null || loginEdit.getError() != null) {
             return;
         }
+        Optional<String> response = ((App) getApplication()).getHttpWrapper().login(login, password);
+        if (!response.isPresent()) {
+            ((App) getApplication()).showNotification(this,
+                    getString(R.string.sign_in_error), getString(R.string.sign_in_error_title));
+            return;
+        }
+        ((App) getApplication()).getUserInfo().setToken(response.get());
+        Log.d("SIGN_IN", response.get());
+
         MainActivity.switchActivity(ChatListActivity.class);
     }
 }
