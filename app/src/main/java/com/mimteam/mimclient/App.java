@@ -6,6 +6,9 @@ import com.google.common.eventbus.EventBus;
 import com.mimteam.mimclient.client.HTTPClient;
 import com.mimteam.mimclient.client.HTTPWrapper;
 import com.mimteam.mimclient.client.MessagesStorage;
+import android.app.AlertDialog;
+import android.content.Context;
+
 import com.mimteam.mimclient.client.UserInfo;
 import com.mimteam.mimclient.client.WSClient;
 
@@ -43,6 +46,23 @@ public class App extends Application {
 
     public MessagesStorage getMessagesStorage() {
         return messagesStorage;
+    }
+
+    public interface Operable {
+        void operate();
+    }
+
+    public void showNotification(Context context, String message, String title) {
+        showNotification(context, message, title, () -> {});
+    }
+
+    public void showNotification(Context context, String message, String title, Operable onClose) {
+        new AlertDialog.Builder(context)
+                .setMessage(message)
+                .setTitle(title)
+                .setPositiveButton("OK", (dialog, which) -> onClose.operate())
+                .create()
+                .show();
     }
 
     public WSClient getWsClient() {

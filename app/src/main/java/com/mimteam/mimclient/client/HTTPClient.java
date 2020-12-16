@@ -1,5 +1,7 @@
 package com.mimteam.mimclient.client;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
@@ -13,7 +15,6 @@ import com.squareup.okhttp.Response;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -81,7 +82,8 @@ public class HTTPClient {
         Callable<String> callable = () -> {
             Response response = okHttpClient.newCall(request).execute();
             if (!response.isSuccessful()) {
-                throw new IOException(response + ": " + response.body().string());
+                Log.d("HTTP CLIENT", response + ": " + response.body().string());
+                return null;
             }
             ObjectMapper mapper = new ObjectMapper();
             ResponseDTO responseDTO = mapper.readValue(response.body().string(), ResponseDTO.class);
