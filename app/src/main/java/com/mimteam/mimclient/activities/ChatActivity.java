@@ -99,7 +99,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setupMessageList() {
         messages = new ArrayList<>();
-        messageAdapter = new MessageAdapter(this, R.layout.message_markup, messages);
+        messageAdapter = new MessageAdapter(this, messages);
         messagesList.setAdapter(messageAdapter);
     }
 
@@ -116,9 +116,8 @@ public class ChatActivity extends AppCompatActivity {
     @Subscribe
     public void handleReceivedMessage(@NotNull MessageDTO messageDto) {
         String name = userInfo.getUserName(messageDto.getUserId(), "");
-        messages.add(new MessageModel(name,
+        messageAdapter.add(new MessageModel(name,
                 messageDto.getContent(),
                 messageDto.getDateTime()));
-        messageAdapter.notifyDataSetChanged();
     }
 }
