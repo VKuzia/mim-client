@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.adapters.MessageAdapter;
 import com.mimteam.mimclient.models.MessageModel;
@@ -27,6 +28,8 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<MessageModel> messages;
     private MessageAdapter messageAdapter;
 
+    private String invitationKey;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,8 @@ public class ChatActivity extends AppCompatActivity {
         setSupportActionBar(chatToolbar);
         attachListenersToComponents();
         setupMessageList();
+
+//        invitationKey = ((App) getApplication()).getHttpWrapper().getInvitationKey()
     }
 
     @Override
@@ -54,6 +59,10 @@ public class ChatActivity extends AppCompatActivity {
     private void attachListenersToComponents() {
         sendButton.setOnClickListener(v -> sendMessage());
         chatToolbar.setNavigationOnClickListener(v -> MainActivity.switchActivity(ChatListActivity.class));
+        chatToolbar.setOnMenuItemClickListener(v -> {
+            MainActivity.switchActivity(ChatSettingsActivity.class);
+            return true;
+        });
         inputEdit.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {

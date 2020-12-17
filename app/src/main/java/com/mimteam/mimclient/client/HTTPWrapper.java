@@ -39,6 +39,11 @@ public class HTTPWrapper {
         return parseResponse(response.orNull(), new TypeReference<List<Integer>>() {});
     }
 
+    public Optional<String> getInvitationKey(Integer chatId) {
+        Optional<String> response = httpClient.get("/chats/" + chatId + "/invitation");
+        return parseResponse(response.orNull(), new TypeReference<String>() {});
+    }
+
     public Optional<String> signUp(String name, String login, String password) {
         ImmutableMap<String, String> params = ImmutableMap.of(
                 "name", name, "login", login, "password", password);
