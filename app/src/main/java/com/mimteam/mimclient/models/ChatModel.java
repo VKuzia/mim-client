@@ -1,12 +1,20 @@
 package com.mimteam.mimclient.models;
 
+import com.mimteam.mimclient.models.dto.ChatDTO;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
+
 public class ChatModel {
     private MessageModel messageModel;
     private String chatName;
+    private Integer chatId;
 
-    public ChatModel(MessageModel messageModel, String chatName) {
+    public ChatModel(MessageModel messageModel, @NotNull ChatDTO chatDto) {
         this.messageModel = messageModel;
-        this.chatName = chatName;
+        this.chatName = chatDto.getChatName();
+        this.chatId = chatDto.getChatId();
     }
 
     public String getMessage() {
@@ -25,7 +33,15 @@ public class ChatModel {
         return messageModel.getDateString();
     }
 
+    public Date getDateTime() {
+        return messageModel.getDateTime();
+    }
+
     public String getChatName() {
         return chatName;
+    }
+
+    public Integer getChatId() {
+        return chatId;
     }
 }
