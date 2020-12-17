@@ -27,7 +27,6 @@ public class App extends Application {
     private UserInfo userInfo;
 
     private Integer openedChatId;
-    private String openedChatInvitationKey;
 
     @Override
     public void onCreate() {
@@ -106,13 +105,7 @@ public class App extends Application {
     public Integer getOpenedChatId() {
         return openedChatId;
     }
-
-    public String getOpenedChatInvitationKey() {
-        return openedChatInvitationKey;
-    }
-
     public void setOpenedChatId(Integer openedChatId) {
         this.openedChatId = openedChatId;
-//        this.openedChatInvitationKey = httpWrapper.getInvitationKey(openedChatId).get();
     }
 }
