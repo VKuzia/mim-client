@@ -29,6 +29,10 @@ public class SignInActivity extends AppCompatActivity {
         attachListenersToComponents();
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
     private void initializeUIComponents() {
         loginEdit = findViewById(R.id.signInLoginEdit);
         passwordEdit = findViewById(R.id.signInPasswordEdit);
