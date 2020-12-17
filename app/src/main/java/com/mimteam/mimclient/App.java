@@ -14,6 +14,7 @@ import android.util.Log;
 import com.mimteam.mimclient.client.UserInfo;
 import com.mimteam.mimclient.client.WSClient;
 import com.mimteam.mimclient.models.dto.ChatDTO;
+import com.mimteam.mimclient.models.dto.UserDTO;
 
 import java.util.List;
 
@@ -57,6 +58,10 @@ public class App extends Application {
             Log.i("APP", "Subscribing to " + chat.getChatId() + "(" + chat.getChatName() + ")");
 
             userInfo.addChat(chat);
+            Optional<List<UserDTO>> userList = httpWrapper.getUserList(chat.getChatId());
+            if (userList.isPresent()) {
+                userInfo.addUsers(userList.get());
+            }
         }
     }
 

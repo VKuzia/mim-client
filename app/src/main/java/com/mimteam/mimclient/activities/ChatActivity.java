@@ -58,7 +58,10 @@ public class ChatActivity extends AppCompatActivity {
         userInfo = application.getUserInfo();
         wsClient = application.getWsClient();
 
-        List<MessageDTO> oldMessages = application.getMessagesStorage().getMessagesInChat(chatId);
+        handleOldMessages(application.getMessagesStorage().getMessagesInChat(chatId));
+    }
+
+    private void handleOldMessages(List<MessageDTO> oldMessages) {
         for (MessageDTO message : oldMessages) {
             handleReceivedMessage(message);
         }
@@ -107,10 +110,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void handleReceivedMessage(@NotNull MessageDTO messageDTO) {
-        messages.add(new MessageModel(messageDTO.getUserId().toString(),
-                messageDTO.getContent(),
-                messageDTO.getDateTime()));
+    public void handleReceivedMessage(@NotNull MessageDTO messageDto) {
+        String name = userInfo.getUserName(messageDto.getUserId(), "");
+        messages.add(new MessageModel(name,
+                messageDto.getContent(),
+                messageDto.getDateTime()));
         messageAdapter.notifyDataSetChanged();
     }
 }

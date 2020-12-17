@@ -98,7 +98,8 @@ public class ChatListActivity extends AppCompatActivity {
         MessageDTO lastMessage = messagesStorage.getLastMessageInChat(chat.getChatId());
         MessageModel messageModel = new MessageModel(getString(R.string.user_name), getString(R.string.test_message));
         if (lastMessage != null) {
-            messageModel = new MessageModel(lastMessage.getUserId().toString(),
+            String name = userInfo.getUserName(lastMessage.getUserId(), getString(R.string.your_name));
+            messageModel = new MessageModel(name,
                     lastMessage.getContent(),
                     lastMessage.getDateTime());
         }
