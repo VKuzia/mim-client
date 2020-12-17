@@ -36,4 +36,8 @@ public class MessageModel {
     public String getDateString() {
         return DateAssistant.dateToString(dateTime);
     }
+
+    public Date getDateTime() {
+        return dateTime;
+    }
 }

@@ -8,13 +8,21 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.adapters.ChatAdapter;
+import com.mimteam.mimclient.client.MessagesStorage;
+import com.mimteam.mimclient.client.UserInfo;
 import com.mimteam.mimclient.models.ChatModel;
 import com.mimteam.mimclient.models.MessageModel;
 import com.mimteam.mimclient.R;
+import com.mimteam.mimclient.models.dto.ChatDTO;
+import com.mimteam.mimclient.models.dto.MessageDTO;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ChatListActivity extends AppCompatActivity {
 
@@ -25,6 +33,9 @@ public class ChatListActivity extends AppCompatActivity {
     private ArrayList<ChatModel> chats;
     private ChatAdapter chatAdapter;
 
+    private UserInfo userInfo;
+    private MessagesStorage messagesStorage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +45,22 @@ public class ChatListActivity extends AppCompatActivity {
         setSupportActionBar(chatListToolbar);
         attachListenersToComponents();
         setupChatList();
+
+        App application = (App) getApplication();
+        userInfo = application.getUserInfo();
+        messagesStorage = application.getMessagesStorage();
+
+        application.connectWebSocket();
+        userInfo.setOnChatListChanged(this::updateChatList);
+    }
+
+    private void updateChatList() {
+        chats.clear();
+        for (ChatDTO chat : userInfo.getChats()) {
+            addChat(chat);
+        }
+        Collections.sort(chats, (chat1, chat2) -> chat2.getDateTime().compareTo(chat1.getDateTime()));
+        chatAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -42,7 +69,7 @@ public class ChatListActivity extends AppCompatActivity {
 
         String createdChatName = intent.getStringExtra(getString(R.string.chat_name_variable));
         if (createdChatName != null) {
-            createChat(createdChatName);
+//            createChat(createdChatName);
         }
     }
 
@@ -55,7 +82,10 @@ public class ChatListActivity extends AppCompatActivity {
     private void attachListenersToComponents() {
         addChat.setOnClickListener(view -> MainActivity.switchActivity(CreateChatActivity.class));
         chatsList.setOnItemClickListener(
-                (parent, view, position, id) -> MainActivity.switchActivity(ChatActivity.class));
+                (parent, view, position, id) -> {
+                    ((App) getApplication()).setOpenedChatId(chats.get((int) id).getChatId());
+                    MainActivity.switchActivity(ChatActivity.class);
+                });
     }
 
     private void setupChatList() {
@@ -64,9 +94,16 @@ public class ChatListActivity extends AppCompatActivity {
         chatsList.setAdapter(chatAdapter);
     }
 
-    private void createChat(String chatName) {
+    private void addChat(@NotNull ChatDTO chat) {
+        MessageDTO lastMessage = messagesStorage.getLastMessageInChat(chat.getChatId());
         MessageModel messageModel = new MessageModel(getString(R.string.user_name), getString(R.string.test_message));
-        chats.add(new ChatModel(messageModel, chatName));
+        if (lastMessage != null) {
+            String name = userInfo.getUserName(lastMessage.getUserId(), getString(R.string.your_name));
+            messageModel = new MessageModel(name,
+                    lastMessage.getContent(),
+                    lastMessage.getDateTime());
+        }
+        chats.add(new ChatModel(messageModel, chat));
         chatAdapter.notifyDataSetChanged();
     }
 }

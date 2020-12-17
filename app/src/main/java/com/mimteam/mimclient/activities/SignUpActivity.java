@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
-import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 
 public class SignUpActivity extends AppCompatActivity {

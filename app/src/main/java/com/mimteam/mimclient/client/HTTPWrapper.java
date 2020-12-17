@@ -5,6 +5,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
+import com.mimteam.mimclient.models.dto.ChatDTO;
+import com.mimteam.mimclient.models.dto.MessageDTO;
+import com.mimteam.mimclient.models.dto.UserDTO;
 
 import java.util.List;
 
@@ -34,9 +37,9 @@ public class HTTPWrapper {
         return httpClient.post("/chats/" + chatId + "/leave", params);
     }
 
-    public Optional<List<Integer>> getUserList(Integer chatId) {
+    public Optional<List<UserDTO>> getUserList(Integer chatId) {
         Optional<String> response = httpClient.get("/chats/" + chatId + "/userlist");
-        return parseResponse(response.orNull(), new TypeReference<List<Integer>>() {});
+        return parseResponse(response.orNull(), new TypeReference<List<UserDTO>>() {});
     }
 
     public Optional<String> signUp(String name, String login, String password) {
@@ -51,10 +54,19 @@ public class HTTPWrapper {
         return  httpClient.post("/users/login", params);
     }
 
-    public Optional<List<Integer>> getChatsList() {
-        Integer userId = httpClient.getUserInfo().getId();
-        Optional<String> response = httpClient.get("/users/" + userId + "/chatlist");
-        return parseResponse(response.orNull(), new TypeReference<List<Integer>>() {});
+    public Optional<List<ChatDTO>> getChatsList() {
+        Optional<String> response = httpClient.get("/users/chatlist");
+        return parseResponse(response.orNull(), new TypeReference<List<ChatDTO>>() {});
+    }
+
+    public Optional<List<MessageDTO>> getChatMessages(Integer chatId) {
+        Optional<String> response = httpClient.get("/chats/" + chatId + "/messages");
+        return parseResponse(response.orNull(), new TypeReference<List<MessageDTO>>() {});
+    }
+
+    public Optional<Integer> getUserId() {
+        Optional<String> response = httpClient.get("/users/getid");
+        return parseResponse(response.orNull(), new TypeReference<Integer>() {});
     }
 
     private static <T> Optional<T> parseResponse(String response, TypeReference<T> outputType) {

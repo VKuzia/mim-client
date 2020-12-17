@@ -2,12 +2,15 @@ package com.mimteam.mimclient.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mimteam.mimclient.models.ws.MessageDTO;
+import com.mimteam.mimclient.models.dto.MessageDTO;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+
+import java.util.Collections;
+import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -15,10 +18,11 @@ import io.reactivex.Flowable;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 import ua.naiksoftware.stomp.dto.LifecycleEvent;
+import ua.naiksoftware.stomp.dto.StompHeader;
 import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class WSClientUnitTest {
-    private final static String url = "ws://localhost:8080/ws";
+    private final static String url = "ws://10.0.2.2:8080/ws";
     private final static Integer userId = 0;
     private final static Integer chatId = 0;
     private final static String content = "Test";
@@ -28,8 +32,9 @@ public class WSClientUnitTest {
             .withClientHeartbeat(1000)
             .withServerHeartbeat(1000);
     private final static Flowable<LifecycleEvent> lifecycleFlowable = realClient.lifecycle();
+    private final static List<StompHeader> realHeaders = Collections.singletonList(new StompHeader("Authorization", "Bearer "));
     private final static Flowable<StompMessage> stompMessageFlowable =
-            realClient.topic(subscribePath);
+            realClient.topic(subscribePath, realHeaders);
     private final static Completable completable = new Completable() {
         @Override
         protected void subscribeActual(CompletableObserver observer) {
@@ -41,7 +46,8 @@ public class WSClientUnitTest {
 
     @BeforeEach
     public void init() {
-        UserInfo userInfo = new UserInfo(userId);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(userId);
         wsClient = new WSClient(userInfo);
         messageDTO = new MessageDTO();
         messageDTO.setUserId(userId);
@@ -60,13 +66,13 @@ public class WSClientUnitTest {
         Mockito.when(stompClientMock.lifecycle())
                 .thenReturn(lifecycleFlowable);
         try (MockedStatic<WSClient> staticWSClient = Mockito.mockStatic(WSClient.class)) {
-            staticWSClient.when(() -> WSClient.createStompClient(Mockito.eq(url)))
+            staticWSClient.when(() -> WSClient.createStompClient(Mockito.eq(url), Mockito.any()))
                     .thenReturn(stompClientMock);
             wsClient.connect(url);
-            staticWSClient.verify(() -> WSClient.createStompClient(Mockito.eq(url)));
+            staticWSClient.verify(() -> WSClient.createStompClient(Mockito.eq(url), Mockito.any()));
         }
         Mockito.verify(stompClientMock).lifecycle();
-        Mockito.verify(stompClientMock).connect();
+        Mockito.verify(stompClientMock).connect(Mockito.any());
     }
 
     @Test
@@ -93,18 +99,17 @@ public class WSClientUnitTest {
                 .thenReturn(lifecycleFlowable);
         Mockito.when(stompClientMock.isConnected())
                 .thenReturn(true);
-        Mockito.when(stompClientMock.send(Mockito.anyString(), Mockito.anyString()))
+        Mockito.when(stompClientMock.send(Mockito.any(StompMessage.class)))
                 .thenReturn(completable);
         try (MockedStatic<WSClient> staticWSClient = Mockito.mockStatic(WSClient.class)) {
-            staticWSClient.when(() -> WSClient.createStompClient(Mockito.anyString()))
+            staticWSClient.when(() -> WSClient.createStompClient(Mockito.eq(url), Mockito.any()))
                     .thenReturn(stompClientMock);
             wsClient.connect(url);
             wsClient.sendMessage(messageDTO);
-            staticWSClient.verify(() -> WSClient.createStompClient(Mockito.eq(url)));
+            staticWSClient.verify(() -> WSClient.createStompClient(Mockito.eq(url), Mockito.any()));
         }
-        Mockito.verify(stompClientMock).connect();
-        Mockito.verify(stompClientMock)
-                .send(Mockito.eq(messageDestination), Mockito.eq(messagePayload));
+        Mockito.verify(stompClientMock).connect(Mockito.any());
+        Mockito.verify(stompClientMock).send(Mockito.any(StompMessage.class));
     }
 
     @Test
@@ -127,14 +132,15 @@ public class WSClientUnitTest {
                 .thenReturn(lifecycleFlowable);
         Mockito.when(stompClientMock.isConnected())
                 .thenReturn(true);
-        Mockito.when(stompClientMock.topic(Mockito.anyString())).thenReturn(stompMessageFlowable);
+        Mockito.when(stompClientMock.topic(Mockito.anyString(), Mockito.any()))
+                .thenReturn(stompMessageFlowable);
         try (MockedStatic<WSClient> staticWSClient = Mockito.mockStatic(WSClient.class)) {
-            staticWSClient.when(() -> WSClient.createStompClient(Mockito.anyString()))
+            staticWSClient.when(() -> WSClient.createStompClient(Mockito.eq(url), Mockito.any()))
                     .thenReturn(stompClientMock);
             wsClient.connect(url);
             wsClient.subscribe(chatId);
-            staticWSClient.verify(() -> WSClient.createStompClient(Mockito.eq(url)));
+            staticWSClient.verify(() -> WSClient.createStompClient(Mockito.eq(url), Mockito.any()));
         }
-        Mockito.verify(stompClientMock).topic(Mockito.eq(subscribePath));
+        Mockito.verify(stompClientMock).topic(Mockito.eq(subscribePath), Mockito.any());
     }
 }

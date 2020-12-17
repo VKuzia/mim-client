@@ -4,16 +4,18 @@ import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mimteam.mimclient.models.ws.MessageDTO;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.eventbus.EventBus;
+import com.mimteam.mimclient.App;
+import com.mimteam.mimclient.models.dto.MessageDTO;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
-import io.reactivex.CompletableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -21,9 +23,13 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
+import ua.naiksoftware.stomp.dto.StompCommand;
+import ua.naiksoftware.stomp.dto.StompHeader;
 import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class WSClient {
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String TOKEN_PREFIX = "Bearer ";
     private final String LOG_TAG = "WS_CLIENT";
     private final ObjectMapper jsonMapper = new ObjectMapper();
     private final ArrayList<Disposable> messages = new ArrayList<>();
@@ -32,18 +38,33 @@ public class WSClient {
     private StompClient stompClient;
     private Disposable lifecycleSubscription;
 
+    private EventBus messagesEventBus;
+    private App.Operable onConnected;
+
     public WSClient(@NotNull UserInfo userInfo) {
         this.userInfo = userInfo;
     }
 
     public static @NotNull StompClient createStompClient(String url) {
-        return Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
+        return createStompClient(url, ImmutableMap.of());
+    }
+
+    public static @NotNull StompClient createStompClient(String url, ImmutableMap<String, String> headers) {
+        return Stomp.over(Stomp.ConnectionProvider.OKHTTP, url, headers)
                 .withClientHeartbeat(1000)
                 .withServerHeartbeat(1000);
     }
 
     public void connect(String url) {
-        setStompClient(createStompClient(url));
+        connect(url, () -> {});
+    }
+
+    public void connect(String url, App.Operable onConnected) {
+        this.onConnected = onConnected;
+
+        ImmutableMap<String, String> authHeaders =
+                ImmutableMap.of(AUTHORIZATION_HEADER, TOKEN_PREFIX + userInfo.getToken());
+        setStompClient(createStompClient(url, authHeaders));
         connect();
     }
 
@@ -55,6 +76,7 @@ public class WSClient {
                     switch (lifecycleEvent.getType()) {
                         case OPENED:
                             Log.i(LOG_TAG, "Stomp connection opened");
+                            onConnected.operate();
                             break;
                         case ERROR:
                             Log.e(LOG_TAG, "Stomp connection error", lifecycleEvent.getException());
@@ -68,7 +90,7 @@ public class WSClient {
                             break;
                     }
                 });
-        stompClient.connect();
+        stompClient.connect(createAuthorizationHeaders());
     }
 
     public void subscribe(Integer id) {
@@ -77,7 +99,7 @@ public class WSClient {
         }
         Log.d(LOG_TAG, "SUBSCRIBE TO " + id);
         String fullUrl = "/chats/" + id;
-        Disposable disposableSubscription = stompClient.topic(fullUrl)
+        Disposable disposableSubscription = stompClient.topic(fullUrl, createAuthorizationHeaders())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleReceivedMessage,
@@ -104,7 +126,11 @@ public class WSClient {
             e.printStackTrace();
             return;
         }
-        Disposable disposableMessage = stompClient.send("/app/chats/" + message.getChatId() + "/message", payload)
+        List<StompHeader> headers = createAuthorizationHeaders();
+        headers.add(new StompHeader(StompHeader.DESTINATION, "/app/chats/" + message.getChatId() + "/message"));
+        StompMessage stompMessage = new StompMessage(StompCommand.SEND, headers, payload);
+
+        Disposable disposableMessage = stompClient.send(stompMessage)
                 .unsubscribeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -139,10 +165,19 @@ public class WSClient {
         Log.i(LOG_TAG, "\nRECEIVE:  " + message.getPayload() + "\n");
         try {
             MessageDTO dto = jsonMapper.readValue(message.getPayload(), MessageDTO.class);
+            if (messagesEventBus != null) {
+                messagesEventBus.post(dto);
+            }
             Log.i(LOG_TAG, dto.getContent());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
+
+    private @NotNull List<StompHeader> createAuthorizationHeaders() {
+        ArrayList<StompHeader> stompHeaders = new ArrayList<>();
+        stompHeaders.add(new StompHeader(AUTHORIZATION_HEADER, TOKEN_PREFIX + userInfo.getToken()));
+        return stompHeaders;
     }
 
     private void setStompClient(StompClient client) {
@@ -155,5 +190,9 @@ public class WSClient {
 
     public UserInfo getUserInfo() {
         return userInfo;
+    }
+
+    public void setMessagesEventBus(EventBus messagesEventBus) {
+        this.messagesEventBus = messagesEventBus;
     }
 }
