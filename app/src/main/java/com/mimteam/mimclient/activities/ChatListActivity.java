@@ -66,11 +66,7 @@ public class ChatListActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
-        String createdChatName = intent.getStringExtra(getString(R.string.chat_name_variable));
-        if (createdChatName != null) {
-//            createChat(createdChatName);
-        }
+        updateChatList();
     }
 
     private void initializeUIComponents() {

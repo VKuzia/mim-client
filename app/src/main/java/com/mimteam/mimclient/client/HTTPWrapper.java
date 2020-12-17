@@ -19,10 +19,10 @@ public class HTTPWrapper {
         this.httpClient = httpClient;
     }
 
-    public Optional<Integer> createChat(String chatName) {
+    public Optional<ChatDTO> createChat(String chatName) {
         ImmutableMap<String, String> params = ImmutableMap.of("chatName", chatName);
         Optional<String> response = httpClient.post("/chats/create", params);
-        return parseResponse(response.orNull(), new TypeReference<Integer>() {});
+        return parseResponse(response.orNull(), new TypeReference<ChatDTO>() {});
     }
 
     public Optional<String> joinChat(Integer chatId) {

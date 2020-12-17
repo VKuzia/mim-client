@@ -10,8 +10,12 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.common.base.Optional;
+import com.mimteam.mimclient.App;
+import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.components.ChatAvatar;
+import com.mimteam.mimclient.models.dto.ChatDTO;
 
 public class CreateChatActivity extends AppCompatActivity {
 
@@ -73,8 +77,12 @@ public class CreateChatActivity extends AppCompatActivity {
             setChatNameError();
             return;
         }
-        Intent intent = new Intent(CreateChatActivity.this, ChatListActivity.class);
-        intent.putExtra(getString(R.string.chat_name_variable), chatNameEdit.getText().toString());
-        startActivity(intent);
+        App application = (App) getApplication();
+        Optional<ChatDTO> chat = application.getHttpWrapper().createChat(chatNameEdit.getText().toString());
+        if (chat.isPresent()) {
+            application.getUserInfo().addChat(chat.get());
+            application.getWsClient().subscribe(chat.get().getChatId());
+        }
+        MainActivity.switchActivity(ChatListActivity.class);
     }
 }
