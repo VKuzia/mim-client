@@ -36,7 +36,6 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<MessageModel> messages;
     private MessageAdapter messageAdapter;
 
-    private String invitationKey;
     private Integer chatId;
 
     private UserInfo userInfo;

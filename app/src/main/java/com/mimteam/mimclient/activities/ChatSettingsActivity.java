@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 
@@ -28,7 +29,11 @@ public class ChatSettingsActivity extends AppCompatActivity {
 
         clipboardManager=(ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
         initializeUIComponents();
+        textView.setText(((App) getApplication()).getOpenedChatInvitationKey());
         attachListenersToComponents();
+
+
+//        String key = ((App) getApplication()).getHttpWrapper().getInvitationKey()
     }
 
     private void initializeUIComponents() {
