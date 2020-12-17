@@ -46,7 +46,8 @@ public class WSClientUnitTest {
 
     @BeforeEach
     public void init() {
-        UserInfo userInfo = new UserInfo(userId);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(userId);
         wsClient = new WSClient(userInfo);
         messageDTO = new MessageDTO();
         messageDTO.setUserId(userId);
