@@ -10,9 +10,22 @@
         android:id="@+id/toolBarChats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignRight="@id/fab"
+        android:layout_alignParentRight="true"
         android:background="@color/purple_500"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:navigationIcon="@drawable/menu" />
+        app:navigationIcon="@drawable/menu">
+
+        <Button
+            android:id="@+id/joinChatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="Join Chat"
+            android:layout_alignParentRight="true" />
+
+    </androidx.appcompat.widget.Toolbar>
+
 
     <ListView
         android:id="@+id/listOfChats"
@@ -40,4 +53,5 @@
         android:src="@android:drawable/ic_input_add"
         app:backgroundTint="@color/blue_fab"
         tools:srcCompat="@android:drawable/ic_input_add" />
+
 </RelativeLayout>

@@ -51,9 +51,9 @@ public class MessageAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        Log.i("Name", messages.get(position).getUserName());
+//        Log.i("Name", messages.get(position).getUserName());
         if (messages.get(position).getUserName().equals("")) {
-            Log.i("Position", String.valueOf(position));
+//            Log.i("Position", String.valueOf(position));
             convertView = inflater.inflate(R.layout.current_user_message_markup, parent, false);
         } else {
             convertView = inflater.inflate(R.layout.user_message_markup, parent, false);

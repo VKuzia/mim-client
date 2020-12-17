@@ -5,9 +5,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.common.eventbus.Subscribe;
 import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.adapters.ChatAdapter;
@@ -28,6 +30,7 @@ public class ChatListActivity extends AppCompatActivity {
 
     private ListView chatsList;
     private Toolbar chatListToolbar;
+    private Button joinChatButton;
     private FloatingActionButton addChat;
 
     private ArrayList<ChatModel> chats;
@@ -49,8 +52,7 @@ public class ChatListActivity extends AppCompatActivity {
         App application = (App) getApplication();
         userInfo = application.getUserInfo();
         messagesStorage = application.getMessagesStorage();
-
-        application.connectWebSocket();
+        application.getMessagesEventBus().register(this);
         userInfo.setOnChatListChanged(this::updateChatList);
     }
 
@@ -63,6 +65,11 @@ public class ChatListActivity extends AppCompatActivity {
         chatAdapter.notifyDataSetChanged();
     }
 
+    @Subscribe
+    public void handleReceivedMessage(@NotNull MessageDTO messageDto) {
+        updateChatList();
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -72,6 +79,7 @@ public class ChatListActivity extends AppCompatActivity {
     private void initializeUIComponents() {
         chatsList = findViewById(R.id.listOfChats);
         chatListToolbar = findViewById(R.id.toolBarChat);
+        joinChatButton = findViewById(R.id.joinChatButton);
         addChat = findViewById(R.id.fab);
     }
 
@@ -82,6 +90,7 @@ public class ChatListActivity extends AppCompatActivity {
                     ((App) getApplication()).setOpenedChatId(chats.get((int) id).getChatId());
                     MainActivity.switchActivity(ChatActivity.class);
                 });
+        joinChatButton.setOnClickListener(view -> MainActivity.switchActivity(ChatJoinActivity.class));
     }
 
     private void setupChatList() {

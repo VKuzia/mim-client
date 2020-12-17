@@ -25,10 +25,10 @@ public class HTTPWrapper {
         return parseResponse(response.orNull(), new TypeReference<ChatDTO>() {});
     }
 
-    public Optional<String> joinChat(Integer chatId) {
-        ImmutableMap<String, String> params = ImmutableMap.of("userId",
-                httpClient.getUserInfo().getId().toString());
-        return httpClient.post("/chats/" + chatId + "/join", params);
+    public Optional<ChatDTO> joinChat(String key) {
+        ImmutableMap<String, String> params = ImmutableMap.of("invitationKey", key);
+        Optional<String> response = httpClient.post("/chats/join", params);
+        return parseResponse(response.orNull(), new TypeReference<ChatDTO>() {});
     }
 
     public Optional<String> leaveChat(Integer chatId) {

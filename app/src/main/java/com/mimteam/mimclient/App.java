@@ -37,16 +37,17 @@ public class App extends Application {
 
         userInfo = new UserInfo();
 
-        httpWrapper = new HTTPWrapper(new HTTPClient(userInfo, getString(R.string.local_http_url)));
+        httpWrapper = new HTTPWrapper(new HTTPClient(userInfo, getString(R.string.http_url)));
     }
 
     public void connectWebSocket() {
         wsClient = new WSClient(userInfo);
         wsClient.setMessagesEventBus(messagesEventBus);
-        wsClient.connect(getString(R.string.local_ws_endpoint), this::subscribeToChats);
+        wsClient.connect(getString(R.string.ws_endpoint), this::subscribeToChats);
     }
 
     public void subscribeToChats() {
+        userInfo.clear();
         Optional<List<ChatDTO>> chatsList = httpWrapper.getChatsList();
         if (!chatsList.isPresent()) {
             showNotification(this, "Error getting chat list", "ERROR");

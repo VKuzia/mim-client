@@ -12,6 +12,10 @@ import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
+import com.mimteam.mimclient.client.UserInfo;
+import com.mimteam.mimclient.models.dto.ChatDTO;
+
+import java.util.List;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -67,10 +71,21 @@ public class SignInActivity extends AppCompatActivity {
                     getString(R.string.sign_in_error), getString(R.string.sign_in_error_title));
             return;
         }
-        application.getUserInfo().setToken(response.get());
-        application.getUserInfo().setId(application.getHttpWrapper().getUserId().or(-1));
-        Log.d("SIGN_IN", response.get());
 
+        UserInfo userInfo = application.getUserInfo();
+        userInfo.clear();
+        userInfo.setToken(response.get());
+        userInfo.setId(application.getHttpWrapper().getUserId().or(-1));
+        if (application.getWsClient() != null) {
+            application.getWsClient().dispose();
+        }
+        application.connectWebSocket();
+//        Optional<List<ChatDTO>> chatList = application.getHttpWrapper().getChatsList();
+//        userInfo.setChatList(chatList.get());
+//        for (ChatDTO chatDTO : chatList.get()) {
+//            application.getWsClient().subscribe(chatDTO.getChatId());
+//        }
+        Log.d("SIGN_IN", response.get());
         MainActivity.switchActivity(ChatListActivity.class);
     }
 }

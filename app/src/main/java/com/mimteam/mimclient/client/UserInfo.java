@@ -49,6 +49,13 @@ public class UserInfo {
         }
     }
 
+    public void clear() {
+        chats.clear();
+        if (onChatListChanged != null) {
+            onChatListChanged.operate();
+        }
+    }
+
     public void addUsers(@NotNull List<UserDTO> users) {
         for (UserDTO user : users) {
             userIdToName.put(user.getUserId(), user.getUserName());
@@ -63,7 +70,13 @@ public class UserInfo {
         this.onChatListChanged = onChatListChanged;
     }
 
-    public String getUserName(Integer userId, String currentUserName) {
+    public String getUserName(@NotNull Integer userId, String currentUserName) {
         return userId.equals(id) ? currentUserName : userIdToName.get(userId);
     }
+
+    public void setChatList(@NotNull List<ChatDTO> chatList) {
+        clear();
+        chats.addAll(chatList);
+    }
+
 }
