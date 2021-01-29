@@ -12,11 +12,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
+import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 
 public class ChatSettingsActivity extends AppCompatActivity {
 
-    private TextView linkView;
+    private TextView inviteLinkView;
     private ImageView imageView;
     private Toolbar settingsToolbar;
 
@@ -31,34 +32,34 @@ public class ChatSettingsActivity extends AppCompatActivity {
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         initializeUIComponents();
         attachListenersToComponents();
-        updateLink();
+        updateInviteLink();
     }
 
     private void initializeUIComponents() {
-        linkView = findViewById(R.id.linkView);
+        inviteLinkView = findViewById(R.id.linkView);
         imageView = findViewById(R.id.shareImage);
         settingsToolbar = findViewById(R.id.chatSettingsToolbar);
     }
 
     private void attachListenersToComponents() {
         settingsToolbar.setNavigationOnClickListener(v -> MainActivity.switchActivity(ChatActivity.class));
-        imageView.setOnClickListener(v -> copyLinkToBuffer());
+        imageView.setOnClickListener(v -> copyInviteLinkToBuffer());
     }
 
-    private void updateLink() {
+    private void updateInviteLink() {
         App application = (App) getApplication();
-        Optional<String> key = application.getHttpWrapper().getInvitationKey(application.getOpenedChatId());
-        if (key.isPresent()) {
-            linkView.setText(key.get());
+        Optional<String> inviteLink = application.getHttpWrapper().getInvitationLink(application.getOpenedChatId());
+        if (inviteLink.isPresent()) {
+            inviteLinkView.setText(inviteLink.get());
         } else {
             application.showNotification(this, getString(R.string.chat_link_error),
                     getString(R.string.chat_link_error_title));
         }
     }
 
-    private void copyLinkToBuffer() {
-        String text = linkView.getText().toString();
-        ClipData clipData = ClipData.newPlainText("text", text);
+    private void copyInviteLinkToBuffer() {
+        String inviteLink = inviteLinkView.getText().toString();
+        ClipData clipData = ClipData.newPlainText("text", inviteLink);
         clipboardManager.setPrimaryClip(clipData);
     }
 }

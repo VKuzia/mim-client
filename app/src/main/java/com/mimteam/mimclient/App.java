@@ -83,8 +83,7 @@ public class App extends Application {
     }
 
     public void showNotification(Context context, String message, String title) {
-        showNotification(context, message, title, () -> {
-        });
+        showNotification(context, message, title, () -> { });
     }
 
     public void showNotification(Context context, String message, String title, Operable onClose) {

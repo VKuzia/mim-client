@@ -42,7 +42,7 @@ public class HTTPWrapper {
         return parseResponse(response.orNull(), new TypeReference<List<UserDTO>>() {});
     }
 
-    public Optional<String> getInvitationKey(Integer chatId) {
+    public Optional<String> getInvitationLink(Integer chatId) {
         Optional<String> response = httpClient.get("/chats/" + chatId + "/invitation");
         return parseResponse(response.orNull(), new TypeReference<String>() {});
     }
