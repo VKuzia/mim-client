@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
@@ -17,6 +18,7 @@ public class ChatSettingsActivity extends AppCompatActivity {
 
     private TextView linkView;
     private ImageView imageView;
+    private Toolbar settingsToolbar;
 
     private ClipboardManager clipboardManager;
 
@@ -24,6 +26,7 @@ public class ChatSettingsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_settings);
+        setSupportActionBar(settingsToolbar);
 
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         initializeUIComponents();
@@ -34,9 +37,11 @@ public class ChatSettingsActivity extends AppCompatActivity {
     private void initializeUIComponents() {
         linkView = findViewById(R.id.linkView);
         imageView = findViewById(R.id.shareImage);
+        settingsToolbar = findViewById(R.id.chatSettingsToolbar);
     }
 
     private void attachListenersToComponents() {
+        settingsToolbar.setNavigationOnClickListener(v -> MainActivity.switchActivity(ChatActivity.class));
         imageView.setOnClickListener(v -> copyLinkToBuffer());
     }
 
