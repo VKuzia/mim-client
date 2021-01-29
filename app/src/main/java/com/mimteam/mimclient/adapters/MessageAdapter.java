@@ -1,7 +1,6 @@
 package com.mimteam.mimclient.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,9 +50,7 @@ public class MessageAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        Log.i("Name", messages.get(position).getUserName());
         if (messages.get(position).getUserName().equals("")) {
-//            Log.i("Position", String.valueOf(position));
             convertView = inflater.inflate(R.layout.current_user_message_markup, parent, false);
         } else {
             convertView = inflater.inflate(R.layout.user_message_markup, parent, false);

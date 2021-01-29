@@ -13,7 +13,6 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -77,7 +76,7 @@ public class HTTPClient {
         return Headers.of("Authorization", "Bearer " + userInfo.getToken());
     }
 
-    private @Nullable Optional<String> sendRequest(Request request) {
+    private @NotNull Optional<String> sendRequest(Request request) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Callable<String> callable = () -> {
             Response response = okHttpClient.newCall(request).execute();

@@ -3,7 +3,6 @@ package com.mimteam.mimclient.activities;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,34 +11,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
-import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 
 public class ChatSettingsActivity extends AppCompatActivity {
 
-    private TextView textView;
+    private TextView linkView;
     private ImageView imageView;
 
     private ClipboardManager clipboardManager;
-    private ClipData clipData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_settings);
 
-        clipboardManager=(ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+        clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         initializeUIComponents();
-        App application = (App) getApplication();
-        Optional<String> key = application.getHttpWrapper().getInvitationKey(application.getOpenedChatId());
-        if (key.isPresent()) {
-            textView.setText(key.get());
-        }
         attachListenersToComponents();
+        updateLink();
     }
 
     private void initializeUIComponents() {
-        textView = findViewById(R.id.linkView);
+        linkView = findViewById(R.id.linkView);
         imageView = findViewById(R.id.shareImage);
     }
 
@@ -47,9 +40,20 @@ public class ChatSettingsActivity extends AppCompatActivity {
         imageView.setOnClickListener(v -> copyLinkToBuffer());
     }
 
+    private void updateLink() {
+        App application = (App) getApplication();
+        Optional<String> key = application.getHttpWrapper().getInvitationKey(application.getOpenedChatId());
+        if (key.isPresent()) {
+            linkView.setText(key.get());
+        } else {
+            application.showNotification(this, getString(R.string.chat_link_error),
+                    getString(R.string.chat_link_error_title));
+        }
+    }
+
     private void copyLinkToBuffer() {
-        String text = textView.getText().toString();
-        clipData = ClipData.newPlainText("text",text);
+        String text = linkView.getText().toString();
+        ClipData clipData = ClipData.newPlainText("text", text);
         clipboardManager.setPrimaryClip(clipData);
     }
 }

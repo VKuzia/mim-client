@@ -61,7 +61,7 @@ public class ChatActivity extends AppCompatActivity {
         handleOldMessages(application.getMessagesStorage().getMessagesInChat(chatId));
     }
 
-    private void handleOldMessages(List<MessageDTO> oldMessages) {
+    private void handleOldMessages(@NotNull List<MessageDTO> oldMessages) {
         for (MessageDTO message : oldMessages) {
             handleReceivedMessage(message);
         }

@@ -13,9 +13,6 @@ import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.client.UserInfo;
-import com.mimteam.mimclient.models.dto.ChatDTO;
-
-import java.util.List;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -51,20 +48,18 @@ public class SignInActivity extends AppCompatActivity {
 
     private void authorize() {
         App application = (App) getApplication();
-
         String login = loginEdit.getText().toString();
         if (login.length() == 0) {
-            loginEdit.setError(getString(R.string.sign_in_error) + " " +
-                    getString(R.string.login).toLowerCase());
+            loginEdit.setError(getString(R.string.empty_field_error));
         }
         String password = passwordEdit.getText().toString();
-        if (password.length() == 0) {
-            passwordEdit.setError(getString(R.string.sign_in_error) + " " +
-                    getString(R.string.password).toLowerCase());
+        if (password.length() == 0){
+            passwordEdit.setError(getString(R.string.empty_field_error));
         }
         if (passwordEdit.getError() != null || loginEdit.getError() != null) {
             return;
         }
+
         Optional<String> response = application.getHttpWrapper().login(login, password);
         if (!response.isPresent()) {
             application.showNotification(this,
@@ -73,18 +68,10 @@ public class SignInActivity extends AppCompatActivity {
         }
 
         UserInfo userInfo = application.getUserInfo();
-        userInfo.clear();
+        userInfo.clearChats();
         userInfo.setToken(response.get());
         userInfo.setId(application.getHttpWrapper().getUserId().or(-1));
-        if (application.getWsClient() != null) {
-            application.getWsClient().dispose();
-        }
         application.connectWebSocket();
-//        Optional<List<ChatDTO>> chatList = application.getHttpWrapper().getChatsList();
-//        userInfo.setChatList(chatList.get());
-//        for (ChatDTO chatDTO : chatList.get()) {
-//            application.getWsClient().subscribe(chatDTO.getChatId());
-//        }
         Log.d("SIGN_IN", response.get());
         MainActivity.switchActivity(ChatListActivity.class);
     }

@@ -42,13 +42,14 @@ public class ChatJoinActivity extends AppCompatActivity {
         App application = (App) getApplication();
         Optional<ChatDTO> chat = application.getHttpWrapper().joinChat(link);
         if (!chat.isPresent()) {
-            application.showNotification(this, "Unable to join chat", "Join chat Error", this::finish);
+            application.showNotification(this, getString(R.string.join_chat_error),
+                    getString(R.string.join_chat_error_title), this::finish);
         } else {
             application.getUserInfo().addChat(chat.get());
             application.getWsClient().subscribe(chat.get().getChatId());
             Optional<List<UserDTO>> userList = application.getHttpWrapper().getUserList(chat.get().getChatId());
             if (userList.isPresent()) {
-                application.getUserInfo().addUsers(userList.get());
+                application.getUserInfo().updateUsers(userList.get());
             }
             finish();
         }

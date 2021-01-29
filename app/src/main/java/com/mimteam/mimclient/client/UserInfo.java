@@ -42,21 +42,14 @@ public class UserInfo {
         }
     }
 
-    public void removeChat(ChatDTO chat) {
-        chats.remove(chat);
-        if (onChatListChanged != null) {
-            onChatListChanged.operate();
-        }
-    }
-
-    public void clear() {
+    public void clearChats() {
         chats.clear();
         if (onChatListChanged != null) {
             onChatListChanged.operate();
         }
     }
 
-    public void addUsers(@NotNull List<UserDTO> users) {
+    public void updateUsers(@NotNull List<UserDTO> users) {
         for (UserDTO user : users) {
             userIdToName.put(user.getUserId(), user.getUserName());
         }
@@ -73,10 +66,4 @@ public class UserInfo {
     public String getUserName(@NotNull Integer userId, String currentUserName) {
         return userId.equals(id) ? currentUserName : userIdToName.get(userId);
     }
-
-    public void setChatList(@NotNull List<ChatDTO> chatList) {
-        clear();
-        chats.addAll(chatList);
-    }
-
 }
