@@ -30,9 +30,12 @@ public class App extends Application {
 
     private Integer openedChatId;
 
+    private static Context appContext;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        appContext = getApplicationContext();
         messagesEventBus = new EventBus();
         messagesStorage = new MessagesStorage();
         messagesEventBus.register(messagesStorage);
@@ -113,5 +116,9 @@ public class App extends Application {
 
     public void setOpenedChatId(Integer openedChatId) {
         this.openedChatId = openedChatId;
+    }
+
+    public static Context getAppContext() {
+        return appContext;
     }
 }

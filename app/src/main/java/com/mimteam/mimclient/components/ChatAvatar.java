@@ -30,16 +30,10 @@ public class ChatAvatar extends RelativeLayout {
         avatarText = view.findViewById(R.id.avatarText);
     }
 
-    public boolean setChatName(String chatName) {
-        if (chatName == null) {
-            return true;
-        }
+    public void setChatName(String chatName) {
         String text = getFirstNonEmptyWord(chatName);
-        if (text.length() > 0) {
-            text = text.substring(0, 1).toUpperCase();
-        }
+        text = text.substring(0, 1).toUpperCase();
         avatarText.setText(text);
-        return text.isEmpty();
     }
 
     private @NotNull String getFirstNonEmptyWord(@NotNull String text) {

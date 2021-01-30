@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.google.common.eventbus.Subscribe;
@@ -16,6 +15,7 @@ import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.adapters.MessageAdapter;
 import com.mimteam.mimclient.client.UserInfo;
 import com.mimteam.mimclient.client.WSClient;
+import com.mimteam.mimclient.components.ui.ExtendedEditText;
 import com.mimteam.mimclient.models.MessageModel;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.models.dto.MessageDTO;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private EditText inputEdit;
+    private ExtendedEditText inputEdit;
     private ListView messagesList;
     private Button sendButton;
     private Toolbar chatToolbar;

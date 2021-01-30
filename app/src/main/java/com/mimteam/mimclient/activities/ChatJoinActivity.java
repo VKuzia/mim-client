@@ -2,7 +2,6 @@ package com.mimteam.mimclient.activities;
 
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,14 +9,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.R;
+import com.mimteam.mimclient.components.ui.ExtendedEditText;
 import com.mimteam.mimclient.models.dto.ChatDTO;
 import com.mimteam.mimclient.models.dto.UserDTO;
+import com.mimteam.mimclient.util.validors.ChatLinkValidator;
+import com.mimteam.mimclient.util.validors.NonEmptyValidator;
 
 import java.util.List;
 
 public class ChatJoinActivity extends AppCompatActivity {
 
-    private EditText linkEdit;
+    private ExtendedEditText linkEdit;
     private Button joinButton;
 
     @Override
@@ -38,6 +40,10 @@ public class ChatJoinActivity extends AppCompatActivity {
     }
 
     private void joinChat() {
+        linkEdit.validate(new ChatLinkValidator());
+        if (linkEdit.getError() != null) {
+            return;
+        }
         String link = linkEdit.getText().toString();
         App application = (App) getApplication();
         Optional<ChatDTO> chat = application.getHttpWrapper().joinChat(link);

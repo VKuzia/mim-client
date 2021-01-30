@@ -2,7 +2,6 @@ package com.mimteam.mimclient.activities;
 
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,12 +9,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.R;
+import com.mimteam.mimclient.components.ui.ExtendedEditText;
+import com.mimteam.mimclient.util.validors.LoginValidator;
+import com.mimteam.mimclient.util.validors.PasswordValidator;
+import com.mimteam.mimclient.util.validors.UsernameValidator;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    private EditText usernameEdit;
-    private EditText loginEdit;
-    private EditText passwordEdit;
+    private ExtendedEditText usernameEdit;
+    private ExtendedEditText loginEdit;
+    private ExtendedEditText passwordEdit;
     private Button signUpButton;
     private TextView toLoginView;
 
@@ -42,26 +45,17 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void createAccount() {
-        String username = usernameEdit.getText().toString();
-        if (username.length() == 0) {
-            usernameEdit.setError(getString(R.string.user_name) + " " +
-                    getString(R.string.empty_field_error));
-        }
-        String login = loginEdit.getText().toString();
-        if (login.length() == 0) {
-            loginEdit.setError(getString(R.string.login) + " " +
-                    getString(R.string.empty_field_error));
-        }
-        String password = passwordEdit.getText().toString();
-        if (password.length() == 0) {
-            passwordEdit.setError(getString(R.string.password) + " " +
-                    getString(R.string.empty_field_error));
-        }
+        usernameEdit.validate(new UsernameValidator());
+        loginEdit.validate(new LoginValidator());
+        passwordEdit.validate(new PasswordValidator());
         if (usernameEdit.getError() != null ||
                 loginEdit.getError() != null ||
                 passwordEdit.getError() != null) {
             return;
         }
+        String username = usernameEdit.getText().toString();
+        String login = loginEdit.getText().toString();
+        String password = passwordEdit.getText().toString();
         Optional<String> response =
                 ((App) getApplication()).getHttpWrapper().signUp(username, login, password);
         if (!response.isPresent()) {

@@ -1,11 +1,9 @@
 package com.mimteam.mimclient.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,11 +13,13 @@ import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.components.ChatAvatar;
+import com.mimteam.mimclient.components.ui.ExtendedEditText;
 import com.mimteam.mimclient.models.dto.ChatDTO;
+import com.mimteam.mimclient.util.validors.ChatNameValidator;
 
 public class CreateChatActivity extends AppCompatActivity {
 
-    private EditText chatNameEdit;
+    private ExtendedEditText chatNameEdit;
     private Button createChatButton;
     private ChatAvatar chatAvatar;
     private Toolbar createChatToolbar;
@@ -51,8 +51,9 @@ public class CreateChatActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (chatAvatar.setChatName(chatNameEdit.getText().toString())) {
-                    chatNameEdit.setError(getString(R.string.chat_name_error));
+                chatNameEdit.validate(new ChatNameValidator());
+                if (chatNameEdit.getError() == null) {
+                    chatAvatar.setChatName(chatNameEdit.getText().toString());
                 }
             }
 
@@ -63,8 +64,8 @@ public class CreateChatActivity extends AppCompatActivity {
     }
 
     private void createChat() {
-        if (chatNameEdit.getError() != null || chatNameEdit.getText().length() == 0) {
-            chatNameEdit.setError(getString(R.string.chat_name_error));
+        chatNameEdit.validate(new ChatNameValidator());
+        if (chatNameEdit.getError() != null) {
             return;
         }
         App application = (App) getApplication();

@@ -2,18 +2,30 @@ package com.mimteam.mimclient.components.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.EditText;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.mimteam.mimclient.util.validors.Validator;
+
+import org.jetbrains.annotations.NotNull;
 
 public class ExtendedEditText extends androidx.appcompat.widget.AppCompatEditText {
-    public ExtendedEditText(Context context) {
+
+    public ExtendedEditText(@NonNull Context context) {
         super(context);
     }
 
-    public ExtendedEditText(Context context, AttributeSet attrs) {
+    public ExtendedEditText(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ExtendedEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ExtendedEditText(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    public void validate(@NotNull Validator validator) {
+        if (!validator.validate(getText().toString())) {
+            setError(validator.getErrorMessage());
+        }
     }
 }
