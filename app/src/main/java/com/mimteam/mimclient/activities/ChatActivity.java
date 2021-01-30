@@ -61,7 +61,7 @@ public class ChatActivity extends AppCompatActivity {
         handleOldMessages(application.getMessagesStorage().getMessagesInChat(chatId));
     }
 
-    private void handleOldMessages(List<MessageDTO> oldMessages) {
+    private void handleOldMessages(@NotNull List<MessageDTO> oldMessages) {
         for (MessageDTO message : oldMessages) {
             handleReceivedMessage(message);
         }
@@ -83,6 +83,10 @@ public class ChatActivity extends AppCompatActivity {
     private void attachListenersToComponents() {
         sendButton.setOnClickListener(v -> sendMessage());
         chatToolbar.setNavigationOnClickListener(v -> MainActivity.switchActivity(ChatListActivity.class));
+        chatToolbar.setOnMenuItemClickListener(v -> {
+            MainActivity.switchActivity(ChatSettingsActivity.class);
+            return true;
+        });
         inputEdit.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {

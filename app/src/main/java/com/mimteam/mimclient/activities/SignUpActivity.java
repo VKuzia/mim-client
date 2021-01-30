@@ -45,17 +45,17 @@ public class SignUpActivity extends AppCompatActivity {
         String username = usernameEdit.getText().toString();
         if (username.length() == 0) {
             usernameEdit.setError(getString(R.string.user_name) + " " +
-                    getString(R.string.sign_up_field_error));
+                    getString(R.string.empty_field_error));
         }
         String login = loginEdit.getText().toString();
         if (login.length() == 0) {
             loginEdit.setError(getString(R.string.login) + " " +
-                    getString(R.string.sign_up_field_error));
+                    getString(R.string.empty_field_error));
         }
         String password = passwordEdit.getText().toString();
         if (password.length() == 0) {
             passwordEdit.setError(getString(R.string.password) + " " +
-                    getString(R.string.sign_up_field_error));
+                    getString(R.string.empty_field_error));
         }
         if (usernameEdit.getError() != null ||
                 loginEdit.getError() != null ||

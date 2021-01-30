@@ -18,10 +18,11 @@ public class MessagesStorage {
     }
 
     public MessageDTO getLastMessageInChat(Integer chatId) {
-        if (!chatMessages.containsKey(chatId) || chatMessages.get(chatId).isEmpty()) {
+        List<MessageDTO> messageDTOList = chatMessages.get(chatId);
+        if (messageDTOList == null || messageDTOList.isEmpty()) {
             return null;
         }
-        return chatMessages.get(chatId).get(chatMessages.get(chatId).size() - 1);
+        return messageDTOList.get(messageDTOList.size() - 1);
     }
 
     @Subscribe

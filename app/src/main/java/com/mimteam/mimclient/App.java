@@ -7,6 +7,7 @@ import com.google.common.eventbus.EventBus;
 import com.mimteam.mimclient.client.HTTPClient;
 import com.mimteam.mimclient.client.HTTPWrapper;
 import com.mimteam.mimclient.client.MessagesStorage;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.mimteam.mimclient.client.WSClient;
 import com.mimteam.mimclient.models.dto.ChatDTO;
 import com.mimteam.mimclient.models.dto.UserDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class App extends Application {
@@ -36,32 +38,35 @@ public class App extends Application {
         messagesEventBus.register(messagesStorage);
 
         userInfo = new UserInfo();
-
-        httpWrapper = new HTTPWrapper(new HTTPClient(userInfo, getString(R.string.local_http_url)));
+        wsClient = new WSClient(userInfo);
+        httpWrapper = new HTTPWrapper(new HTTPClient(userInfo, getString(R.string.http_url)));
     }
 
     public void connectWebSocket() {
+        wsClient.dispose();  // Release previous resources before new connection
         wsClient = new WSClient(userInfo);
         wsClient.setMessagesEventBus(messagesEventBus);
-        wsClient.connect(getString(R.string.local_ws_endpoint), this::subscribeToChats);
+        wsClient.connect(getString(R.string.ws_endpoint), this::subscribeToChats);
     }
 
-    public void subscribeToChats() {
+    private void subscribeToChats() {
+        userInfo.clearChats();
         Optional<List<ChatDTO>> chatsList = httpWrapper.getChatsList();
         if (!chatsList.isPresent()) {
             showNotification(this, "Error getting chat list", "ERROR");
             return;
         }
         for (ChatDTO chat : chatsList.get()) {
-            wsClient.subscribe(chat.getChatId());
-            messagesStorage.addMessages(chat.getChatId(), httpWrapper.getChatMessages(chat.getChatId()).orNull());
-            Log.i("APP", "Subscribing to " + chat.getChatId() + "(" + chat.getChatName() + ")");
-
             userInfo.addChat(chat);
+            wsClient.subscribe(chat.getChatId());
+            messagesStorage.addMessages(chat.getChatId(),
+                    httpWrapper.getChatMessages(chat.getChatId()).or(new ArrayList<>()));
+            Log.d("APP", "Subscribing to " + chat.getChatId() + "(" + chat.getChatName() + ")");
             Optional<List<UserDTO>> userList = httpWrapper.getUserList(chat.getChatId());
             if (userList.isPresent()) {
-                userInfo.addUsers(userList.get());
+                userInfo.updateUsers(userList.get());
             }
+            // We need to handle else block somehow.
         }
     }
 
@@ -78,7 +83,7 @@ public class App extends Application {
     }
 
     public void showNotification(Context context, String message, String title) {
-        showNotification(context, message, title, () -> {});
+        showNotification(context, message, title, () -> { });
     }
 
     public void showNotification(Context context, String message, String title, Operable onClose) {

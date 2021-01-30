@@ -61,7 +61,6 @@ public class WSClient {
 
     public void connect(String url, App.Operable onConnected) {
         this.onConnected = onConnected;
-
         ImmutableMap<String, String> authHeaders =
                 ImmutableMap.of(AUTHORIZATION_HEADER, TOKEN_PREFIX + userInfo.getToken());
         setStompClient(createStompClient(url, authHeaders));

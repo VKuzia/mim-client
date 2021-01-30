@@ -13,6 +13,8 @@ import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.components.ChatAvatar;
 import com.mimteam.mimclient.models.ChatModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class ChatAdapter extends ArrayAdapter<ChatModel> {
@@ -31,7 +33,7 @@ public class ChatAdapter extends ArrayAdapter<ChatModel> {
         return convertView;
     }
 
-    private void setupChatModel(View convertView, ChatModel chatModel) {
+    private void setupChatModel(@NotNull View convertView, @NotNull ChatModel chatModel) {
         TextView chatName = convertView.findViewById(R.id.chatName);
         TextView userName = convertView.findViewById(R.id.userName);
         TextView message = convertView.findViewById(R.id.message);

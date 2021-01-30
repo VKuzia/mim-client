@@ -27,7 +27,6 @@ public class ChatAvatar extends RelativeLayout {
     private void initializeComponents() {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.chat_avatar_component, this);
-
         avatarText = view.findViewById(R.id.avatarText);
     }
 
@@ -43,7 +42,7 @@ public class ChatAvatar extends RelativeLayout {
         return text.isEmpty();
     }
 
-    private String getFirstNonEmptyWord(@NotNull String text) {
+    private @NotNull String getFirstNonEmptyWord(@NotNull String text) {
         String[] words = text.split("[^\\w\\d]");
         for (String word : words) {
             if (!word.isEmpty()) {

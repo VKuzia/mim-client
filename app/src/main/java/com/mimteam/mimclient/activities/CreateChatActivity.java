@@ -52,7 +52,7 @@ public class CreateChatActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (chatAvatar.setChatName(chatNameEdit.getText().toString())) {
-                    setChatNameError();
+                    chatNameEdit.setError(getString(R.string.chat_name_error));
                 }
             }
 
@@ -62,19 +62,9 @@ public class CreateChatActivity extends AppCompatActivity {
         });
     }
 
-    private void openChatListActivity() {
-        Intent intent = new Intent(CreateChatActivity.this, ChatListActivity.class);
-        startActivity(intent);
-    }
-
-    private void setChatNameError() {
-        chatNameEdit.requestFocus();
-        chatNameEdit.setError(getString(R.string.chat_name_error));
-    }
-
     private void createChat() {
         if (chatNameEdit.getError() != null || chatNameEdit.getText().length() == 0) {
-            setChatNameError();
+            chatNameEdit.setError(getString(R.string.chat_name_error));
             return;
         }
         App application = (App) getApplication();
@@ -83,6 +73,10 @@ public class CreateChatActivity extends AppCompatActivity {
             application.getUserInfo().addChat(chat.get());
             application.getWsClient().subscribe(chat.get().getChatId());
         }
+        MainActivity.switchActivity(ChatListActivity.class);
+    }
+
+    private void openChatListActivity() {
         MainActivity.switchActivity(ChatListActivity.class);
     }
 }
