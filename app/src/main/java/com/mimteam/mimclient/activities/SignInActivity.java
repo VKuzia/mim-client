@@ -13,8 +13,8 @@ import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.client.UserInfo;
 import com.mimteam.mimclient.components.ui.ExtendedEditText;
-import com.mimteam.mimclient.util.validors.PasswordValidator;
-import com.mimteam.mimclient.util.validors.UsernameValidator;
+import com.mimteam.mimclient.util.validors.AlphanumericValidator;
+import com.mimteam.mimclient.util.validors.NonEmptyValidator;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -50,13 +50,13 @@ public class SignInActivity extends AppCompatActivity {
 
     private void authorize() {
         App application = (App) getApplication();
-        loginEdit.validate(new UsernameValidator());
-        passwordEdit.validate(new PasswordValidator());
+        loginEdit.validate(new AlphanumericValidator());
+        passwordEdit.validate(new NonEmptyValidator());
         if (passwordEdit.getError() != null || loginEdit.getError() != null) {
             return;
         }
-        String login = loginEdit.getText().toString();
-        String password = passwordEdit.getText().toString();
+        String login = loginEdit.getStringValue();
+        String password = passwordEdit.getStringValue();
         Optional<String> response = application.getHttpWrapper().login(login, password);
         if (!response.isPresent()) {
             application.showNotification(this,

@@ -15,7 +15,7 @@ import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.components.ChatAvatar;
 import com.mimteam.mimclient.components.ui.ExtendedEditText;
 import com.mimteam.mimclient.models.dto.ChatDTO;
-import com.mimteam.mimclient.util.validors.ChatNameValidator;
+import com.mimteam.mimclient.util.validors.AlphanumericValidator;
 
 public class CreateChatActivity extends AppCompatActivity {
 
@@ -51,9 +51,9 @@ public class CreateChatActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                chatNameEdit.validate(new ChatNameValidator());
+                chatNameEdit.validate(new AlphanumericValidator());
                 if (chatNameEdit.getError() == null) {
-                    chatAvatar.setChatName(chatNameEdit.getText().toString());
+                    chatAvatar.setChatName(chatNameEdit.getStringValue());
                 }
             }
 
@@ -64,12 +64,12 @@ public class CreateChatActivity extends AppCompatActivity {
     }
 
     private void createChat() {
-        chatNameEdit.validate(new ChatNameValidator());
+        chatNameEdit.validate(new AlphanumericValidator());
         if (chatNameEdit.getError() != null) {
             return;
         }
         App application = (App) getApplication();
-        Optional<ChatDTO> chat = application.getHttpWrapper().createChat(chatNameEdit.getText().toString());
+        Optional<ChatDTO> chat = application.getHttpWrapper().createChat(chatNameEdit.getStringValue());
         if (chat.isPresent()) {
             application.getUserInfo().addChat(chat.get());
             application.getWsClient().subscribe(chat.get().getChatId());

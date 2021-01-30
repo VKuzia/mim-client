@@ -25,11 +25,8 @@
     <string name="your_name">You</string>
 
     <!--    Validation Error Messages-->
-    <string name="empty_field_error">should contain at least one letter or number</string>
-    <string name="username_validation_error">username should only contain latin letters and digits</string>
-    <string name="login_validation_error">login should only contain latin letters and digits</string>
-    <string name="password_validation_error">password should only contain latin letters and digits</string>
-    <string name="chat_name_validation_error">Name should contain at least one letter or number</string>
+    <string name="non_empty_validation_error">should contain at least one letter or number</string>
+    <string name="alphanumeric_validation_error">should only contain latin letters and digits</string>
 
     <!--    Events Error Messages-->
     <string name="sign_up_error">Something went wrong on signing up</string>

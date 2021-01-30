@@ -10,9 +10,8 @@ import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.components.ui.ExtendedEditText;
-import com.mimteam.mimclient.util.validors.LoginValidator;
-import com.mimteam.mimclient.util.validors.PasswordValidator;
-import com.mimteam.mimclient.util.validors.UsernameValidator;
+import com.mimteam.mimclient.util.validors.AlphanumericValidator;
+import com.mimteam.mimclient.util.validors.NonEmptyValidator;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -45,17 +44,17 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void createAccount() {
-        usernameEdit.validate(new UsernameValidator());
-        loginEdit.validate(new LoginValidator());
-        passwordEdit.validate(new PasswordValidator());
+        usernameEdit.validate(new NonEmptyValidator());
+        loginEdit.validate(new AlphanumericValidator());
+        passwordEdit.validate(new NonEmptyValidator());
         if (usernameEdit.getError() != null ||
                 loginEdit.getError() != null ||
                 passwordEdit.getError() != null) {
             return;
         }
-        String username = usernameEdit.getText().toString();
-        String login = loginEdit.getText().toString();
-        String password = passwordEdit.getText().toString();
+        String username = usernameEdit.getStringValue();
+        String login = loginEdit.getStringValue();
+        String password = passwordEdit.getStringValue();
         Optional<String> response =
                 ((App) getApplication()).getHttpWrapper().signUp(username, login, password);
         if (!response.isPresent()) {

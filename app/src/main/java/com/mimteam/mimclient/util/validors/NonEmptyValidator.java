@@ -10,6 +10,6 @@ public class NonEmptyValidator extends Validator {
 
     @Override
     public int getErrorMessageId() {
-        return R.string.empty_field_error;
+        return R.string.non_empty_validation_error;
     }
 }

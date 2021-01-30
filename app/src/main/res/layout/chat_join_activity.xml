@@ -28,7 +28,8 @@
         android:layout_marginRight="10dp"
         android:layout_marginEnd="10dp"
         android:gravity="center"
-        android:textSize="40sp"/>
+        android:textSize="40sp"
+        app:field_name="Invite link"/>
 
     <Button
         android:id="@+id/joinButton"

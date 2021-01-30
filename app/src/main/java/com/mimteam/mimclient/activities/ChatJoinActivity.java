@@ -12,8 +12,7 @@ import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.components.ui.ExtendedEditText;
 import com.mimteam.mimclient.models.dto.ChatDTO;
 import com.mimteam.mimclient.models.dto.UserDTO;
-import com.mimteam.mimclient.util.validors.ChatLinkValidator;
-import com.mimteam.mimclient.util.validors.NonEmptyValidator;
+import com.mimteam.mimclient.util.validors.AlphanumericValidator;
 
 import java.util.List;
 
@@ -40,11 +39,11 @@ public class ChatJoinActivity extends AppCompatActivity {
     }
 
     private void joinChat() {
-        linkEdit.validate(new ChatLinkValidator());
+        linkEdit.validate(new AlphanumericValidator());
         if (linkEdit.getError() != null) {
             return;
         }
-        String link = linkEdit.getText().toString();
+        String link = linkEdit.getStringValue();
         App application = (App) getApplication();
         Optional<ChatDTO> chat = application.getHttpWrapper().joinChat(link);
         if (!chat.isPresent()) {

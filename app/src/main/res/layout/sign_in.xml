@@ -36,7 +36,8 @@
         android:maxLength="30"
         android:gravity="center"
         android:importantForAutofill="no"
-        android:inputType="text" />
+        android:inputType="text"
+        app:field_name="Login" />
 
     <com.mimteam.mimclient.components.ui.ExtendedEditText
         android:id="@+id/signInPasswordEdit"
@@ -56,7 +57,8 @@
         android:maxLength="30"
         android:gravity="center"
         android:importantForAutofill="no"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        app:field_name="Password"/>
 
     <Button
         android:id="@+id/signInButton"
