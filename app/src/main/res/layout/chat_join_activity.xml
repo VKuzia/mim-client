@@ -13,7 +13,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:navigationIcon="@drawable/abc_vector_test" />
 
-    <EditText
+    <com.mimteam.mimclient.components.ui.NamedEditText
         android:id="@+id/linkEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +28,8 @@
         android:layout_marginRight="10dp"
         android:layout_marginEnd="10dp"
         android:gravity="center"
-        android:textSize="40sp"/>
+        android:textSize="40sp"
+        app:field_name="Invite link"/>
 
     <Button
         android:id="@+id/joinButton"

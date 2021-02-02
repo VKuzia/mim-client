@@ -24,9 +24,11 @@
     <string name="time">20:00</string>
     <string name="your_name">You</string>
 
-    <!--    Error Messages-->
-    <string name="empty_field_error">should contain at least one letter or number</string>
-    <string name="chat_name_error">Name should contain at least one letter or number</string>
+    <!--    Validation Error Messages-->
+    <string name="non_empty_validation_error">should not be empty</string>
+    <string name="alphanumeric_validation_error">should contain only latin letters or digits</string>
+
+    <!--    Events Error Messages-->
     <string name="sign_up_error">Something went wrong on signing up</string>
     <string name="sign_up_error_title">Sign up error</string>
     <string name="sign_up_ok">You\'ve signed up successfully!</string>

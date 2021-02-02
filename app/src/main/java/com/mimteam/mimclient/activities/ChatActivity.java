@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.google.common.eventbus.Subscribe;
@@ -16,10 +15,13 @@ import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.adapters.MessageAdapter;
 import com.mimteam.mimclient.client.UserInfo;
 import com.mimteam.mimclient.client.WSClient;
+import com.mimteam.mimclient.components.ui.NamedEditText;
 import com.mimteam.mimclient.models.MessageModel;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.models.dto.MessageDTO;
 import com.mimteam.mimclient.models.ws.messages.TextMessage;
+import com.mimteam.mimclient.util.validators.EditTextGroupValidator;
+import com.mimteam.mimclient.util.validators.schemes.NonEmptyValidationScheme;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,10 +30,11 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private EditText inputEdit;
+    private NamedEditText inputEdit;
     private ListView messagesList;
     private Button sendButton;
     private Toolbar chatToolbar;
+    private final EditTextGroupValidator validator = new EditTextGroupValidator();
 
     private ArrayList<MessageModel> messages;
     private MessageAdapter messageAdapter;
@@ -50,6 +53,7 @@ public class ChatActivity extends AppCompatActivity {
         setSupportActionBar(chatToolbar);
         attachListenersToComponents();
         setupMessageList();
+        configureValidator();
 
         App application = (App) getApplication();
 
@@ -59,6 +63,11 @@ public class ChatActivity extends AppCompatActivity {
         wsClient = application.getWsClient();
 
         handleOldMessages(application.getMessagesStorage().getMessagesInChat(chatId));
+    }
+
+    private void configureValidator() {
+        validator.setupEditTextValidation(inputEdit)
+                .with(new NonEmptyValidationScheme());
     }
 
     private void handleOldMessages(@NotNull List<MessageDTO> oldMessages) {
@@ -104,10 +113,10 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private boolean sendMessage() {
-        if (inputEdit.getText().toString().length() <= 0) {
+        if (!validator.validate()) {
             return false;
         }
-        TextMessage textMessage = new TextMessage(userInfo.getId(), chatId, inputEdit.getText().toString());
+        TextMessage textMessage = new TextMessage(userInfo.getId(), chatId, inputEdit.getStringValue());
         wsClient.sendMessage(textMessage.toDataTransferObject());
         inputEdit.getText().clear();
         return true;

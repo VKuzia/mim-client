@@ -3,7 +3,6 @@ package com.mimteam.mimclient.activities;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,13 +12,18 @@ import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.client.UserInfo;
+import com.mimteam.mimclient.components.ui.NamedEditText;
+import com.mimteam.mimclient.util.validators.EditTextGroupValidator;
+import com.mimteam.mimclient.util.validators.schemes.AlphanumericValidationScheme;
+import com.mimteam.mimclient.util.validators.schemes.NonEmptyValidationScheme;
 
 public class SignInActivity extends AppCompatActivity {
 
-    private EditText loginEdit;
-    private EditText passwordEdit;
+    private NamedEditText loginEdit;
+    private NamedEditText passwordEdit;
     private Button signInButton;
     private TextView toSignUpView;
+    private final EditTextGroupValidator validator = new EditTextGroupValidator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,14 @@ public class SignInActivity extends AppCompatActivity {
 
         initializeUIComponents();
         attachListenersToComponents();
+        configureValidator();
+    }
+
+    private void configureValidator() {
+        validator.setupEditTextValidation(loginEdit)
+                .with(new NonEmptyValidationScheme(), new AlphanumericValidationScheme());
+        validator.setupEditTextValidation(passwordEdit)
+                .with(new NonEmptyValidationScheme());
     }
 
     @Override
@@ -48,18 +60,11 @@ public class SignInActivity extends AppCompatActivity {
 
     private void authorize() {
         App application = (App) getApplication();
-        String login = loginEdit.getText().toString();
-        if (login.length() == 0) {
-            loginEdit.setError(getString(R.string.empty_field_error));
-        }
-        String password = passwordEdit.getText().toString();
-        if (password.length() == 0){
-            passwordEdit.setError(getString(R.string.empty_field_error));
-        }
-        if (passwordEdit.getError() != null || loginEdit.getError() != null) {
+        if (!validator.validate()) {
             return;
         }
-
+        String login = loginEdit.getStringValue();
+        String password = passwordEdit.getStringValue();
         Optional<String> response = application.getHttpWrapper().login(login, password);
         if (!response.isPresent()) {
             application.showNotification(this,

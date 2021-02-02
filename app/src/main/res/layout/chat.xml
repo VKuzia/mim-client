@@ -60,7 +60,7 @@
         android:layout_toStartOf="@id/sendButton"
         android:layout_toLeftOf="@id/sendButton">
 
-        <EditText
+        <com.mimteam.mimclient.components.ui.NamedEditText
             android:id="@+id/inputEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

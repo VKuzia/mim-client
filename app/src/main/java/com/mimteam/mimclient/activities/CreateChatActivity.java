@@ -1,11 +1,9 @@
 package com.mimteam.mimclient.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,14 +13,19 @@ import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.components.ChatAvatar;
+import com.mimteam.mimclient.components.ui.NamedEditText;
 import com.mimteam.mimclient.models.dto.ChatDTO;
+import com.mimteam.mimclient.util.validators.EditTextGroupValidator;
+import com.mimteam.mimclient.util.validators.schemes.AlphanumericValidationScheme;
+import com.mimteam.mimclient.util.validators.schemes.NonEmptyValidationScheme;
 
 public class CreateChatActivity extends AppCompatActivity {
 
-    private EditText chatNameEdit;
+    private NamedEditText chatNameEdit;
     private Button createChatButton;
     private ChatAvatar chatAvatar;
     private Toolbar createChatToolbar;
+    private final EditTextGroupValidator validator = new EditTextGroupValidator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,12 @@ public class CreateChatActivity extends AppCompatActivity {
         initializeUIComponents();
         setSupportActionBar(createChatToolbar);
         attachListenersToComponents();
+        configureValidator();
+    }
+
+    private void configureValidator() {
+        validator.setupEditTextValidation(chatNameEdit)
+                .with(new NonEmptyValidationScheme(), new AlphanumericValidationScheme());
     }
 
     private void initializeUIComponents() {
@@ -51,8 +60,8 @@ public class CreateChatActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (chatAvatar.setChatName(chatNameEdit.getText().toString())) {
-                    chatNameEdit.setError(getString(R.string.chat_name_error));
+                if (validator.validate()) {
+                    chatAvatar.setChatName(chatNameEdit.getStringValue());
                 }
             }
 
@@ -63,12 +72,11 @@ public class CreateChatActivity extends AppCompatActivity {
     }
 
     private void createChat() {
-        if (chatNameEdit.getError() != null || chatNameEdit.getText().length() == 0) {
-            chatNameEdit.setError(getString(R.string.chat_name_error));
+        if (!validator.validate()) {
             return;
         }
         App application = (App) getApplication();
-        Optional<ChatDTO> chat = application.getHttpWrapper().createChat(chatNameEdit.getText().toString());
+        Optional<ChatDTO> chat = application.getHttpWrapper().createChat(chatNameEdit.getStringValue());
         if (chat.isPresent()) {
             application.getUserInfo().addChat(chat.get());
             application.getWsClient().subscribe(chat.get().getChatId());
