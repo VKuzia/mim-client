@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 
 import com.mimteam.mimclient.R;
 
+import org.jetbrains.annotations.NotNull;
+
 public class NamedEditText extends androidx.appcompat.widget.AppCompatEditText {
     private String fieldName;
 
@@ -25,7 +27,7 @@ public class NamedEditText extends androidx.appcompat.widget.AppCompatEditText {
         initFieldName(context, attrs);
     }
 
-    private void initFieldName(Context context, AttributeSet attrs) {
+    private void initFieldName(@NonNull Context context, AttributeSet attrs) {
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.NamedEditText, 0, 0);
         try {
             fieldName = attributes.getString(R.styleable.NamedEditText_field_name);
