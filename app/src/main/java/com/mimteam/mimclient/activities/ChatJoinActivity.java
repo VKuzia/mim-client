@@ -9,17 +9,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.R;
-import com.mimteam.mimclient.components.ui.ExtendedEditText;
+import com.mimteam.mimclient.components.ui.NamedEditText;
 import com.mimteam.mimclient.models.dto.ChatDTO;
 import com.mimteam.mimclient.models.dto.UserDTO;
-import com.mimteam.mimclient.util.validors.AlphanumericValidator;
+import com.mimteam.mimclient.util.validators.EditTextGroupValidator;
+import com.mimteam.mimclient.util.validators.schemes.AlphanumericValidationScheme;
+import com.mimteam.mimclient.util.validators.schemes.NonEmptyValidationScheme;
 
 import java.util.List;
 
 public class ChatJoinActivity extends AppCompatActivity {
 
-    private ExtendedEditText linkEdit;
+    private NamedEditText linkEdit;
     private Button joinButton;
+    private final EditTextGroupValidator validator = new EditTextGroupValidator();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,6 +30,12 @@ public class ChatJoinActivity extends AppCompatActivity {
         setContentView(R.layout.chat_join_activity);
         initializeUIComponents();
         attachListenersToComponents();
+        configureValidator();
+    }
+
+    private void configureValidator() {
+        validator.setupEditTextValidation(linkEdit)
+                .with(new NonEmptyValidationScheme(), new AlphanumericValidationScheme());
     }
 
     private void initializeUIComponents() {
@@ -39,8 +48,7 @@ public class ChatJoinActivity extends AppCompatActivity {
     }
 
     private void joinChat() {
-        linkEdit.validate(new AlphanumericValidator());
-        if (linkEdit.getError() != null) {
+        if (!validator.validate()) {
             return;
         }
         String link = linkEdit.getStringValue();

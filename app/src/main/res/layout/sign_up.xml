@@ -17,7 +17,7 @@
         android:textColor="@color/black"
         android:textSize="40sp" />
 
-    <com.mimteam.mimclient.components.ui.ExtendedEditText
+    <com.mimteam.mimclient.components.ui.NamedEditText
         android:id="@+id/signUpUsernameEdit"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -38,7 +38,7 @@
         android:inputType="text"
         app:field_name="Name" />
 
-    <com.mimteam.mimclient.components.ui.ExtendedEditText
+    <com.mimteam.mimclient.components.ui.NamedEditText
         android:id="@+id/signUpLoginEdit"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -59,7 +59,7 @@
         android:inputType="text"
         app:field_name="Login" />
 
-    <com.mimteam.mimclient.components.ui.ExtendedEditText
+    <com.mimteam.mimclient.components.ui.NamedEditText
         android:id="@+id/signUpPasswordEdit"
         android:layout_width="0dp"
         android:layout_height="50dp"

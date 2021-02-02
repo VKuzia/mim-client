@@ -13,7 +13,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:navigationIcon="@drawable/abc_vector_test" />
 
-    <com.mimteam.mimclient.components.ui.ExtendedEditText
+    <com.mimteam.mimclient.components.ui.NamedEditText
         android:id="@+id/linkEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

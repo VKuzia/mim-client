@@ -13,16 +13,19 @@ import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.components.ChatAvatar;
-import com.mimteam.mimclient.components.ui.ExtendedEditText;
+import com.mimteam.mimclient.components.ui.NamedEditText;
 import com.mimteam.mimclient.models.dto.ChatDTO;
-import com.mimteam.mimclient.util.validors.AlphanumericValidator;
+import com.mimteam.mimclient.util.validators.EditTextGroupValidator;
+import com.mimteam.mimclient.util.validators.schemes.AlphanumericValidationScheme;
+import com.mimteam.mimclient.util.validators.schemes.NonEmptyValidationScheme;
 
 public class CreateChatActivity extends AppCompatActivity {
 
-    private ExtendedEditText chatNameEdit;
+    private NamedEditText chatNameEdit;
     private Button createChatButton;
     private ChatAvatar chatAvatar;
     private Toolbar createChatToolbar;
+    private final EditTextGroupValidator validator = new EditTextGroupValidator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,12 @@ public class CreateChatActivity extends AppCompatActivity {
         initializeUIComponents();
         setSupportActionBar(createChatToolbar);
         attachListenersToComponents();
+        configureValidator();
+    }
+
+    private void configureValidator() {
+        validator.setupEditTextValidation(chatNameEdit)
+                .with(new NonEmptyValidationScheme(), new AlphanumericValidationScheme());
     }
 
     private void initializeUIComponents() {
@@ -51,8 +60,7 @@ public class CreateChatActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                chatNameEdit.validate(new AlphanumericValidator());
-                if (chatNameEdit.getError() == null) {
+                if (validator.validate()) {
                     chatAvatar.setChatName(chatNameEdit.getStringValue());
                 }
             }
@@ -64,8 +72,7 @@ public class CreateChatActivity extends AppCompatActivity {
     }
 
     private void createChat() {
-        chatNameEdit.validate(new AlphanumericValidator());
-        if (chatNameEdit.getError() != null) {
+        if (!validator.validate()) {
             return;
         }
         App application = (App) getApplication();

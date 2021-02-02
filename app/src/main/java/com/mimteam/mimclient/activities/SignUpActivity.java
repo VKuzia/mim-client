@@ -9,17 +9,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.R;
-import com.mimteam.mimclient.components.ui.ExtendedEditText;
-import com.mimteam.mimclient.util.validors.AlphanumericValidator;
-import com.mimteam.mimclient.util.validors.NonEmptyValidator;
+import com.mimteam.mimclient.components.ui.NamedEditText;
+import com.mimteam.mimclient.util.validators.EditTextGroupValidator;
+import com.mimteam.mimclient.util.validators.schemes.AlphanumericValidationScheme;
+import com.mimteam.mimclient.util.validators.schemes.NonEmptyValidationScheme;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    private ExtendedEditText usernameEdit;
-    private ExtendedEditText loginEdit;
-    private ExtendedEditText passwordEdit;
+    private NamedEditText usernameEdit;
+    private NamedEditText loginEdit;
+    private NamedEditText passwordEdit;
     private Button signUpButton;
     private TextView toLoginView;
+    private final EditTextGroupValidator validator = new EditTextGroupValidator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,16 @@ public class SignUpActivity extends AppCompatActivity {
 
         initializeUIComponents();
         attachListenersToComponents();
+        configureValidator();
+    }
+
+    private void configureValidator() {
+        validator.setupEditTextValidation(usernameEdit)
+                .with(new NonEmptyValidationScheme(), new AlphanumericValidationScheme());
+        validator.setupEditTextValidation(loginEdit)
+                .with(new NonEmptyValidationScheme(), new AlphanumericValidationScheme());
+        validator.setupEditTextValidation(passwordEdit)
+                .with(new NonEmptyValidationScheme());
     }
 
     private void initializeUIComponents() {
@@ -44,12 +56,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void createAccount() {
-        usernameEdit.validate(new NonEmptyValidator());
-        loginEdit.validate(new AlphanumericValidator());
-        passwordEdit.validate(new NonEmptyValidator());
-        if (usernameEdit.getError() != null ||
-                loginEdit.getError() != null ||
-                passwordEdit.getError() != null) {
+        if (!validator.validate()) {
             return;
         }
         String username = usernameEdit.getStringValue();

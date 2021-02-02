@@ -12,16 +12,18 @@ import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.client.UserInfo;
-import com.mimteam.mimclient.components.ui.ExtendedEditText;
-import com.mimteam.mimclient.util.validors.AlphanumericValidator;
-import com.mimteam.mimclient.util.validors.NonEmptyValidator;
+import com.mimteam.mimclient.components.ui.NamedEditText;
+import com.mimteam.mimclient.util.validators.EditTextGroupValidator;
+import com.mimteam.mimclient.util.validators.schemes.AlphanumericValidationScheme;
+import com.mimteam.mimclient.util.validators.schemes.NonEmptyValidationScheme;
 
 public class SignInActivity extends AppCompatActivity {
 
-    private ExtendedEditText loginEdit;
-    private ExtendedEditText passwordEdit;
+    private NamedEditText loginEdit;
+    private NamedEditText passwordEdit;
     private Button signInButton;
     private TextView toSignUpView;
+    private final EditTextGroupValidator validator = new EditTextGroupValidator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,14 @@ public class SignInActivity extends AppCompatActivity {
 
         initializeUIComponents();
         attachListenersToComponents();
+        configureValidator();
+    }
+
+    private void configureValidator() {
+        validator.setupEditTextValidation(loginEdit)
+                .with(new NonEmptyValidationScheme(), new AlphanumericValidationScheme());
+        validator.setupEditTextValidation(passwordEdit)
+                .with(new NonEmptyValidationScheme());
     }
 
     @Override
@@ -50,9 +60,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private void authorize() {
         App application = (App) getApplication();
-        loginEdit.validate(new AlphanumericValidator());
-        passwordEdit.validate(new NonEmptyValidator());
-        if (passwordEdit.getError() != null || loginEdit.getError() != null) {
+        if (!validator.validate()) {
             return;
         }
         String login = loginEdit.getStringValue();

@@ -25,8 +25,8 @@
     <string name="your_name">You</string>
 
     <!--    Validation Error Messages-->
-    <string name="non_empty_validation_error">should contain at least one letter or number</string>
-    <string name="alphanumeric_validation_error">should only contain latin letters and digits</string>
+    <string name="non_empty_validation_error">should not be empty</string>
+    <string name="alphanumeric_validation_error">should contain only latin letters or digits</string>
 
     <!--    Events Error Messages-->
     <string name="sign_up_error">Something went wrong on signing up</string>

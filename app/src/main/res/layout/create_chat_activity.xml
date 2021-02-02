@@ -28,7 +28,7 @@
 
     </FrameLayout>
 
-    <com.mimteam.mimclient.components.ui.ExtendedEditText
+    <com.mimteam.mimclient.components.ui.NamedEditText
         android:id="@+id/createChatName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
