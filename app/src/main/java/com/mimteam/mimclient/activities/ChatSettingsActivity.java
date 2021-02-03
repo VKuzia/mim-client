@@ -3,6 +3,7 @@ package com.mimteam.mimclient.activities;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +19,7 @@ import com.mimteam.mimclient.R;
 public class ChatSettingsActivity extends AppCompatActivity {
 
     private TextView inviteLinkView;
-    private ImageView imageView;
+    private Button inviteLinkCopyButton;
     private Toolbar settingsToolbar;
 
     private ClipboardManager clipboardManager;
@@ -36,14 +37,14 @@ public class ChatSettingsActivity extends AppCompatActivity {
     }
 
     private void initializeUIComponents() {
-        inviteLinkView = findViewById(R.id.linkView);
-        imageView = findViewById(R.id.shareImage);
-        settingsToolbar = findViewById(R.id.chatSettingsToolbar);
+        inviteLinkView = findViewById(R.id.inviteLinkView);
+        inviteLinkCopyButton = findViewById(R.id.inviteLinkCopyButton);
+        settingsToolbar = findViewById(R.id.settingsToolbar);
     }
 
     private void attachListenersToComponents() {
         settingsToolbar.setNavigationOnClickListener(v -> MainActivity.switchActivity(ChatActivity.class));
-        imageView.setOnClickListener(v -> copyInviteLinkToBuffer());
+        inviteLinkCopyButton.setOnClickListener(v -> copyInviteLinkToBuffer());
     }
 
     private void updateInviteLink() {
