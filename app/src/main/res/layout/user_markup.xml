@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:padding="10dp">
 
-    <com.mimteam.mimclient.components.ChatAvatar
+    <com.mimteam.mimclient.components.AvatarView
         android:id="@+id/userAvatar"
         android:layout_width="52dp"
         android:layout_height="52dp"

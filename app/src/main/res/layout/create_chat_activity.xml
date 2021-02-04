@@ -21,7 +21,7 @@
         android:layout_below="@id/toolBarCreateChat"
         android:layout_marginTop="20dp">
 
-        <com.mimteam.mimclient.components.ChatAvatar
+        <com.mimteam.mimclient.components.AvatarView
             android:id="@+id/createChatAvatar"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

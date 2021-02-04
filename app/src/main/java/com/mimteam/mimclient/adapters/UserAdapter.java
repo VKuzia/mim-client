@@ -10,8 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.mimteam.mimclient.R;
-import com.mimteam.mimclient.components.ChatAvatar;
-import com.mimteam.mimclient.models.ChatModel;
+import com.mimteam.mimclient.components.AvatarView;
 import com.mimteam.mimclient.models.UserModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +34,7 @@ public class UserAdapter extends ArrayAdapter<UserModel> {
     }
 
     private void setupUserModel(@NotNull View convertView, @NotNull UserModel userModel) {
-        ChatAvatar avatar = convertView.findViewById(R.id.userAvatar);
+        AvatarView avatar = convertView.findViewById(R.id.userAvatar);
         TextView userName = convertView.findViewById(R.id.userNameView);
 
         avatar.setChatName(userModel.getName());

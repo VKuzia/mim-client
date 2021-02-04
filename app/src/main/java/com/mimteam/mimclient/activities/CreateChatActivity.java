@@ -12,7 +12,7 @@ import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
-import com.mimteam.mimclient.components.ChatAvatar;
+import com.mimteam.mimclient.components.AvatarView;
 import com.mimteam.mimclient.components.ui.NamedEditText;
 import com.mimteam.mimclient.models.dto.ChatDTO;
 import com.mimteam.mimclient.util.validators.EditTextGroupValidator;
@@ -23,7 +23,7 @@ public class CreateChatActivity extends AppCompatActivity {
 
     private NamedEditText chatNameEdit;
     private Button createChatButton;
-    private ChatAvatar chatAvatar;
+    private AvatarView avatarView;
     private Toolbar createChatToolbar;
     private final EditTextGroupValidator validator = new EditTextGroupValidator();
 
@@ -46,7 +46,7 @@ public class CreateChatActivity extends AppCompatActivity {
     private void initializeUIComponents() {
         chatNameEdit = findViewById(R.id.createChatName);
         createChatButton = findViewById(R.id.createChatButton);
-        chatAvatar = findViewById(R.id.createChatAvatar);
+        avatarView = findViewById(R.id.createChatAvatar);
         createChatToolbar = findViewById(R.id.toolBarCreateChat);
     }
 
@@ -61,7 +61,7 @@ public class CreateChatActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (validator.validate()) {
-                    chatAvatar.setChatName(chatNameEdit.getStringValue());
+                    avatarView.setChatName(chatNameEdit.getStringValue());
                 }
             }
 

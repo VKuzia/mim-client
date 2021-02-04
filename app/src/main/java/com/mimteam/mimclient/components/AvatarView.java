@@ -11,15 +11,15 @@ import com.mimteam.mimclient.R;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ChatAvatar extends RelativeLayout {
+public class AvatarView extends RelativeLayout {
     private TextView avatarText;
 
-    public ChatAvatar(Context context) {
+    public AvatarView(Context context) {
         super(context);
         initializeComponents();
     }
 
-    public ChatAvatar(Context context, AttributeSet attrs) {
+    public AvatarView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initializeComponents();
     }
