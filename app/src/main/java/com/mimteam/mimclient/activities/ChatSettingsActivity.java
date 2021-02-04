@@ -1,7 +1,9 @@
 package com.mimteam.mimclient.activities;
 
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
@@ -31,6 +33,7 @@ public class ChatSettingsActivity extends AppCompatActivity {
     private Button inviteLinkCopyButton;
     private Toolbar settingsToolbar;
     private ListView usersListView;
+    private Button leaveChatButton;
 
     private ArrayList<UserModel> users;
     private UserAdapter userAdapter;
@@ -55,6 +58,33 @@ public class ChatSettingsActivity extends AppCompatActivity {
         updateUsersList();
     }
 
+    private void initializeUIComponents() {
+        nameView = findViewById(R.id.userNameView);
+        inviteLinkView = findViewById(R.id.inviteLinkView);
+        inviteLinkCopyButton = findViewById(R.id.inviteLinkCopyButton);
+        settingsToolbar = findViewById(R.id.settingsToolbar);
+        usersListView = findViewById(R.id.usersListView);
+        leaveChatButton = findViewById(R.id.leaveChatButton);
+    }
+
+    private void attachListenersToComponents() {
+        settingsToolbar.setNavigationOnClickListener(v -> MainActivity.switchActivity(ChatActivity.class));
+        inviteLinkCopyButton.setOnClickListener(v -> copyInviteLinkToBuffer());
+        leaveChatButton.setOnClickListener(v -> leaveChatAction());
+    }
+
+    private void updateChatName() {
+        App application = (App) getApplication();
+        String chatName = application.getUserInfo().getNameById(application.getOpenedChatId());
+        nameView.setText(chatName);
+    }
+
+    private void setupUsersView() {
+        users = new ArrayList<>();
+        userAdapter = new UserAdapter(this, R.layout.user_markup, users);
+        usersListView.setAdapter(userAdapter);
+    }
+
     private void updateUsersList() {
         App application = (App) getApplication();
         Optional<List<UserDTO>> userList = application.getHttpWrapper().getUserList(chatId);
@@ -74,31 +104,6 @@ public class ChatSettingsActivity extends AppCompatActivity {
         userAdapter.notifyDataSetChanged();
     }
 
-    private void updateChatName() {
-        App application = (App) getApplication();
-        String chatName = application.getUserInfo().getNameById(application.getOpenedChatId());
-        nameView.setText(chatName);
-    }
-
-    private void initializeUIComponents() {
-        nameView = findViewById(R.id.userNameView);
-        inviteLinkView = findViewById(R.id.inviteLinkView);
-        inviteLinkCopyButton = findViewById(R.id.inviteLinkCopyButton);
-        settingsToolbar = findViewById(R.id.settingsToolbar);
-        usersListView = findViewById(R.id.usersListView);
-    }
-
-    private void attachListenersToComponents() {
-        settingsToolbar.setNavigationOnClickListener(v -> MainActivity.switchActivity(ChatActivity.class));
-        inviteLinkCopyButton.setOnClickListener(v -> copyInviteLinkToBuffer());
-    }
-
-    private void setupUsersView() {
-        users = new ArrayList<>();
-        userAdapter = new UserAdapter(this, R.layout.user_markup, users);
-        usersListView.setAdapter(userAdapter);
-    }
-
     private void updateInviteLink() {
         App application = (App) getApplication();
         Optional<String> inviteLink = application.getHttpWrapper().getInvitationLink(chatId);
@@ -108,6 +113,26 @@ public class ChatSettingsActivity extends AppCompatActivity {
             application.showNotification(this, getString(R.string.chat_link_error),
                     getString(R.string.chat_link_error_title));
         }
+    }
+
+    private void leaveChatAction() {
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            if (which == DialogInterface.BUTTON_POSITIVE) {
+                leaveChat();
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.leave_chat_notification))
+                .setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener)
+                .show();
+    }
+
+    private void leaveChat() {
+        App application = (App) getApplication();
+        application.getUserInfo().removeChat(chatId);
+        application.getHttpWrapper().leaveChat(chatId);
+        MainActivity.switchActivity(ChatListActivity.class);
     }
 
     private void copyInviteLinkToBuffer() {

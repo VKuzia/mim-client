@@ -42,6 +42,18 @@ public class UserInfo {
         }
     }
 
+    public void removeChat(Integer chatId) {
+        for (ChatDTO chatDTO : chats) {
+            if (chatDTO.getChatId().equals(chatId)) {
+                chats.remove(chatDTO);
+                if (onChatListChanged != null) {
+                    onChatListChanged.operate();
+                }
+                return;
+            }
+        }
+    }
+
     public void clearChats() {
         chats.clear();
         if (onChatListChanged != null) {
