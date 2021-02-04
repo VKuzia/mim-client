@@ -54,8 +54,9 @@
     <string name="http_url">http://mim-server-dev.eu-central-1.elasticbeanstalk.com</string>
     <string name="title_activity_join_chat">JoinChatActivity</string>
 
-    <!--    Notifications-->
-    <string name="leave_chat_notification">Are your sure you want to leave this chat?</string>
+    <!--    Alerts-->
+    <string name="confirmation_title">Confirmation</string>
+    <string name="leave_chat_alert">Are your sure you want to leave this chat?</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

@@ -33,7 +33,7 @@ public class ChatListActivity extends AppCompatActivity {
     private Button joinChatButton;
     private FloatingActionButton addChat;
 
-    private ArrayList<ChatModel> chats;
+    private final ArrayList<ChatModel> chats = new ArrayList<>();
     private ChatAdapter chatAdapter;
 
     private UserInfo userInfo;
@@ -94,7 +94,6 @@ public class ChatListActivity extends AppCompatActivity {
     }
 
     private void setupChatList() {
-        chats = new ArrayList<>();
         chatAdapter = new ChatAdapter(this, R.layout.chat_markup, chats);
         chatsList.setAdapter(chatAdapter);
     }

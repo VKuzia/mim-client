@@ -35,7 +35,7 @@ public class ChatSettingsActivity extends AppCompatActivity {
     private ListView usersListView;
     private Button leaveChatButton;
 
-    private ArrayList<UserModel> users;
+    private final ArrayList<UserModel> users = new ArrayList<>();
     private UserAdapter userAdapter;
 
     private ClipboardManager clipboardManager;
@@ -59,7 +59,7 @@ public class ChatSettingsActivity extends AppCompatActivity {
     }
 
     private void initializeUIComponents() {
-        nameView = findViewById(R.id.userNameView);
+        nameView = findViewById(R.id.chatNameView);
         inviteLinkView = findViewById(R.id.inviteLinkView);
         inviteLinkCopyButton = findViewById(R.id.inviteLinkCopyButton);
         settingsToolbar = findViewById(R.id.settingsToolbar);
@@ -70,17 +70,16 @@ public class ChatSettingsActivity extends AppCompatActivity {
     private void attachListenersToComponents() {
         settingsToolbar.setNavigationOnClickListener(v -> MainActivity.switchActivity(ChatActivity.class));
         inviteLinkCopyButton.setOnClickListener(v -> copyInviteLinkToBuffer());
-        leaveChatButton.setOnClickListener(v -> leaveChatAction());
+        leaveChatButton.setOnClickListener(v -> leaveChatWithAlert());
     }
 
     private void updateChatName() {
         App application = (App) getApplication();
-        String chatName = application.getUserInfo().getNameById(application.getOpenedChatId());
+        String chatName = application.getUserInfo().getChatNameById(application.getOpenedChatId());
         nameView.setText(chatName);
     }
 
     private void setupUsersView() {
-        users = new ArrayList<>();
         userAdapter = new UserAdapter(this, R.layout.user_markup, users);
         usersListView.setAdapter(userAdapter);
     }
@@ -98,9 +97,8 @@ public class ChatSettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void addUser(@NotNull UserDTO userDTO) {
-        UserModel model = new UserModel(userDTO.getUserId(), userDTO.getUserName());
-        users.add(model);
+    private void addUser(@NotNull UserDTO userDto) {
+        users.add(new UserModel(userDto.getUserId(), userDto.getUserName()));
         userAdapter.notifyDataSetChanged();
     }
 
@@ -115,17 +113,12 @@ public class ChatSettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void leaveChatAction() {
-        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-            if (which == DialogInterface.BUTTON_POSITIVE) {
-                leaveChat();
-            }
-        };
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.leave_chat_notification))
-                .setPositiveButton("Yes", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener)
-                .show();
+    private void leaveChatWithAlert() {
+        ((App) getApplication()).showYesNoDialog(this,
+                getString(R.string.leave_chat_alert),
+                getString(R.string.confirmation_title),
+                this::leaveChat,
+                () -> {});
     }
 
     private void leaveChat() {

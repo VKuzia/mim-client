@@ -66,7 +66,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setupToolbar() {
-        String chatName = userInfo.getNameById(chatId);
+        String chatName = userInfo.getChatNameById(chatId);
         chatToolbar.setTitle(chatName);
     }
 

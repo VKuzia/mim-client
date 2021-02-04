@@ -10,6 +10,7 @@ import com.mimteam.mimclient.client.MessagesStorage;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 
 import com.mimteam.mimclient.client.UserInfo;
@@ -95,6 +96,29 @@ public class App extends Application {
                 .setTitle(title)
                 .setPositiveButton("OK", (dialog, which) -> onClose.operate())
                 .create()
+                .show();
+    }
+
+    public void showYesNoDialog(Context context,
+                                String message,
+                                String title,
+                                Operable onYes,
+                                Operable onNo) {
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    onYes.operate();
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    onNo.operate();
+                    break;
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message)
+                .setTitle(title)
+                .setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener)
                 .show();
     }
 

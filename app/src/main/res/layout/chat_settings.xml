@@ -29,7 +29,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/userNameView"
+            android:id="@+id/chatNameView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
@@ -43,9 +43,7 @@
             android:layout_weight="4"
             android:gravity="center"
             android:linksClickable="false"
-            android:scrollbarAlwaysDrawHorizontalTrack="false"
-            android:scrollbars="none"
-            android:scrollHorizontally="true" />
+            app:autoSizeTextType="uniform" />
 
         <LinearLayout
             android:id="@+id/inviteHorizontalLayout"
@@ -66,7 +64,8 @@
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="2"
-                android:gravity="center" />
+                android:gravity="center"
+                app:autoSizeTextType="uniform" />
 
             <Button
                 android:id="@+id/inviteLinkCopyButton"

@@ -35,7 +35,7 @@ public class UserAdapter extends ArrayAdapter<UserModel> {
 
     private void setupUserModel(@NotNull View convertView, @NotNull UserModel userModel) {
         AvatarView avatar = convertView.findViewById(R.id.userAvatar);
-        TextView userName = convertView.findViewById(R.id.userNameView);
+        TextView userName = convertView.findViewById(R.id.chatNameView);
 
         avatar.setChatName(userModel.getName());
         userName.setText(userModel.getName());

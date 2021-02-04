@@ -1,5 +1,6 @@
 package com.mimteam.mimclient.client;
 
+import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.models.dto.ChatDTO;
 import com.mimteam.mimclient.models.dto.UserDTO;
@@ -43,13 +44,11 @@ public class UserInfo {
     }
 
     public void removeChat(Integer chatId) {
-        for (ChatDTO chatDTO : chats) {
-            if (chatDTO.getChatId().equals(chatId)) {
-                chats.remove(chatDTO);
-                if (onChatListChanged != null) {
-                    onChatListChanged.operate();
-                }
-                return;
+        Optional<ChatDTO> chatDto = getChatDtoById(chatId);
+        if (chatDto.isPresent()) {
+            chats.remove(chatDto.get());
+            if (onChatListChanged != null) {
+                onChatListChanged.operate();
             }
         }
     }
@@ -79,12 +78,16 @@ public class UserInfo {
         return userId.equals(id) ? currentUserName : userIdToName.get(userId);
     }
 
-    public String getNameById(Integer chatId) {
-        for (ChatDTO chatDTO : chats) {
-            if (chatDTO.getChatId().equals(chatId)) {
-                return chatDTO.getChatName();
+    public String getChatNameById(Integer chatId) {
+        return getChatDtoById(chatId).or(new ChatDTO()).getChatName();
+    }
+
+    private Optional<ChatDTO> getChatDtoById(Integer chatId) {
+        for (ChatDTO chatDto : chats) {
+            if (chatDto.getChatId().equals(chatId)) {
+                return Optional.of(chatDto);
             }
         }
-        return "";
+        return Optional.absent();
     }
 }
