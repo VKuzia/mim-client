@@ -66,4 +66,13 @@ public class UserInfo {
     public String getUserName(@NotNull Integer userId, String currentUserName) {
         return userId.equals(id) ? currentUserName : userIdToName.get(userId);
     }
+
+    public String getNameById(Integer chatId) {
+        for (ChatDTO chatDTO : chats) {
+            if (chatDTO.getChatId().equals(chatId)) {
+                return chatDTO.getChatName();
+            }
+        }
+        return "";
+    }
 }

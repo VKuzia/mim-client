@@ -56,13 +56,18 @@ public class ChatActivity extends AppCompatActivity {
         configureValidator();
 
         App application = (App) getApplication();
-
         application.getMessagesEventBus().register(this);
         chatId = application.getOpenedChatId();
         userInfo = application.getUserInfo();
         wsClient = application.getWsClient();
 
+        setupToolbar();
         handleOldMessages(application.getMessagesStorage().getMessagesInChat(chatId));
+    }
+
+    private void setupToolbar() {
+        String chatName = userInfo.getNameById(chatId);
+        chatToolbar.setTitle(chatName);
     }
 
     private void configureValidator() {
