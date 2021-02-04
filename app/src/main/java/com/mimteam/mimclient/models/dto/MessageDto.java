@@ -6,7 +6,7 @@ import com.mimteam.mimclient.models.ws.messages.ChatMembershipMessage.ChatMember
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MessageDTO {
+public class MessageDto {
     private MessageType messageType;
     private Integer userId;
     private Integer chatId;

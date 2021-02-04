@@ -1,6 +1,6 @@
 package com.mimteam.mimclient.models.ws.messages;
 
-import com.mimteam.mimclient.models.dto.MessageDTO;
+import com.mimteam.mimclient.models.dto.MessageDto;
 import com.mimteam.mimclient.models.ws.Transferable;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,7 @@ public class TextMessage implements Transferable {
     private Date time;
 
     @Override
-    public void fromDataTransferObject(@NotNull MessageDTO dto) {
+    public void fromDataTransferObject(@NotNull MessageDto dto) {
         userId = dto.getUserId();
         chatId = dto.getChatId();
         content = dto.getContent();
@@ -22,9 +22,9 @@ public class TextMessage implements Transferable {
     }
 
     @Override
-    public MessageDTO toDataTransferObject() {
-        MessageDTO dto = new MessageDTO();
-        dto.setMessageType(MessageDTO.MessageType.TEXT_MESSAGE);
+    public MessageDto toDataTransferObject() {
+        MessageDto dto = new MessageDto();
+        dto.setMessageType(MessageDto.MessageType.TEXT_MESSAGE);
         dto.setUserId(userId);
         dto.setChatId(chatId);
         dto.setContent(content);

@@ -1,9 +1,7 @@
 package com.mimteam.mimclient.activities;
 
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
@@ -19,7 +17,7 @@ import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.adapters.UserAdapter;
 import com.mimteam.mimclient.models.UserModel;
-import com.mimteam.mimclient.models.dto.UserDTO;
+import com.mimteam.mimclient.models.dto.UserDto;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -86,18 +84,18 @@ public class ChatSettingsActivity extends AppCompatActivity {
 
     private void updateUsersList() {
         App application = (App) getApplication();
-        Optional<List<UserDTO>> userList = application.getHttpWrapper().getUserList(chatId);
+        Optional<List<UserDto>> userList = application.getHttpWrapper().getUserList(chatId);
         if (userList.isPresent()) {
             users.clear();
-            for (UserDTO userDTO : userList.get()) {
-                addUser(userDTO);
+            for (UserDto userDto : userList.get()) {
+                addUser(userDto);
             }
         } else {
             application.showNotification(this, getString(R.string.user_list_error), getString(R.string.error));
         }
     }
 
-    private void addUser(@NotNull UserDTO userDto) {
+    private void addUser(@NotNull UserDto userDto) {
         users.add(new UserModel(userDto.getUserId(), userDto.getUserName()));
         userAdapter.notifyDataSetChanged();
     }

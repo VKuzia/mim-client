@@ -1,6 +1,6 @@
 package com.mimteam.mimclient.client;
 
-public class ResponseDTO {
+public class ResponseDto {
     private ResponseType responseType;
     private String responseMessage;
 

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.eventbus.EventBus;
 import com.mimteam.mimclient.App;
-import com.mimteam.mimclient.models.dto.MessageDTO;
+import com.mimteam.mimclient.models.dto.MessageDto;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +27,7 @@ import ua.naiksoftware.stomp.dto.StompCommand;
 import ua.naiksoftware.stomp.dto.StompHeader;
 import ua.naiksoftware.stomp.dto.StompMessage;
 
-public class WSClient {
+public class WsClient {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
     private final String LOG_TAG = "WS_CLIENT";
@@ -41,7 +41,7 @@ public class WSClient {
     private EventBus messagesEventBus;
     private App.Operable onConnected;
 
-    public WSClient(@NotNull UserInfo userInfo) {
+    public WsClient(@NotNull UserInfo userInfo) {
         this.userInfo = userInfo;
     }
 
@@ -114,7 +114,7 @@ public class WSClient {
         idToSubscription.remove(id);
     }
 
-    public void sendMessage(@NotNull MessageDTO message) {
+    public void sendMessage(@NotNull MessageDto message) {
         if (stompClient == null || !stompClient.isConnected()) {
             return;
         }
@@ -163,7 +163,7 @@ public class WSClient {
     private void handleReceivedMessage(@NotNull StompMessage message) {
         Log.i(LOG_TAG, "\nRECEIVE:  " + message.getPayload() + "\n");
         try {
-            MessageDTO dto = jsonMapper.readValue(message.getPayload(), MessageDTO.class);
+            MessageDto dto = jsonMapper.readValue(message.getPayload(), MessageDto.class);
             if (messagesEventBus != null) {
                 messagesEventBus.post(dto);
             }

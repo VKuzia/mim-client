@@ -1,6 +1,6 @@
 package com.mimteam.mimclient.models.dto;
 
-public class ChatDTO {
+public class ChatDto {
     private Integer chatId;
     private String chatName;
 

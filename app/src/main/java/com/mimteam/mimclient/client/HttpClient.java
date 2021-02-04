@@ -21,12 +21,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class HTTPClient {
+public class HttpClient {
     private final String url;
     private final UserInfo userInfo;
     private final OkHttpClient okHttpClient;
 
-    public HTTPClient(UserInfo userInfo, String url) {
+    public HttpClient(UserInfo userInfo, String url) {
         this.userInfo = userInfo;
         this.url = url;
         this.okHttpClient = new OkHttpClient();
@@ -85,8 +85,8 @@ public class HTTPClient {
                 return null;
             }
             ObjectMapper mapper = new ObjectMapper();
-            ResponseDTO responseDTO = mapper.readValue(response.body().string(), ResponseDTO.class);
-            return responseDTO.getResponseMessage();
+            ResponseDto responseDto = mapper.readValue(response.body().string(), ResponseDto.class);
+            return responseDto.getResponseMessage();
         };
         Future<String> future = executor.submit(callable);
         try {

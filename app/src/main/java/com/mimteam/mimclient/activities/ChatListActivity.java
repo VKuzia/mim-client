@@ -18,8 +18,8 @@ import com.mimteam.mimclient.client.UserInfo;
 import com.mimteam.mimclient.models.ChatModel;
 import com.mimteam.mimclient.models.MessageModel;
 import com.mimteam.mimclient.R;
-import com.mimteam.mimclient.models.dto.ChatDTO;
-import com.mimteam.mimclient.models.dto.MessageDTO;
+import com.mimteam.mimclient.models.dto.ChatDto;
+import com.mimteam.mimclient.models.dto.MessageDto;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -58,7 +58,7 @@ public class ChatListActivity extends AppCompatActivity {
 
     private void updateChatList() {
         chats.clear();
-        for (ChatDTO chat : userInfo.getChats()) {
+        for (ChatDto chat : userInfo.getChats()) {
             addChat(chat);
         }
         Collections.sort(chats, (chat1, chat2) -> chat2.getDateTime().compareTo(chat1.getDateTime()));
@@ -66,7 +66,7 @@ public class ChatListActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void handleReceivedMessage(@NotNull MessageDTO messageDto) {
+    public void handleReceivedMessage(@NotNull MessageDto messageDto) {
         updateChatList();
     }
 
@@ -98,8 +98,8 @@ public class ChatListActivity extends AppCompatActivity {
         chatsList.setAdapter(chatAdapter);
     }
 
-    private void addChat(@NotNull ChatDTO chat) {
-        MessageDTO lastMessage = messagesStorage.getLastMessageInChat(chat.getChatId());
+    private void addChat(@NotNull ChatDto chat) {
+        MessageDto lastMessage = messagesStorage.getLastMessageInChat(chat.getChatId());
         MessageModel messageModel = new MessageModel(getString(R.string.user_name), getString(R.string.test_message));
         if (lastMessage != null) {
             String name = userInfo.getUserName(lastMessage.getUserId(), getString(R.string.your_name));

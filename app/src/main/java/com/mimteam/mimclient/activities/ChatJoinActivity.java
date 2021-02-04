@@ -10,8 +10,8 @@ import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.components.ui.NamedEditText;
-import com.mimteam.mimclient.models.dto.ChatDTO;
-import com.mimteam.mimclient.models.dto.UserDTO;
+import com.mimteam.mimclient.models.dto.ChatDto;
+import com.mimteam.mimclient.models.dto.UserDto;
 import com.mimteam.mimclient.util.validators.EditTextGroupValidator;
 import com.mimteam.mimclient.util.validators.schemes.AlphanumericValidationScheme;
 import com.mimteam.mimclient.util.validators.schemes.NonEmptyValidationScheme;
@@ -53,14 +53,14 @@ public class ChatJoinActivity extends AppCompatActivity {
         }
         String link = linkEdit.getStringValue();
         App application = (App) getApplication();
-        Optional<ChatDTO> chat = application.getHttpWrapper().joinChat(link);
+        Optional<ChatDto> chat = application.getHttpWrapper().joinChat(link);
         if (!chat.isPresent()) {
             application.showNotification(this, getString(R.string.join_chat_error),
                     getString(R.string.join_chat_error_title), this::finish);
         } else {
             application.getUserInfo().addChat(chat.get());
             application.getWsClient().subscribe(chat.get().getChatId());
-            Optional<List<UserDTO>> userList = application.getHttpWrapper().getUserList(chat.get().getChatId());
+            Optional<List<UserDto>> userList = application.getHttpWrapper().getUserList(chat.get().getChatId());
             if (userList.isPresent()) {
                 application.getUserInfo().updateUsers(userList.get());
             }

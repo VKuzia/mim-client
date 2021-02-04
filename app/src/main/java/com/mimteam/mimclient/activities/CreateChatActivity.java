@@ -14,7 +14,7 @@ import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.R;
 import com.mimteam.mimclient.components.AvatarView;
 import com.mimteam.mimclient.components.ui.NamedEditText;
-import com.mimteam.mimclient.models.dto.ChatDTO;
+import com.mimteam.mimclient.models.dto.ChatDto;
 import com.mimteam.mimclient.util.validators.EditTextGroupValidator;
 import com.mimteam.mimclient.util.validators.schemes.AlphanumericValidationScheme;
 import com.mimteam.mimclient.util.validators.schemes.NonEmptyValidationScheme;
@@ -76,7 +76,7 @@ public class CreateChatActivity extends AppCompatActivity {
             return;
         }
         App application = (App) getApplication();
-        Optional<ChatDTO> chat = application.getHttpWrapper().createChat(chatNameEdit.getStringValue());
+        Optional<ChatDto> chat = application.getHttpWrapper().createChat(chatNameEdit.getStringValue());
         if (chat.isPresent()) {
             application.getUserInfo().addChat(chat.get());
             application.getWsClient().subscribe(chat.get().getChatId());
