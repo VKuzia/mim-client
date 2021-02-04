@@ -1,11 +1,11 @@
 package com.mimteam.mimclient.client;
 
-import com.google.common.base.Optional;
 import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.models.dto.ChatDto;
 import com.mimteam.mimclient.models.dto.UserDto;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,9 +44,9 @@ public class UserInfo {
     }
 
     public void removeChat(Integer chatId) {
-        Optional<ChatDto> chatDto = getChatDtoById(chatId);
-        if (chatDto.isPresent()) {
-            chats.remove(chatDto.get());
+        ChatDto chatDto = getChatDtoById(chatId);
+        if (chatDto != null) {
+            chats.remove(chatDto);
             if (onChatListChanged != null) {
                 onChatListChanged.operate();
             }
@@ -79,15 +79,16 @@ public class UserInfo {
     }
 
     public String getChatNameById(Integer chatId) {
-        return getChatDtoById(chatId).or(new ChatDto()).getChatName();
+        ChatDto chatDto = getChatDtoById(chatId);
+        return chatDto != null ? chatDto.getChatName() : "";
     }
 
-    private Optional<ChatDto> getChatDtoById(Integer chatId) {
+    private @Nullable ChatDto getChatDtoById(Integer chatId) {
         for (ChatDto chatDto : chats) {
             if (chatDto.getChatId().equals(chatId)) {
-                return Optional.of(chatDto);
+                return chatDto;
             }
         }
-        return Optional.absent();
+        return null;
     }
 }
