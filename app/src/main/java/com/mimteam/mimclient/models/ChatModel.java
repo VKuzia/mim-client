@@ -1,6 +1,6 @@
 package com.mimteam.mimclient.models;
 
-import com.mimteam.mimclient.models.dto.ChatDTO;
+import com.mimteam.mimclient.models.dto.ChatDto;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,7 @@ public class ChatModel {
     private String chatName;
     private Integer chatId;
 
-    public ChatModel(MessageModel messageModel, @NotNull ChatDTO chatDto) {
+    public ChatModel(MessageModel messageModel, @NotNull ChatDto chatDto) {
         this.messageModel = messageModel;
         this.chatName = chatDto.getChatName();
         this.chatId = chatDto.getChatId();

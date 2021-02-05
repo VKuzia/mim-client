@@ -2,7 +2,7 @@ package com.mimteam.mimclient.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mimteam.mimclient.models.dto.MessageDTO;
+import com.mimteam.mimclient.models.dto.MessageDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import ua.naiksoftware.stomp.dto.LifecycleEvent;
 import ua.naiksoftware.stomp.dto.StompHeader;
 import ua.naiksoftware.stomp.dto.StompMessage;
 
-public class WSClientUnitTest {
+public class WsClientUnitTest {
     private final static String url = "ws://10.0.2.2:8080/ws";
     private final static Integer userId = 0;
     private final static Integer chatId = 0;
@@ -41,20 +41,20 @@ public class WSClientUnitTest {
         }
     };
     private String messagePayload;
-    private WSClient wsClient;
-    private MessageDTO messageDTO;
+    private WsClient wsClient;
+    private MessageDto messageDto;
 
     @BeforeEach
     public void init() {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(userId);
-        wsClient = new WSClient(userInfo);
-        messageDTO = new MessageDTO();
-        messageDTO.setUserId(userId);
-        messageDTO.setChatId(chatId);
-        messageDTO.setContent(content);
+        wsClient = new WsClient(userInfo);
+        messageDto = new MessageDto();
+        messageDto.setUserId(userId);
+        messageDto.setChatId(chatId);
+        messageDto.setContent(content);
         try {
-            messagePayload = new ObjectMapper().writeValueAsString(messageDTO);
+            messagePayload = new ObjectMapper().writeValueAsString(messageDto);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -65,11 +65,11 @@ public class WSClientUnitTest {
         StompClient stompClientMock = Mockito.mock(StompClient.class);
         Mockito.when(stompClientMock.lifecycle())
                 .thenReturn(lifecycleFlowable);
-        try (MockedStatic<WSClient> staticWSClient = Mockito.mockStatic(WSClient.class)) {
-            staticWSClient.when(() -> WSClient.createStompClient(Mockito.eq(url), Mockito.any()))
+        try (MockedStatic<WsClient> staticWsClient = Mockito.mockStatic(WsClient.class)) {
+            staticWsClient.when(() -> WsClient.createStompClient(Mockito.eq(url), Mockito.any()))
                     .thenReturn(stompClientMock);
             wsClient.connect(url);
-            staticWSClient.verify(() -> WSClient.createStompClient(Mockito.eq(url), Mockito.any()));
+            staticWsClient.verify(() -> WsClient.createStompClient(Mockito.eq(url), Mockito.any()));
         }
         Mockito.verify(stompClientMock).lifecycle();
         Mockito.verify(stompClientMock).connect(Mockito.any());
@@ -78,14 +78,14 @@ public class WSClientUnitTest {
     @Test
     public void wsClientSendMessageConnectionFailTest() {
         StompClient stompClientMock = Mockito.mock(StompClient.class);
-        MessageDTO message = Mockito.mock(MessageDTO.class);
+        MessageDto message = Mockito.mock(MessageDto.class);
         Mockito.when(message.getChatId()).thenReturn(0);
-        try (MockedStatic<WSClient> staticWSClient = Mockito.mockStatic(WSClient.class)) {
-            staticWSClient.when(() -> WSClient.createStompClient(Mockito.anyString()))
+        try (MockedStatic<WsClient> staticWsClient = Mockito.mockStatic(WsClient.class)) {
+            staticWsClient.when(() -> WsClient.createStompClient(Mockito.anyString()))
                     .thenReturn(stompClientMock);
             wsClient.sendMessage(message);
-            staticWSClient.verify(Mockito.never(),
-                    () -> WSClient.createStompClient(Mockito.anyString()));
+            staticWsClient.verify(Mockito.never(),
+                    () -> WsClient.createStompClient(Mockito.anyString()));
         }
         Mockito.verify(message, Mockito.never()).getChatId();
         Mockito.verify(stompClientMock, Mockito.never())
@@ -101,12 +101,12 @@ public class WSClientUnitTest {
                 .thenReturn(true);
         Mockito.when(stompClientMock.send(Mockito.any(StompMessage.class)))
                 .thenReturn(completable);
-        try (MockedStatic<WSClient> staticWSClient = Mockito.mockStatic(WSClient.class)) {
-            staticWSClient.when(() -> WSClient.createStompClient(Mockito.eq(url), Mockito.any()))
+        try (MockedStatic<WsClient> staticWsClient = Mockito.mockStatic(WsClient.class)) {
+            staticWsClient.when(() -> WsClient.createStompClient(Mockito.eq(url), Mockito.any()))
                     .thenReturn(stompClientMock);
             wsClient.connect(url);
-            wsClient.sendMessage(messageDTO);
-            staticWSClient.verify(() -> WSClient.createStompClient(Mockito.eq(url), Mockito.any()));
+            wsClient.sendMessage(messageDto);
+            staticWsClient.verify(() -> WsClient.createStompClient(Mockito.eq(url), Mockito.any()));
         }
         Mockito.verify(stompClientMock).connect(Mockito.any());
         Mockito.verify(stompClientMock).send(Mockito.any(StompMessage.class));
@@ -115,12 +115,12 @@ public class WSClientUnitTest {
     @Test
     public void wsClientSubscribeFailTest() {
         StompClient stompClientMock = Mockito.mock(StompClient.class);
-        try (MockedStatic<WSClient> staticWSClient = Mockito.mockStatic(WSClient.class)) {
-            staticWSClient.when(() -> WSClient.createStompClient(Mockito.anyString()))
+        try (MockedStatic<WsClient> staticWsClient = Mockito.mockStatic(WsClient.class)) {
+            staticWsClient.when(() -> WsClient.createStompClient(Mockito.anyString()))
                     .thenReturn(stompClientMock);
             wsClient.subscribe(chatId);
-            staticWSClient.verify(Mockito.never(),
-                    () -> WSClient.createStompClient(Mockito.anyString()));
+            staticWsClient.verify(Mockito.never(),
+                    () -> WsClient.createStompClient(Mockito.anyString()));
         }
         Mockito.verify(stompClientMock, Mockito.never()).topic(Mockito.anyString());
     }
@@ -134,12 +134,12 @@ public class WSClientUnitTest {
                 .thenReturn(true);
         Mockito.when(stompClientMock.topic(Mockito.anyString(), Mockito.any()))
                 .thenReturn(stompMessageFlowable);
-        try (MockedStatic<WSClient> staticWSClient = Mockito.mockStatic(WSClient.class)) {
-            staticWSClient.when(() -> WSClient.createStompClient(Mockito.eq(url), Mockito.any()))
+        try (MockedStatic<WsClient> staticWsClient = Mockito.mockStatic(WsClient.class)) {
+            staticWsClient.when(() -> WsClient.createStompClient(Mockito.eq(url), Mockito.any()))
                     .thenReturn(stompClientMock);
             wsClient.connect(url);
             wsClient.subscribe(chatId);
-            staticWSClient.verify(() -> WSClient.createStompClient(Mockito.eq(url), Mockito.any()));
+            staticWsClient.verify(() -> WsClient.createStompClient(Mockito.eq(url), Mockito.any()));
         }
         Mockito.verify(stompClientMock).topic(Mockito.eq(subscribePath), Mockito.any());
     }

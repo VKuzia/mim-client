@@ -1,10 +1,11 @@
 package com.mimteam.mimclient.client;
 
 import com.mimteam.mimclient.App;
-import com.mimteam.mimclient.models.dto.ChatDTO;
-import com.mimteam.mimclient.models.dto.UserDTO;
+import com.mimteam.mimclient.models.dto.ChatDto;
+import com.mimteam.mimclient.models.dto.UserDto;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import java.util.Map;
 public class UserInfo {
     private Integer id;
     private String token = "";
-    private final ArrayList<ChatDTO> chats = new ArrayList<>();
+    private final ArrayList<ChatDto> chats = new ArrayList<>();
     private final Map<Integer, String> userIdToName = new HashMap<>();
 
     private App.Operable onChatListChanged;
@@ -35,10 +36,20 @@ public class UserInfo {
         this.token = token;
     }
 
-    public void addChat(ChatDTO chat) {
+    public void addChat(ChatDto chat) {
         chats.add(chat);
         if (onChatListChanged != null) {
             onChatListChanged.operate();
+        }
+    }
+
+    public void removeChat(Integer chatId) {
+        ChatDto chatDto = getChatDtoById(chatId);
+        if (chatDto != null) {
+            chats.remove(chatDto);
+            if (onChatListChanged != null) {
+                onChatListChanged.operate();
+            }
         }
     }
 
@@ -49,13 +60,13 @@ public class UserInfo {
         }
     }
 
-    public void updateUsers(@NotNull List<UserDTO> users) {
-        for (UserDTO user : users) {
+    public void updateUsers(@NotNull List<UserDto> users) {
+        for (UserDto user : users) {
             userIdToName.put(user.getUserId(), user.getUserName());
         }
     }
 
-    public ArrayList<ChatDTO> getChats() {
+    public ArrayList<ChatDto> getChats() {
         return chats;
     }
 
@@ -65,5 +76,19 @@ public class UserInfo {
 
     public String getUserName(@NotNull Integer userId, String currentUserName) {
         return userId.equals(id) ? currentUserName : userIdToName.get(userId);
+    }
+
+    public String getChatNameById(Integer chatId) {
+        ChatDto chatDto = getChatDtoById(chatId);
+        return chatDto != null ? chatDto.getChatName() : "";
+    }
+
+    private @Nullable ChatDto getChatDtoById(Integer chatId) {
+        for (ChatDto chatDto : chats) {
+            if (chatDto.getChatId().equals(chatId)) {
+                return chatDto;
+            }
+        }
+        return null;
     }
 }

@@ -5,30 +5,30 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
-import com.mimteam.mimclient.models.dto.ChatDTO;
-import com.mimteam.mimclient.models.dto.MessageDTO;
-import com.mimteam.mimclient.models.dto.UserDTO;
+import com.mimteam.mimclient.models.dto.ChatDto;
+import com.mimteam.mimclient.models.dto.MessageDto;
+import com.mimteam.mimclient.models.dto.UserDto;
 
 import java.util.List;
 
-public class HTTPWrapper {
+public class HttpWrapper {
 
-    private final HTTPClient httpClient;
+    private final HttpClient httpClient;
 
-    public HTTPWrapper(HTTPClient httpClient) {
+    public HttpWrapper(HttpClient httpClient) {
         this.httpClient = httpClient;
     }
 
-    public Optional<ChatDTO> createChat(String chatName) {
+    public Optional<ChatDto> createChat(String chatName) {
         ImmutableMap<String, String> params = ImmutableMap.of("chatName", chatName);
         Optional<String> response = httpClient.post("/chats/create", params);
-        return parseResponse(response.orNull(), new TypeReference<ChatDTO>() {});
+        return parseResponse(response.orNull(), new TypeReference<ChatDto>() {});
     }
 
-    public Optional<ChatDTO> joinChat(String key) {
+    public Optional<ChatDto> joinChat(String key) {
         ImmutableMap<String, String> params = ImmutableMap.of("invitationKey", key);
         Optional<String> response = httpClient.post("/chats/join", params);
-        return parseResponse(response.orNull(), new TypeReference<ChatDTO>() {});
+        return parseResponse(response.orNull(), new TypeReference<ChatDto>() {});
     }
 
     public Optional<String> leaveChat(Integer chatId) {
@@ -37,9 +37,9 @@ public class HTTPWrapper {
         return httpClient.post("/chats/" + chatId + "/leave", params);
     }
 
-    public Optional<List<UserDTO>> getUserList(Integer chatId) {
+    public Optional<List<UserDto>> getUserList(Integer chatId) {
         Optional<String> response = httpClient.get("/chats/" + chatId + "/userlist");
-        return parseResponse(response.orNull(), new TypeReference<List<UserDTO>>() {});
+        return parseResponse(response.orNull(), new TypeReference<List<UserDto>>() {});
     }
 
     public Optional<String> getInvitationLink(Integer chatId) {
@@ -59,14 +59,14 @@ public class HTTPWrapper {
         return  httpClient.post("/users/login", params);
     }
 
-    public Optional<List<ChatDTO>> getChatsList() {
+    public Optional<List<ChatDto>> getChatsList() {
         Optional<String> response = httpClient.get("/users/chatlist");
-        return parseResponse(response.orNull(), new TypeReference<List<ChatDTO>>() {});
+        return parseResponse(response.orNull(), new TypeReference<List<ChatDto>>() {});
     }
 
-    public Optional<List<MessageDTO>> getChatMessages(Integer chatId) {
+    public Optional<List<MessageDto>> getChatMessages(Integer chatId) {
         Optional<String> response = httpClient.get("/chats/" + chatId + "/messages");
-        return parseResponse(response.orNull(), new TypeReference<List<MessageDTO>>() {});
+        return parseResponse(response.orNull(), new TypeReference<List<MessageDto>>() {});
     }
 
     public Optional<Integer> getUserId() {

@@ -16,6 +16,8 @@
     <string name="chat_name_hint">Chat Name</string>
     <string name="create_button">Create</string>
     <string name="avatar">W</string>
+    <string name="copyButtonTitle">Copy</string>
+    <string name="leaveChatButtonTitle">Leave Chat</string>
 
     <!--    Message and chat model-->
     <string name="chat_name">Chat %d</string>
@@ -29,6 +31,7 @@
     <string name="alphanumeric_validation_error">should contain only latin letters or digits</string>
 
     <!--    Events Error Messages-->
+    <string name="error">Error</string>
     <string name="sign_up_error">Something went wrong on signing up</string>
     <string name="sign_up_error_title">Sign up error</string>
     <string name="sign_up_ok">You\'ve signed up successfully!</string>
@@ -39,6 +42,7 @@
     <string name="join_chat_error_title">Join Error</string>
     <string name="chat_link_error">Unable to get chat link</string>
     <string name="chat_link_error_title">Link Error</string>
+    <string name="user_list_error">Unable to get users list</string>
 
     <!--    Intent Variables-->
     <string name="chat_name_variable">chatName</string>
@@ -49,6 +53,10 @@
     <string name="ws_endpoint">ws://mim-server-dev.eu-central-1.elasticbeanstalk.com/ws</string>
     <string name="http_url">http://mim-server-dev.eu-central-1.elasticbeanstalk.com</string>
     <string name="title_activity_join_chat">JoinChatActivity</string>
+
+    <!--    Alerts-->
+    <string name="confirmation_title">Confirmation</string>
+    <string name="leave_chat_alert">Are your sure you want to leave this chat?</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

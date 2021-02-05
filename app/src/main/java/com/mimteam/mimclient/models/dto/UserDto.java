@@ -1,6 +1,6 @@
 package com.mimteam.mimclient.models.dto;
 
-public class UserDTO {
+public class UserDto {
     private Integer userId;
     private String userName;
 

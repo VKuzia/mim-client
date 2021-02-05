@@ -14,11 +14,11 @@ import com.mimteam.mimclient.App;
 import com.mimteam.mimclient.MainActivity;
 import com.mimteam.mimclient.adapters.MessageAdapter;
 import com.mimteam.mimclient.client.UserInfo;
-import com.mimteam.mimclient.client.WSClient;
+import com.mimteam.mimclient.client.WsClient;
 import com.mimteam.mimclient.components.ui.NamedEditText;
 import com.mimteam.mimclient.models.MessageModel;
 import com.mimteam.mimclient.R;
-import com.mimteam.mimclient.models.dto.MessageDTO;
+import com.mimteam.mimclient.models.dto.MessageDto;
 import com.mimteam.mimclient.models.ws.messages.TextMessage;
 import com.mimteam.mimclient.util.validators.EditTextGroupValidator;
 import com.mimteam.mimclient.util.validators.schemes.NonEmptyValidationScheme;
@@ -42,7 +42,7 @@ public class ChatActivity extends AppCompatActivity {
     private Integer chatId;
 
     private UserInfo userInfo;
-    private WSClient wsClient;
+    private WsClient wsClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +56,18 @@ public class ChatActivity extends AppCompatActivity {
         configureValidator();
 
         App application = (App) getApplication();
-
         application.getMessagesEventBus().register(this);
         chatId = application.getOpenedChatId();
         userInfo = application.getUserInfo();
         wsClient = application.getWsClient();
 
+        setupToolbar();
         handleOldMessages(application.getMessagesStorage().getMessagesInChat(chatId));
+    }
+
+    private void setupToolbar() {
+        String chatName = userInfo.getChatNameById(chatId);
+        chatToolbar.setTitle(chatName);
     }
 
     private void configureValidator() {
@@ -70,8 +75,8 @@ public class ChatActivity extends AppCompatActivity {
                 .with(new NonEmptyValidationScheme());
     }
 
-    private void handleOldMessages(@NotNull List<MessageDTO> oldMessages) {
-        for (MessageDTO message : oldMessages) {
+    private void handleOldMessages(@NotNull List<MessageDto> oldMessages) {
+        for (MessageDto message : oldMessages) {
             handleReceivedMessage(message);
         }
     }
@@ -123,7 +128,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void handleReceivedMessage(@NotNull MessageDTO messageDto) {
+    public void handleReceivedMessage(@NotNull MessageDto messageDto) {
         String name = userInfo.getUserName(messageDto.getUserId(), "");
         messageAdapter.add(new MessageModel(name,
                 messageDto.getContent(),
