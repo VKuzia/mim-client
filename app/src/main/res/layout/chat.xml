@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBarChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:navigationIcon="@drawable/abc_vector_test" />
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="62dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="14dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/send"
+        android:textSize="10sp"
+        app:fabSize="mini"
+        tools:ignore="SmallSp" />
+
+    <ListView
+        android:id="@+id/listOfMessages"
+        android:layout_width="match_parent"
+        android:layout_height="592dp"
+        android:layout_above="@id/sendButton"
+        android:layout_below="@id/toolBarChat"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="71dp"
+        android:layout_marginBottom="11dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5dp"
+        android:stackFromBottom="true"
+        android:transcriptMode="normal" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/sendButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="3dp"
+        android:layout_toStartOf="@id/sendButton"
+        android:layout_toLeftOf="@id/sendButton">
+
+        <com.mimteam.mimclient.components.ui.NamedEditText
+            android:id="@+id/inputEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginBottom="14dp"
+            android:hint="@string/enter_text"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine" />
+    </ScrollView>
+</RelativeLayout>

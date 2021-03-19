@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:paddingVertical="10dp"
+    android:paddingStart="15dp"
+    android:paddingLeft="15dp"
+    android:paddingEnd="60dp"
+    android:paddingRight="60dp">
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/message"
+        android:layout_alignLeft="@id/message"
+        android:layout_marginStart="-3dp"
+        android:layout_marginLeft="-3dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/user_name"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/userName"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="119dp"
+        android:layout_marginLeft="119dp"
+        android:text="@string/test_message"
+        android:textIsSelectable="true"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/message"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="-5dp"
+        android:layout_toEndOf="@id/message"
+        android:layout_toRightOf="@id/message"
+        android:text="@string/time"
+        android:textSize="12sp" />
+</RelativeLayout>
